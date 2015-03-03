@@ -69,7 +69,7 @@ angular.module('okarito.controllers', ['okarito.services'])
         dataService
             .getCases($scope.filter, $scope.apiUrl, $scope.token)
             .then(function (response) {
-                $scope.cases = response.data.response.cases;
+                $scope.cases = response.data.response.cases.case;
             });
     };
 

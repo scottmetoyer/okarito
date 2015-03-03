@@ -30,7 +30,7 @@ angular.module('okarito.services', [])
 
         },
         getCases: function (filter, apiUrl, token) {
-            return $http.get(apiUrl + "cmd=search&q=" + filter + "&token=" + token,
+            return $http.get(apiUrl + 'cmd=search&q=' + filter + '&token=' + token + '&cols=sTitle,ixBug',
                     { transformResponse: transform });
         }
     }

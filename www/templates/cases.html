@@ -2,7 +2,7 @@
     <ion-content>
         <ion-list>
             <ion-item ng-repeat="case in cases" href="#/app/cases/{{case.ixBug}}">
-                {{case.sTitle}}
+                {{case.sTitle.__cdata}}
             </ion-item>
         </ion-list>
     </ion-content>
