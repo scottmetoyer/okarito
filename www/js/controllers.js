@@ -15,8 +15,8 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.modal = modal;
 
         // Check for a saved token - open login as needed
-        var token = authService.getToken();
-        if (token == null) {
+        var properties = authService.getProperties();
+        if (properties == null) {
             $scope.login();
         }
     });
@@ -33,14 +33,15 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     // Perform the login action when the user submits the login form
     $scope.doLogin = function () {
+        var properties = {};
         var root = $scope.loginData.url;
         root = root.replace(/\/?$/, '/');
 
         authService
             .getApiUrl(root)
             .then(function (response) {
-                var apiUrl = root + response.data.response.url;
-                window.localStorage.setItem('apiUrl', apiUrl);
+                var apiUrl = root + response.data.response.url.__cdata;
+                properties.apiUrl = apiUrl;
 
                 return authService.loginUser(
                     $scope.loginData.email,
@@ -48,8 +49,11 @@ angular.module('okarito.controllers', ['okarito.services'])
                     apiUrl)
             })
             .then(function (response) {
-                var token = response.data.response.token;
-                window.localStorage.setItem('token', token);
+                var token = response.data.response.token.__cdata;
+                properties.token = token;
+                
+                // Persist the token and apiUrl
+                authService.setProperties(properties);
 
                 // We are logged in - close the login modal
                 $scope.closeLogin();
@@ -62,20 +66,35 @@ angular.module('okarito.controllers', ['okarito.services'])
 .controller('CasesCtrl', function ($scope, dataService) {
     $scope.filter = '';
     $scope.cases = [];
-    $scope.apiUrl = window.localStorage.getItem('apiUrl');
-    $scope.token = window.localStorage.getItem('token');
 
     var init = function () {
         dataService
-            .getCases($scope.filter, $scope.apiUrl, $scope.token)
+            .getCases($scope.filter)
             .then(function (response) {
                 $scope.cases = response.data.response.cases.case;
+            })
+            .catch(function (response) {
+                alert("Error loading cases");
             });
     };
 
     init();
 })
 
-.controller('CaseCtrl', function ($scope, $stateParams) {
-    $scope.case = { title: 'This is the big massive title of the case that we are reviewing if we can do this with', id: 4 };
+.controller('CaseCtrl', function ($scope, $stateParams, dataService) {
+    $scope.case = {};
+    $scope.apiUrl = window.localStorage.getItem('apiUrl');
+
+    var init = function () {
+        dataService
+            .getCase($stateParams.caseId)
+            .then(function (response) {
+                $scope.case = response.data.response.cases.case[0];
+            })
+            .catch(function (response) {
+                alert("Error loading case");
+            });;
+    }
+
+    init();
 });

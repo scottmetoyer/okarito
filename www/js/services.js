@@ -7,11 +7,21 @@ function transform(data) {
 
 angular.module('okarito.services', [])
 
-.factory('authService', function ($http) {
+.factory('authService', function ($http, $localstorage) {
+    var properties = {};
+
     return {
-        getToken: function () {
-            var token = window.localStorage.getItem("token");
-            return token;
+        getProperties: function () {
+            var props = $localstorage.getObject('props');
+            if (Object.keys(props).length) {
+                return properties;
+            } else {
+                return null;
+            }
+        },
+        setProperties: function (props) {
+            properties = props;
+            $localstorage.setObject('props', properties);
         },
         getApiUrl: function (root) {
             return $http.get(root + 'api.xml',
@@ -24,14 +34,36 @@ angular.module('okarito.services', [])
     }
 })
 
-.factory('dataService', function ($http) {
+.factory('dataService', function ($http, authService) {
+    var properties = authService.getProperties();
+    var token = properties.token;
+    var apiUrl = properties.apiUrl;
+
     return {
         getCase: function (id) {
-
+            return $http.get(apiUrl + 'cmd=search&q=' + id + '&token=' + token + '&cols=sTitle,ixBug,sProject',
+                   { transformResponse: transform });
         },
-        getCases: function (filter, apiUrl, token) {
+        getCases: function (filter) {
             return $http.get(apiUrl + 'cmd=search&q=' + filter + '&token=' + token + '&cols=sTitle,ixBug',
                     { transformResponse: transform });
         }
     }
-});
+})
+
+.factory('$localstorage', ['$window', function ($window) {
+    return {
+        set: function (key, value) {
+            $window.localStorage[key] = value;
+        },
+        get: function (key, defaultValue) {
+            return $window.localStorage[key] || defaultValue;
+        },
+        setObject: function (key, value) {
+            $window.localStorage[key] = JSON.stringify(value);
+        },
+        getObject: function (key) {
+            return JSON.parse($window.localStorage[key] || '{}');
+        }
+    }
+}]);

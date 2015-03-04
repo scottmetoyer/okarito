@@ -1,12 +1,12 @@
-<ion-view view-title="Case {{case.id}}">
+<ion-view view-title="Case {{case.ixBug}}">
     <ion-content>
         <div class="list">
             <label class="item item-input">
-                <textarea msd-elastic ng-model="case.title"></textarea>
+                <textarea msd-elastic ng-model="case.sTitle.__cdata"></textarea>
             </label>
             <label class="item item-input">
                 <span class="input-label">Project</span>
-                <input type="text">
+                <input type="text" value="{{case.sProject.__cdata}}">
             </label>
             <label class="item item-input">
                 <span class="input-label">Area</span>
