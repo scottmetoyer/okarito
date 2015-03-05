@@ -7,25 +7,21 @@ function transform(data) {
 
 angular.module('okarito.services', [])
 
-.factory('authService', function ($http, $localstorage) {
-    var properties = {};
+.factory('authService', function ($http) {
+    var apiUrlPromise;
 
     return {
-        getProperties: function () {
-            var props = $localstorage.getObject('props');
-            if (Object.keys(props).length) {
-                return properties;
-            } else {
-                return null;
-            }
+        setToken: function(token) {
+            window.localStorage.setItem('token', token);
         },
-        setProperties: function (props) {
-            properties = props;
-            $localstorage.setObject('props', properties);
+        getToken: function() {
+            return window.localStorage.getItem('token');
         },
         getApiUrl: function (root) {
-            return $http.get(root + 'api.xml',
-                { transformResponse: transform });
+            if (!apiUrlPromise) {
+                apiUrlPromise = $http.get(root + 'api.xml', { transformResponse: transform });
+            }
+            return apiUrlPromise;
         },
         loginUser: function (email, password, apiUrl) {
             return $http.get(apiUrl + "cmd=logon&email=" + email + "&password=" + password,
@@ -49,21 +45,4 @@ angular.module('okarito.services', [])
                     { transformResponse: transform });
         }
     }
-})
-
-.factory('$localstorage', ['$window', function ($window) {
-    return {
-        set: function (key, value) {
-            $window.localStorage[key] = value;
-        },
-        get: function (key, defaultValue) {
-            return $window.localStorage[key] || defaultValue;
-        },
-        setObject: function (key, value) {
-            $window.localStorage[key] = JSON.stringify(value);
-        },
-        getObject: function (key) {
-            return JSON.parse($window.localStorage[key] || '{}');
-        }
-    }
-}]);
+});
