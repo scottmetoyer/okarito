@@ -5,7 +5,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.loginData = {};
     $scope.loginData.email = 'scott.metoyer@gmail.com';
     $scope.loginData.url = 'https://scottmetoyer.fogbugz.com';
-    $scope.loginData.password = '';
+    $scope.loginData.password = 'J29enuZ7pjSi';
 
     // Create the login modal that we will use later
     $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -15,8 +15,10 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.modal = modal;
 
         // Check for a saved token - open login as needed
-        var properties = authService.getProperties();
-        if (properties == null) {
+        var token = window.localStorage.getItem('token');
+        var apiUrl = window.localStorage.getItem('apiUrl');
+
+        if (!token && !apiUrl) {
             $scope.login();
         }
     });
@@ -41,7 +43,9 @@ angular.module('okarito.controllers', ['okarito.services'])
             .getApiUrl(root)
             .then(function (response) {
                 var apiUrl = root + response.data.response.url.__cdata;
-                properties.apiUrl = apiUrl;
+
+                // Persist the API url
+                window.localStorage.setItem('apiUrl', apiUrl);
 
                 return authService.loginUser(
                     $scope.loginData.email,
@@ -50,12 +54,10 @@ angular.module('okarito.controllers', ['okarito.services'])
             })
             .then(function (response) {
                 var token = response.data.response.token.__cdata;
-                properties.token = token;
-                
-                // Persist the token and apiUrl
-                authService.setProperties(properties);
 
-                // We are logged in - close the login modal
+                // Persist the authentication token
+                window.localStorage('token', token);
+
                 $scope.closeLogin();
             })
             .catch(function (response) {

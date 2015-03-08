@@ -8,33 +8,25 @@ function transform(data) {
 angular.module('okarito.services', [])
 
 .factory('authService', function ($http) {
-    var apiUrlPromise;
-
     return {
-        setToken: function(token) {
-            window.localStorage.setItem('token', token);
-        },
         getToken: function() {
-            return window.localStorage.getItem('token');
+          return window.localStorage.getItem('token');
         },
         getApiUrl: function (root) {
-            if (!apiUrlPromise) {
-                apiUrlPromise = $http.get(root + 'api.xml', { transformResponse: transform });
-            }
-            return apiUrlPromise;
+          return $http.get(root + 'api.xml',
+                      { transformResponse: transform });
         },
         loginUser: function (email, password, apiUrl) {
-            return $http.get(apiUrl + "cmd=logon&email=" + email + "&password=" + password,
+          return $http.get(apiUrl + 'cmd=logon&email=' + email + '&password=' + password,
                     { transformResponse: transform });
         }
     }
 })
 
 .factory('dataService', function ($http, authService) {
-    var properties = authService.getProperties();
-    var token = properties.token;
-    var apiUrl = properties.apiUrl;
-
+    var apiUrl = '';
+    var token = '';
+    
     return {
         getCase: function (id) {
             return $http.get(apiUrl + 'cmd=search&q=' + id + '&token=' + token + '&cols=sTitle,ixBug,sProject',
