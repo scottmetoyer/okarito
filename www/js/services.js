@@ -26,7 +26,7 @@ angular.module('okarito.services', [])
 .factory('dataService', function ($http, authService) {
     var apiUrl = '';
     var token = '';
-    
+
     return {
         getCase: function (id) {
             return $http.get(apiUrl + 'cmd=search&q=' + id + '&token=' + token + '&cols=sTitle,ixBug,sProject',

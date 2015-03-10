@@ -5,7 +5,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.loginData = {};
     $scope.loginData.email = 'scott.metoyer@gmail.com';
     $scope.loginData.url = 'https://scottmetoyer.fogbugz.com';
-    $scope.loginData.password = 'J29enuZ7pjSi';
+    $scope.loginData.password = '';
 
     // Create the login modal that we will use later
     $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -65,7 +65,8 @@ angular.module('okarito.controllers', ['okarito.services'])
             });
     };
 })
-.controller('CasesCtrl', function ($scope, dataService) {
+
+.controller('CasesCtrl', function ($scope, dataService, authService) {
     $scope.filter = '';
     $scope.cases = [];
 
@@ -88,6 +89,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.apiUrl = window.localStorage.getItem('apiUrl');
 
     var init = function () {
+
         dataService
             .getCase($stateParams.caseId)
             .then(function (response) {
