@@ -5,13 +5,10 @@ function transform(data) {
     return json;
 }
 
-angular.module('okarito.services', [])
+angular.module('okarito.services', [http-auth-interceptor])
 
 .factory('authService', function ($http) {
     return {
-        getToken: function() {
-          return window.localStorage.getItem('token');
-        },
         getApiUrl: function (root) {
           return $http.get(root + 'api.xml',
                       { transformResponse: transform });

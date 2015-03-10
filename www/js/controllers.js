@@ -8,19 +8,16 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.loginData.password = '';
 
     // Create the login modal that we will use later
-    $ionicModal.fromTemplateUrl('templates/login.html', {
+    $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
+      $scope.modal = modal;
+    }, {
         scope: $scope,
-        hardwareBackButtonClose: false
-    }).then(function (modal) {
-        $scope.modal = modal;
+        hardwareBackButtonClose: false,
+        focusFirstInput: true
+    });
 
-        // Check for a saved token - open login as needed
-        var token = window.localStorage.getItem('token');
-        var apiUrl = window.localStorage.getItem('apiUrl');
-
-        if (!token && !apiUrl) {
-            $scope.login();
-        }
+    $scope.$on('$destroy', function() {
+      $scope.loginModal.remove();
     });
 
     // Triggered in the login modal to close it
@@ -66,11 +63,46 @@ angular.module('okarito.controllers', ['okarito.services'])
     };
 })
 
-.controller('CasesCtrl', function ($scope, dataService, authService) {
-    $scope.filter = '';
-    $scope.cases = [];
+.controller('LoginCtrl', function($scope, $http, $state) {
+  $scope.message = '';
 
-    var init = function () {
+  $scope.user = {
+    email: null,
+    password: null
+  }
+
+  $scope.login = function() {
+    // Authenticate the user
+  };
+
+  $scope.$on('event:auth-loginRequired', function(e, rejection) {
+    $scope.modal.show();
+  });
+
+  $scope.$on('event:auth-loginConfirmed', function() {
+     $scope.username = null;
+     $scope.password = null;
+     $scope.modal.hide();
+  });
+
+  $scope.$on('event:auth-login-failed', function(e, status) {
+    var error = "Login failed.";
+    if (status == 401) {
+      error = "Invalid Username or Password.";
+    }
+    $scope.message = error;
+  });
+
+  $scope.$on('event:auth-logout-complete', function() {
+    $state.go('app.cases', { }, { reload: true, inherit: false });
+  });
+})
+
+.controller('CasesCtrl', function ($scope, dataService, authService) {
+  $scope.filter = '';
+  $scope.cases = [];
+
+  var init = function () {
         dataService
             .getCases($scope.filter)
             .then(function (response) {
