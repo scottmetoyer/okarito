@@ -1,15 +1,17 @@
 angular.module('okarito.controllers', ['okarito.services'])
 
 .controller('AppCtrl', function ($scope, $ionicModal, $timeout, authService) {
-    // Form data for the login modal
-    $scope.loginData = {};
-    $scope.loginData.email = 'scott.metoyer@gmail.com';
-    $scope.loginData.url = 'https://scottmetoyer.fogbugz.com';
-    $scope.loginData.password = '';
+    $scope.message = '';
+
+    $scope.loginData = {
+      email: 'scott.metoyer@gmail.com',
+      url: 'https://scottmetoyer.fogbugz.com',
+      password: ''
+    };
 
     // Create the login modal that we will use later
     $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
-      $scope.modal = modal;
+      $scope.loginModal = modal;
     }, {
         scope: $scope,
         hardwareBackButtonClose: false,
@@ -20,18 +22,30 @@ angular.module('okarito.controllers', ['okarito.services'])
       $scope.loginModal.remove();
     });
 
-    // Triggered in the login modal to close it
-    $scope.closeLogin = function () {
-        $scope.modal.hide();
-    };
+    $scope.$on('event:auth-loginRequired', function(e, rejection) {
+      $scope.loginModal.show();
+    });
 
-    // Open the login modal
-    $scope.login = function () {
-        $scope.modal.show();
-    };
+    $scope.$on('event:auth-loginConfirmed', function() {
+       $scope.loginModal.hide();
+    });
+
+    $scope.$on('event:auth-login-failed', function(e, status) {
+      var error = "Login failed.";
+      if (status == 401) {
+        error = "Invalid username or password.";
+      }
+      $scope.message = error;
+    });
+
+    $scope.$on('event:auth-logout-complete', function() {
+      $state.go('app.cases', { }, { reload: true, inherit: false });
+    });
 
     // Perform the login action when the user submits the login form
     $scope.doLogin = function () {
+      authService.loginConfirmed();
+      /*
         var properties = {};
         var root = $scope.loginData.url;
         root = root.replace(/\/?$/, '/');
@@ -59,46 +73,11 @@ angular.module('okarito.controllers', ['okarito.services'])
             })
             .catch(function (response) {
                 alert('There was an error logging in to FogBugz. Please check your entries and try again.');
-            });
+            });*/
     };
 })
 
-.controller('LoginCtrl', function($scope, $http, $state) {
-  $scope.message = '';
-
-  $scope.user = {
-    email: null,
-    password: null
-  }
-
-  $scope.login = function() {
-    // Authenticate the user
-  };
-
-  $scope.$on('event:auth-loginRequired', function(e, rejection) {
-    $scope.modal.show();
-  });
-
-  $scope.$on('event:auth-loginConfirmed', function() {
-     $scope.username = null;
-     $scope.password = null;
-     $scope.modal.hide();
-  });
-
-  $scope.$on('event:auth-login-failed', function(e, status) {
-    var error = "Login failed.";
-    if (status == 401) {
-      error = "Invalid Username or Password.";
-    }
-    $scope.message = error;
-  });
-
-  $scope.$on('event:auth-logout-complete', function() {
-    $state.go('app.cases', { }, { reload: true, inherit: false });
-  });
-})
-
-.controller('CasesCtrl', function ($scope, dataService, authService) {
+.controller('CasesCtrl', function ($scope, dataService, authenticationService) {
   $scope.filter = '';
   $scope.cases = [];
 

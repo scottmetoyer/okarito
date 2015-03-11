@@ -5,33 +5,63 @@ function transform(data) {
     return json;
 }
 
-angular.module('okarito.services', [http-auth-interceptor])
+angular.module('okarito.services')
 
-.factory('authService', function ($http) {
-    return {
-        getApiUrl: function (root) {
-          return $http.get(root + 'api.xml',
-                      { transformResponse: transform });
-        },
-        loginUser: function (email, password, apiUrl) {
-          return $http.get(apiUrl + 'cmd=logon&email=' + email + '&password=' + password,
-                    { transformResponse: transform });
-        }
+.factory('userService', function() {
+  var currentUser = {
+    api_url: '',
+    email: '',
+    access_token: 'xxxxxx'
+  };
+
+  return {
+    getCurrentUser: function() {
+      return currentUser;
     }
+  }
 })
 
-.factory('dataService', function ($http, authService) {
-    var apiUrl = '';
-    var token = '';
+.factory('dataService', function ($http) {;
 
-    return {
-        getCase: function (id) {
-            return $http.get(apiUrl + 'cmd=search&q=' + id + '&token=' + token + '&cols=sTitle,ixBug,sProject',
-                   { transformResponse: transform });
-        },
-        getCases: function (filter) {
-            return $http.get(apiUrl + 'cmd=search&q=' + filter + '&token=' + token + '&cols=sTitle,ixBug',
-                    { transformResponse: transform });
-        }
+  return {
+    getApiUrl: function (root) {
+      return $http.get(
+        root + 'api.xml',
+        { transformResponse: transform });
+      },
+    getCase: function (id) {
+      return $http.get('cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject',
+        { transformResponse: transform });
+    },
+    getCases: function (filter) {
+      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug',
+        { transformResponse: transform });
     }
+  }
+})
+
+.service('fogbugzApiInterceptor', function($rootScope, userService){
+  var service = this;
+
+  service.request = function(config) {
+    var currentUser = userService.getCurrentUser();
+    var access_token = currentUser ? currentUser.access_token : null;
+    var api_url = currentUser ? currentUser.api_url : null;
+
+    // If the API url exists, prepend it to the request
+
+    // If the token exists, append it to the request
+
+    config.url = 'https://scottmetoyer.fogbuz.com?api.asp?' + config.url;
+
+    return config;
+  };
+
+  service.responseError = function(response) {
+    if (response.data.response.error) {
+      console.log(response.data.response.error);
+    }
+
+    return response;
+  };
 });
