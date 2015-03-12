@@ -1,6 +1,6 @@
 angular.module('okarito.controllers', ['okarito.services'])
 
-.controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function ($scope, $rootScope, $ionicModal, $timeout) {
     $scope.message = '';
 
     $scope.loginData = {
@@ -22,24 +22,15 @@ angular.module('okarito.controllers', ['okarito.services'])
       $scope.loginModal.remove();
     });
 
-    $scope.$on('event:auth-loginRequired', function(e, rejection) {
+    $rootScope.$on('unauthorized', function() {
+      // Null the user object
+
+      // Show the login modal
       $scope.loginModal.show();
     });
 
-    $scope.$on('event:auth-loginConfirmed', function() {
-       $scope.loginModal.hide();
-    });
-
-    $scope.$on('event:auth-login-failed', function(e, status) {
-      var error = "Login failed.";
-      if (status == 401) {
-        error = "Invalid username or password.";
-      }
-      $scope.message = error;
-    });
-
-    $scope.$on('event:auth-logout-complete', function() {
-      $state.go('app.cases', { }, { reload: true, inherit: false });
+    $rootScope.$on('authorized', function() {
+      $scope.loginModal.hide();
     });
 
     // Perform the login action when the user submits the login form
@@ -82,14 +73,13 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.cases = [];
 
   var init = function () {
-        dataService
-            .getCases($scope.filter)
-            .then(function (response) {
-                $scope.cases = response.data.response.cases.case;
-            })
-            .catch(function (response) {
-                alert("Error loading cases");
-            });
+    dataService
+      .getCases($scope.filter)
+      .then(function (response) {
+          if (response.data) {
+            $scope.cases = response.data.response.cases.case;
+          }
+      })
     };
 
     init();

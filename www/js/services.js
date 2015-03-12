@@ -47,17 +47,26 @@ angular.module('okarito.services', [])
     var currentUser = userService.getCurrentUser();
     var access_token = currentUser ? currentUser.access_token : null;
 
-    // If the token exists, append it to the request
+    // If the request is a FogBugz command and we have a token save, append it
+    if (access_token) {
+        if (config.url.indexOf('cmd=') > -1) {
+          config.url = config.url + '&token=' + access_token;
+        }
+    }
 
     return config;
   };
 
   service.response = function(response) {
     if (response.data.response && response.data.response.error) {
-      console.log(response.data.response.error);
       $rootScope.$broadcast('unauthorized');
     }
 
+    return response;
+  };
+
+  service.responseError = function(response) {
+    $rootScope.$broadcast('unauthorized');
     return response;
   };
 });
