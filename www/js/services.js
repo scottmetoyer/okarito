@@ -5,7 +5,7 @@ function transform(data) {
     return json;
 }
 
-angular.module('okarito.services')
+angular.module('okarito.services', [])
 
 .factory('userService', function() {
   var currentUser = {
@@ -30,36 +30,32 @@ angular.module('okarito.services')
         { transformResponse: transform });
       },
     getCase: function (id) {
-      return $http.get('cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject',
+      return $http.get('https://scottmetoyer.fogbugz.com/api.asp?cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject',
         { transformResponse: transform });
     },
     getCases: function (filter) {
-      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug',
+      return $http.get('https://scottmetoyer.fogbugz.com/api.asp?cmd=search&q=' + filter + '&cols=sTitle,ixBug',
         { transformResponse: transform });
     }
   }
 })
 
-.service('fogbugzApiInterceptor', function($rootScope, userService){
+.service('authInterceptor', function($rootScope, userService){
   var service = this;
 
   service.request = function(config) {
     var currentUser = userService.getCurrentUser();
     var access_token = currentUser ? currentUser.access_token : null;
-    var api_url = currentUser ? currentUser.api_url : null;
-
-    // If the API url exists, prepend it to the request
 
     // If the token exists, append it to the request
-
-    config.url = 'https://scottmetoyer.fogbuz.com?api.asp?' + config.url;
 
     return config;
   };
 
-  service.responseError = function(response) {
-    if (response.data.response.error) {
+  service.response = function(response) {
+    if (response.data.response && response.data.response.error) {
       console.log(response.data.response.error);
+      $rootScope.$broadcast('unauthorized');
     }
 
     return response;

@@ -1,6 +1,6 @@
 angular.module('okarito.controllers', ['okarito.services'])
 
-.controller('AppCtrl', function ($scope, $ionicModal, $timeout, authService) {
+.controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
     $scope.message = '';
 
     $scope.loginData = {
@@ -44,7 +44,7 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     // Perform the login action when the user submits the login form
     $scope.doLogin = function () {
-      authService.loginConfirmed();
+      // authService.loginConfirmed();
       /*
         var properties = {};
         var root = $scope.loginData.url;
@@ -77,7 +77,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     };
 })
 
-.controller('CasesCtrl', function ($scope, dataService, authenticationService) {
+.controller('CasesCtrl', function ($scope, dataService) {
   $scope.filter = '';
   $scope.cases = [];
 
@@ -100,7 +100,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.apiUrl = window.localStorage.getItem('apiUrl');
 
     var init = function () {
-
+      /*
         dataService
             .getCase($stateParams.caseId)
             .then(function (response) {
@@ -108,7 +108,7 @@ angular.module('okarito.controllers', ['okarito.services'])
             })
             .catch(function (response) {
                 alert("Error loading case");
-            });;
+            });;*/
     }
 
     init();
