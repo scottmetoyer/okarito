@@ -67,6 +67,6 @@ angular.module('okarito.services', [])
 
   service.responseError = function(response) {
     $rootScope.$broadcast('unauthorized');
-    return response;
+    throw('Failed sucka');
   };
 });

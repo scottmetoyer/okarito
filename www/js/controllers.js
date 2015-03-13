@@ -76,9 +76,9 @@ angular.module('okarito.controllers', ['okarito.services'])
     dataService
       .getCases($scope.filter)
       .then(function (response) {
-          if (response.data) {
-            $scope.cases = response.data.response.cases.case;
-          }
+        $scope.cases = response.data.response.cases.case;
+      }).catch(function (error) {
+        console.log('Error loading cases: ' + error);
       })
     };
 
