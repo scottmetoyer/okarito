@@ -5,22 +5,26 @@ function transform(data) {
     return json;
 }
 
-angular.module('okarito.services', [angular-storage])
+angular.module('okarito.services', ['angular-storage'])
 
 .factory('userService', function(store) {
   var currentUser = {
     api_url: '',
     email: '',
-    access_token: 'xxxxxx'
+    access_token: ''
   };
 
   return {
+    loginUser: function(email, password, apiUrl) {
+      return $http.get(apiUrl + 'cmd=logon&email=' + email + '&password=' + password,
+        { transformResponse: transform });
+    },
     setCurrentUser: function(user) {
       currentUser = user;
       store.set('user', user);
       return currentUser;
     },
-    getCurrentUser = function() {
+    getCurrentUser: function() {
       if (!currentUser) {
         currentUser = store.get('user');
       }
@@ -29,7 +33,9 @@ angular.module('okarito.services', [angular-storage])
   }
 })
 
-.factory('dataService', function ($http) {;
+.factory('dataService', function ($http, userService) {;
+  var data = this;
+  data.currentUser = userService.getCurrentUser();
 
   return {
     getApiUrl: function (root) {
@@ -38,11 +44,11 @@ angular.module('okarito.services', [angular-storage])
         { transformResponse: transform });
       },
     getCase: function (id) {
-      return $http.get('https://scottmetoyer.fogbugz.com/api.asp?cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject',
+      return $http.get(data.currentUser.api_url + 'cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject',
         { transformResponse: transform });
     },
     getCases: function (filter) {
-      return $http.get('https://scottmetoyer.fogbugz.com/api.asp?cmd=search&q=' + filter + '&cols=sTitle,ixBug',
+      return $http.get(data.currentUser.api_url + 'cmd=search&q=' + filter + '&cols=sTitle,ixBug',
         { transformResponse: transform });
     }
   }
@@ -61,7 +67,7 @@ angular.module('okarito.services', [angular-storage])
           config.url = config.url + '&token=' + access_token;
         }
     } else {
-      $rootScope.$broadcast('unauthorized');
+      $rootScope.$broadcast('unauthorized', { message: 'Please log in to your FogBugz account to continue' });
     }
 
     return config;
@@ -69,14 +75,14 @@ angular.module('okarito.services', [angular-storage])
 
   service.response = function(response) {
     if (response.data.response && response.data.response.error) {
-      $rootScope.$broadcast('unauthorized');
+      $rootScope.$broadcast('unauthorized', { message: response.data.response.error });
     }
 
     return response;
   };
 
   service.responseError = function(response) {
-    $rootScope.$broadcast('unauthorized');
-    throw('Http response error:' + response);
+    $rootScope.$broadcast('unauthorized', { message: response });
+    throw('HTTP response error:' + response);
   };
 });

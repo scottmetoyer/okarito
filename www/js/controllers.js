@@ -23,48 +23,56 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.loginModal.remove();
   });
 
-  $rootScope.$on('unauthorized', function() {
+  $rootScope.$on('unauthorized', function(event, args) {
     // Null the user object
-    app.currentUser = userService.setCurrentUser(null);
+    userService.setCurrentUser(null);
 
     // Show the login modal
-    $scope.loginModal.show();
+    $scope.message = args.message;
+
+    if ($scope.loginModal) {
+      $scope.loginModal.show();
+    }
   });
 
-    $rootScope.$on('authorized', function() {
-      $scope.loginModal.hide();
-    });
+  $rootScope.$on('authorized', function() {
+    app.currentUser = userService.getCurrentUser();
+    $scope.loginModal.hide();
+  });
 
-    // Perform the login action when the user submits the login form
-    $scope.doLogin = function () {
-      var user = userService.getCurrentUer();
-      var root = $scope.loginData.url;
-      root = root.replace(/\/?$/, '/');
+  // Handle the login action when the user submits the login form
+  $scope.doLogin = function () {
+    var password = $scope.loginData.password;
+    var email = $scope.loginData.email;
+    var root = $scope.loginData.url;
 
-      dataService
-            .getApiUrl(root)
-            .then(function (response) {
-                var apiUrl = root + response.data.response.url.__cdata;
+    var user = userService.getCurrentUser();
+    user.email = email;
 
-                // Persist the API url
-                window.localStorage.setItem('apiUrl', apiUrl);
+    root = root.replace(/\/?$/, '/');
 
-                return authService.loginUser(
-                    $scope.loginData.email,
-                    $scope.loginData.password,
-                    apiUrl)
-            })
-            .then(function (response) {
-                var token = response.data.response.token.__cdata;
+    dataService
+      .getApiUrl(root)
+      .then(function (response) {
+        var apiUrl = root + response.data.response.url.__cdata;
+        user.api_url = apiUrl;
 
-                // Persist the authentication token
-                window.localStorage('token', token);
+        return userService.loginUser(
+          email,
+          password,
+          apiUrl)
+      })
+      .then(function (response) {
+        var token = response.data.response.token.__cdata;
+        user.access_token = token;
 
-                $scope.closeLogin();
-            })
-            .catch(function (response) {
-                alert('There was an error logging in to FogBugz. Please check your entries and try again.');
-            });
+        // Persist the authenticated user
+        userService.setCurrentUser(user);
+        $rootScope.$broadcast('authorized');
+      })
+      .catch(function (response) {
+        alert('There was an error logging in to FogBugz. Please check your entries and try again.');
+      });
     };
 })
 
@@ -77,9 +85,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       .getCases($scope.filter)
       .then(function (response) {
         $scope.cases = response.data.response.cases.case;
-      }).catch(function (error) {
-        console.log('Error loading cases: ' + error);
-      })
+      });
     };
 
     init();
