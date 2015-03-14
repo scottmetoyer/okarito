@@ -5,9 +5,9 @@ function transform(data) {
     return json;
 }
 
-angular.module('okarito.services', [])
+angular.module('okarito.services', [angular-storage])
 
-.factory('userService', function() {
+.factory('userService', function(store) {
   var currentUser = {
     api_url: '',
     email: '',
@@ -15,9 +15,17 @@ angular.module('okarito.services', [])
   };
 
   return {
-    getCurrentUser: function() {
+    setCurrentUser: function(user) {
+      currentUser = user;
+      store.set('user', user);
       return currentUser;
-    }
+    },
+    getCurrentUser = function() {
+      if (!currentUser) {
+        currentUser = store.get('user');
+      }
+      return currentUser;
+   }
   }
 })
 
@@ -52,6 +60,8 @@ angular.module('okarito.services', [])
         if (config.url.indexOf('cmd=') > -1) {
           config.url = config.url + '&token=' + access_token;
         }
+    } else {
+      $rootScope.$broadcast('unauthorized');
     }
 
     return config;
@@ -67,6 +77,6 @@ angular.module('okarito.services', [])
 
   service.responseError = function(response) {
     $rootScope.$broadcast('unauthorized');
-    throw('Failed sucka');
+    throw('Http response error:' + response);
   };
 });

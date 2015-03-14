@@ -1,33 +1,35 @@
 angular.module('okarito.controllers', ['okarito.services'])
 
-.controller('AppCtrl', function ($scope, $rootScope, $ionicModal, $timeout) {
-    $scope.message = '';
+.controller('AppCtrl', function ($scope, $rootScope, $ionicModal, $timeout, userService) {
+  var app = this;
+  $scope.message = '';
 
-    $scope.loginData = {
-      email: 'scott.metoyer@gmail.com',
-      url: 'https://scottmetoyer.fogbugz.com',
-      password: ''
-    };
+  $scope.loginData = {
+    email: 'scott.metoyer@gmail.com',
+    url: 'https://scottmetoyer.fogbugz.com',
+    password: ''
+  };
 
-    // Create the login modal that we will use later
-    $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
-      $scope.loginModal = modal;
-    }, {
-        scope: $scope,
-        hardwareBackButtonClose: false,
-        focusFirstInput: true
-    });
+  // Create the login modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
+    $scope.loginModal = modal;
+  }, {
+    scope: $scope,
+    hardwareBackButtonClose: false,
+    focusFirstInput: true
+  });
 
-    $scope.$on('$destroy', function() {
-      $scope.loginModal.remove();
-    });
+  $scope.$on('$destroy', function() {
+    $scope.loginModal.remove();
+  });
 
-    $rootScope.$on('unauthorized', function() {
-      // Null the user object
+  $rootScope.$on('unauthorized', function() {
+    // Null the user object
+    app.currentUser = userService.setCurrentUser(null);
 
-      // Show the login modal
-      $scope.loginModal.show();
-    });
+    // Show the login modal
+    $scope.loginModal.show();
+  });
 
     $rootScope.$on('authorized', function() {
       $scope.loginModal.hide();
@@ -35,13 +37,11 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     // Perform the login action when the user submits the login form
     $scope.doLogin = function () {
-      // authService.loginConfirmed();
-      /*
-        var properties = {};
-        var root = $scope.loginData.url;
-        root = root.replace(/\/?$/, '/');
+      var user = userService.getCurrentUer();
+      var root = $scope.loginData.url;
+      root = root.replace(/\/?$/, '/');
 
-        authService
+      dataService
             .getApiUrl(root)
             .then(function (response) {
                 var apiUrl = root + response.data.response.url.__cdata;
@@ -64,7 +64,7 @@ angular.module('okarito.controllers', ['okarito.services'])
             })
             .catch(function (response) {
                 alert('There was an error logging in to FogBugz. Please check your entries and try again.');
-            });*/
+            });
     };
 })
 
