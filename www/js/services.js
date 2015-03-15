@@ -7,19 +7,6 @@ function transform(data) {
 
 angular.module('okarito.services', ['angular-storage'])
 
-.factory('authService', function($http) {
-  return {
-    loginUser: function(email, password, apiUrl) {
-      return $http.get(apiUrl + 'cmd=logon&email=' + email + '&password=' + password,
-        { transformResponse: transform });
-    },
-    getApiUrl: function (root) {
-      return $http.get(root + 'api.xml',
-        { transformResponse: transform });
-    }
-  }
-})
-
 .factory('userService', function(store) {
   var currentUser = {
     api_url: '',
@@ -58,17 +45,35 @@ angular.module('okarito.services', ['angular-storage'])
   }
 })
 
-.service('loginService', function($q) {
+.service('loginService', function($q, $http) {
   return {
-    loginUser: function(email, password) {
+    loginUser: function(userEmail, password, root) {
       var deferred = $q.defer();
       var promise = deferred.promise;
+      var user = {
+        email: userEmail,
+        api_url : '',
+        access_token: ''
+      };
 
-      if (email == 'user' && password == 'secret') {
-        deferred.resolve('Welcome ' + email + '!');
-      } else {
-        deferred.reject('Wrong credentials.');
-      }
+      root = root.replace(/\/?$/, '/');
+
+      $http
+        .get(root + 'api.xml',{ transformResponse: transform })
+        .then(function(response) {
+          // Retrive the FogBugz API url
+          user.api_url = root + response.data.response.url;
+
+          return $http.get(user.api_url + 'cmd=logon&email=' + userEmail + '&password=' + password,
+            { transformResponse: transform });
+        })
+        .then(function(response) {
+          user.access_token = response.data.response.token;
+          deferred.resolve(user);
+        })
+        .catch(function(error) {
+          deferred.reject('Unable to connect to FogBugz. Please check your entries and try again.');
+        });
 
       promise.success = function(fn) {
         promise.then(fn);
@@ -85,11 +90,10 @@ angular.module('okarito.services', ['angular-storage'])
   }
 })
 
-.service('authInterceptor', function($rootScope, userService){
+.service('authInterceptor', function($q, $rootScope, userService){
   var service = this;
 
   service.request = function(config) {
-    /*
     var currentUser = userService.getCurrentUser();
     var access_token = currentUser ? currentUser.access_token : null;
 
@@ -98,28 +102,22 @@ angular.module('okarito.services', ['angular-storage'])
       if (access_token) {
         config.url = config.url + '&token=' + access_token;
       } else {
-        $rootScope.$broadcast('unauthorized', { message: 'Please log in to your FogBugz account to continue' });
+        $rootScope.$broadcast('unauthorized');
       }
     }
-*/
-    // alert(config.url);
+
     return config;
   };
 
   service.response = function(response) {
-    /*
     if (response.data.response && response.data.response.error) {
-      $rootScope.$broadcast('unauthorized', { message: response.data.response.error });
+      $rootScope.$broadcast('unauthorized');
     }
-*/
     return response;
   };
 
-  service.responseError = function(response) {
-    /*
-    $rootScope.$broadcast('unauthorized', { message: response });
-    throw(response);
-    */
-    return response;
+  service.responseError = function(rejection) {
+    $rootScope.$broadcast('http-error');
+    return $q.reject(rejection);
   };
 });
