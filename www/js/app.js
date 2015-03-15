@@ -16,6 +16,12 @@ angular.module('okarito', ['ionic', 'okarito.controllers', 'monospaced.elastic']
 .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
     $stateProvider
 
+    .state('login', {
+          url: '/login',
+          templateUrl: 'templates/login.html',
+          controller: 'LoginCtrl'
+    })
+
     .state('app', {
         url: "/app",
         abstract: true,
@@ -58,7 +64,7 @@ angular.module('okarito', ['ionic', 'okarito.controllers', 'monospaced.elastic']
     });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/cases');
+    $urlRouterProvider.otherwise('/login');
 
     // Add the authentication interceptor
     $httpProvider.interceptors.push('authInterceptor');

@@ -1,6 +1,6 @@
 angular.module('okarito.controllers', ['okarito.services'])
 
-.controller('AppCtrl', function ($scope, $rootScope, $ionicModal, $timeout, userService) {
+.controller('AppCtrl', function ($scope, $rootScope, $ionicModal, $ionicPopup, $timeout, userService, authService, loginService) {
   var app = this;
   $scope.message = '';
 
@@ -10,7 +10,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     password: ''
   };
 
-  // Create the login modal that we will use later
+  // Create the login modal
   $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
     $scope.loginModal = modal;
   }, {
@@ -24,15 +24,9 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   $rootScope.$on('unauthorized', function(event, args) {
-    // Null the user object
-    userService.setCurrentUser(null);
-
     // Show the login modal
     $scope.message = args.message;
-
-    if ($scope.loginModal) {
-      $scope.loginModal.show();
-    }
+    $scope.loginModal.show();
   });
 
   $rootScope.$on('authorized', function() {
@@ -51,13 +45,13 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     root = root.replace(/\/?$/, '/');
 
-    dataService
+    authService
       .getApiUrl(root)
       .then(function (response) {
         var apiUrl = root + response.data.response.url.__cdata;
         user.api_url = apiUrl;
 
-        return userService.loginUser(
+        return authService.loginUser(
           email,
           password,
           apiUrl)
@@ -71,9 +65,24 @@ angular.module('okarito.controllers', ['okarito.services'])
         $rootScope.$broadcast('authorized');
       })
       .catch(function (response) {
-        alert('There was an error logging in to FogBugz. Please check your entries and try again.');
+        // alert(response);
       });
     };
+})
+
+.controller('LoginCtrl', function($scope, $state, $ionicPopup, loginService) {
+    $scope.data = {};
+
+    $scope.login = function() {
+        loginService.loginUser($scope.data.email, $scope.data.password).success(function(data) {
+            $state.go('app.cases');
+        }).error(function(data) {
+            var alertPopup = $ionicPopup.alert({
+                title: 'Login failed!',
+                template: 'Please check your credentials!'
+            });
+        });
+    }
 })
 
 .controller('CasesCtrl', function ($scope, dataService) {
@@ -81,11 +90,16 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.cases = [];
 
   var init = function () {
+    /*
     dataService
       .getCases($scope.filter)
       .then(function (response) {
         $scope.cases = response.data.response.cases.case;
+      })
+      .catch(function(error) {
+        alert(error);
       });
+      */
     };
 
     init();
@@ -105,7 +119,7 @@ angular.module('okarito.controllers', ['okarito.services'])
             .catch(function (response) {
                 alert("Error loading case");
             });;*/
-    }
+    };
 
     init();
 });
