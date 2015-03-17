@@ -8,11 +8,7 @@ function transform(data) {
 angular.module('okarito.services', ['angular-storage'])
 
 .factory('userService', function(store) {
-  var currentUser = {
-    api_url: '',
-    email: '',
-    access_token: ''
-  };
+  var currentUser = {};
 
   return {
     setCurrentUser: function(user) {
@@ -21,9 +17,16 @@ angular.module('okarito.services', ['angular-storage'])
       return currentUser;
     },
     getCurrentUser: function() {
+      currentUser = store.get('user');
+
       if (!currentUser) {
-        currentUser = store.get('user');
+        currentUser = {
+          email: '',
+          api_url: '',
+          access_token: ''
+        };
       }
+
       return currentUser;
    }
   }
@@ -68,7 +71,7 @@ angular.module('okarito.services', ['angular-storage'])
             { transformResponse: transform });
         })
         .then(function(response) {
-          user.access_token = response.data.response.token;
+          user.access_token = response.data.response.token.__cdata;
           deferred.resolve(user);
         })
         .catch(function(error) {

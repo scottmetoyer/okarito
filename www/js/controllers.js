@@ -27,6 +27,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       loginService
         .loginUser($scope.data.email, $scope.data.password, $scope.data.url)
         .success(function(data) {
+          alert(data.api_url);
           userService.setCurrentUser(data);
           $rootScope.$broadcast('authorized');
           $state.go('app.cases');
@@ -57,18 +58,13 @@ angular.module('okarito.controllers', ['okarito.services'])
 
 .controller('CaseCtrl', function ($scope, $stateParams, dataService) {
     $scope.case = {};
-    $scope.apiUrl = window.localStorage.getItem('apiUrl');
 
     var init = function () {
-      /*
-        dataService
-            .getCase($stateParams.caseId)
-            .then(function (response) {
-                $scope.case = response.data.response.cases.case[0];
-            })
-            .catch(function (response) {
-                alert("Error loading case");
-            });;*/
+      dataService
+        .getCase($stateParams.caseId)
+        .then(function (response) {
+          $scope.case = response.data.response.cases.case[0];
+        })
     };
 
     init();
