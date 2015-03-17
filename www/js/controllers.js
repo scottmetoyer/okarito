@@ -14,6 +14,11 @@ angular.module('okarito.controllers', ['okarito.services'])
   $rootScope.$on('authorized', function() {
     app.currentUser = userService.getCurrentUser();
   });
+
+  $scope.logout = function() {
+    userService.setCurrentUser(null);
+    $state.go('login');
+  }
 })
 
 .controller('LoginCtrl', function($scope, $rootScope, $state, $ionicPopup, loginService, userService) {
@@ -27,7 +32,6 @@ angular.module('okarito.controllers', ['okarito.services'])
       loginService
         .loginUser($scope.data.email, $scope.data.password, $scope.data.url)
         .success(function(data) {
-          alert(data.api_url);
           userService.setCurrentUser(data);
           $rootScope.$broadcast('authorized');
           $state.go('app.cases');
@@ -53,7 +57,9 @@ angular.module('okarito.controllers', ['okarito.services'])
       })
     };
 
-    init();
+    $scope.$on('$ionicView.enter', function(){
+      init();
+    });
 })
 
 .controller('CaseCtrl', function ($scope, $stateParams, dataService) {
@@ -63,9 +69,12 @@ angular.module('okarito.controllers', ['okarito.services'])
       dataService
         .getCase($stateParams.caseId)
         .then(function (response) {
-          $scope.case = response.data.response.cases.case[0];
+          // TODO: Can this return more than one result? How do we handle?
+          $scope.case = response.data.response.cases.case;
         })
     };
 
-    init();
+    $scope.$on('$ionicView.enter', function(){
+      init();
+    });
 });

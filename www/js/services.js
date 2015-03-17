@@ -18,15 +18,6 @@ angular.module('okarito.services', ['angular-storage'])
     },
     getCurrentUser: function() {
       currentUser = store.get('user');
-
-      if (!currentUser) {
-        currentUser = {
-          email: '',
-          api_url: '',
-          access_token: ''
-        };
-      }
-
       return currentUser;
    }
   }
@@ -34,15 +25,14 @@ angular.module('okarito.services', ['angular-storage'])
 
 .factory('dataService', function ($http, userService) {;
   var data = this;
-  data.currentUser = userService.getCurrentUser();
 
   return {
     getCase: function (id) {
-      return $http.get(data.currentUser.api_url + 'cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject',
+      return $http.get('cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject',
         { transformResponse: transform });
     },
     getCases: function (filter) {
-      return $http.get(data.currentUser.api_url + 'cmd=search&q=' + filter + '&cols=sTitle,ixBug',
+      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug',
         { transformResponse: transform });
     }
   }
@@ -99,11 +89,12 @@ angular.module('okarito.services', ['angular-storage'])
   service.request = function(config) {
     var currentUser = userService.getCurrentUser();
     var access_token = currentUser ? currentUser.access_token : null;
+    var api_url = currentUser ? currentUser.api_url : null;
 
     // If the request is a FogBugz command and we have a token save, append it
     if (config.url.indexOf('cmd=') > -1 && config.url.indexOf('cmd=logon') == -1) {
-      if (access_token) {
-        config.url = config.url + '&token=' + access_token;
+      if (access_token && api_url) {
+        config.url = api_url + config.url + '&token=' + access_token;
       } else {
         $rootScope.$broadcast('unauthorized');
       }
