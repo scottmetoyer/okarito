@@ -31,12 +31,40 @@ angular.module('okarito.services', ['angular-storage'])
       return $http.get('cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags',
         { transformResponse: transform });
     },
-    getPeople: function() {
+    getProjects: function() {
+      return $http.get('cmd=listProjects',
+        { transformResponse: transform });
     },
-    getBugEvents: function(id) {
+    getPriorities: function() {
+      return $http.get('cmd=listPriorities',
+        { transformResponse: transform });
+    },
+    getStatuses: function() {
+      return $http.get('cmd=listStatuses',
+        { transformResponse: transform });
+    },
+    getPeople: function() {
+      return $http.get('cmd=listPeople',
+        { transformResponse: transform });
+    },
+    getPriorities: function() {
+      return $http.get('cmd=listCategories',
+        { transformResponse: transform });
+    },
+    getAreas: function(projectId) {
+      return $http.get('cmd=listAreas&ixProject=' + projectId,
+        { transformResponse: transform });
+    },
+    getMilestones: function(projectId) {
+      return $http.get('cmd=listFixFors&ixProject=' +projectId,
+        { transformResponse: transform });
+    },
+    getBugEvents: function(caseId) {
+      return $http.get('cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags',
+        { transformResponse: transform });
     },
     getCases: function (filter) {
-      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug',
+      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,ixProject',
         { transformResponse: transform });
     }
   }
@@ -87,7 +115,7 @@ angular.module('okarito.services', ['angular-storage'])
   }
 })
 
-.service('authInterceptor', function($q, $rootScope, userService){
+.service('authInterceptor', function($rootScope, userService){
   var service = this;
 
   service.request = function(config) {

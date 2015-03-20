@@ -4,29 +4,27 @@
             <label class="item item-input">
                 <textarea msd-elastic ng-model="case.sTitle"></textarea>
             </label>
-            <label class="item item-input">
-                <span class="input-label">Project</span>
-                <input type="text" value="{{case.sProject.__cdata}}">
+            <label class="item item-input item-select">
+              <div class="input-label">
+               Project
+              </div>
+              <select ng-model="project" ng-options="p.sProject.__cdata for p in projects">
+              </select>
             </label>
             <label class="item item-input">
                 <span class="input-label">Area</span>
-                <input type="text" value="{{case.sArea.__cdata}}">
             </label>
             <label class="item item-input">
                 <span class="input-label">Milestone</span>
-                <input type="text" value="{{case.sFixFor.__cdata}}">
             </label>
             <label class="item item-input">
                 <span class="input-label">Category</span>
-                <input type="text" value="{{case.sCategory.__cdata}}">
             </label>
             <label class="item item-input">
                 <span class="input-label">Assigned To</span>
-                <input type="text" value="{{case.sPersonAssignedTo.__cdata}}">
             </label>
             <label class="item item-input">
                 <span class="input-label">Priority</span>
-                <input type="text" value="{{case.sPriority.__cdata}}"">
             </label>
             <label class="item item-input">
                 <span class="input-label">Tags</span>

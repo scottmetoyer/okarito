@@ -62,16 +62,36 @@ angular.module('okarito.controllers', ['okarito.services'])
     });
 })
 
-.controller('CaseCtrl', function ($scope, $stateParams, dataService) {
+.controller('CaseCtrl', function ($q, $scope, $stateParams, $filter, dataService) {
     $scope.case = {};
+    $scope.projects = {};
+    $scope.priorities = {};
+    $scope.milestones = {};
+    $scope.people = {};
+    $scope.areas = {};
+    $scope.categories = {};
+    $scope.events = {};
+
+    // Properties for the selected items
+    $scope.project = {};
 
     var init = function () {
-      dataService
-        .getCase($stateParams.caseId)
-        .then(function (response) {
-          // TODO: Can this return more than one result? How do we handle?
-          $scope.case = response.data.response.cases.case;
-        })
+      $q.all([
+          dataService.getProjects(),
+          //dataService.getPriorities(),
+          //dataService.getPeople(),
+          //dataService.getCategories(),
+          //dataService.getMilestones($stateParams.projectId),
+          //dataService.getAreas($stateParams.projectId),
+          //dataService.getBugEvents($stateParams.caseId),
+          dataService.getCase($stateParams.caseId)
+      ])
+      .then(function(responses) {
+        $scope.projects = responses[0].data.response.projects.project;
+        $scope.case = responses[1].data.response.cases.case;
+
+        $scope.project = $filter('filter')($scope.projects, { ixProject: $scope.case.ixProject }, null)[0];
+      });
     };
 
     $scope.$on('$ionicView.enter', function(){

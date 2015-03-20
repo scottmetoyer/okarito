@@ -54,7 +54,7 @@ angular.module('okarito', ['ionic', 'okarito.controllers', 'monospaced.elastic']
         }
     })
     .state('app.single', {
-        url: "/cases/:caseId",
+        url: "/cases/:caseId?projectId",
         views: {
             'menuContent': {
                 templateUrl: "templates/case.html",
