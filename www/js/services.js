@@ -48,6 +48,10 @@ angular.module('okarito.services', ['angular-storage'])
         { transformResponse: transform });
     },
     getPriorities: function() {
+      return $http.get('cmd=listPriorities',
+        { transformResponse: transform });
+    },
+    getCategories: function() {
       return $http.get('cmd=listCategories',
         { transformResponse: transform });
     },
@@ -60,7 +64,7 @@ angular.module('okarito.services', ['angular-storage'])
         { transformResponse: transform });
     },
     getBugEvents: function(caseId) {
-      return $http.get('cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags',
+      return $http.get('cmd=search&q=' + caseId + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags',
         { transformResponse: transform });
     },
     getCases: function (filter) {

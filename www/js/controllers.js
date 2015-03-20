@@ -64,6 +64,8 @@ angular.module('okarito.controllers', ['okarito.services'])
 
 .controller('CaseCtrl', function ($q, $scope, $stateParams, $filter, dataService) {
     $scope.case = {};
+
+    // Lists for the selects and bug events view
     $scope.projects = {};
     $scope.priorities = {};
     $scope.milestones = {};
@@ -74,21 +76,26 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     // Properties for the selected items
     $scope.project = {};
+    $scope.priority = {};
+    $scope.milestone = {};
+    $scope.person = {};
+    $scope.area = {};
+    $scope.category = {};
 
     var init = function () {
       $q.all([
           dataService.getProjects(),
-          //dataService.getPriorities(),
-          //dataService.getPeople(),
-          //dataService.getCategories(),
-          //dataService.getMilestones($stateParams.projectId),
-          //dataService.getAreas($stateParams.projectId),
-          //dataService.getBugEvents($stateParams.caseId),
+          dataService.getPriorities(),
+          dataService.getPeople(),
+          dataService.getCategories(),
+          dataService.getMilestones($stateParams.projectId),
+          dataService.getAreas($stateParams.projectId),
+          dataService.getBugEvents($stateParams.caseId),
           dataService.getCase($stateParams.caseId)
       ])
       .then(function(responses) {
         $scope.projects = responses[0].data.response.projects.project;
-        $scope.case = responses[1].data.response.cases.case;
+        $scope.case = responses[7].data.response.cases.case;
 
         $scope.project = $filter('filter')($scope.projects, { ixProject: $scope.case.ixProject }, null)[0];
       });
