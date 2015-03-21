@@ -1,7 +1,7 @@
 <ion-view view-title="Cases">
     <ion-content>
         <ion-list>
-            <ion-item ng-repeat="case in cases" href="#/app/cases/{{case.ixBug}}?projectId={{case.ixProject}}">
+            <ion-item ng-repeat="case in cases.case" href="#/app/cases/{{case.ixBug}}?projectId={{case.ixProject}}">
                 {{case.sTitle.__cdata}}
             </ion-item>
         </ion-list>

@@ -5,26 +5,28 @@
                 <textarea msd-elastic ng-model="case.sTitle"></textarea>
             </label>
             <label class="item item-input item-select">
-              <div class="input-label">
-               Project
-              </div>
-              <select ng-model="project" ng-options="p.sProject.__cdata for p in projects">
-              </select>
+              <div class="input-label">Project</div>
+              <select ng-model="project" ng-options="p.sProject for p in projects"></select>
             </label>
-            <label class="item item-input">
-                <span class="input-label">Area</span>
+            <label class="item item-input item-select">
+              <div class="input-label">Area</div>
+              <select ng-model="area" ng-options="a.sArea for a in areas"></select>
             </label>
-            <label class="item item-input">
-                <span class="input-label">Milestone</span>
+            <label class="item item-input item-select">
+              <div class="input-label">Milestone</div>
+              <select ng-model="milestone" ng-options="m.sFixFor for m in milestones"></select>
             </label>
-            <label class="item item-input">
-                <span class="input-label">Category</span>
+            <label class="item item-input item-select">
+              <div class="input-label">Category</div>
+              <select ng-model="category" ng-options="c.sCategory for c in categories"></select>
             </label>
-            <label class="item item-input">
-                <span class="input-label">Assigned To</span>
+            <label class="item item-input item-select">
+              <div class="input-label">Assigned To</div>
+              <select ng-model="person" ng-options="p.sFullName for p in people"></select>
             </label>
-            <label class="item item-input">
-                <span class="input-label">Priority</span>
+            <label class="item item-input item-select">
+              <div class="input-label">Priority</div>
+              <select ng-model="priority" ng-options="p.sPriority for p in priorities"></select>
             </label>
             <label class="item item-input">
                 <span class="input-label">Tags</span>

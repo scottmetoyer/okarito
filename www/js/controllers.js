@@ -53,7 +53,8 @@ angular.module('okarito.controllers', ['okarito.services'])
     dataService
       .getCases($scope.filter)
       .then(function (response) {
-        $scope.cases = response.data.response.cases.case;
+        $scope.cases = response.data.cases;
+        console.log($scope.cases);
       })
     };
 
@@ -94,10 +95,21 @@ angular.module('okarito.controllers', ['okarito.services'])
           dataService.getCase($stateParams.caseId)
       ])
       .then(function(responses) {
-        $scope.projects = responses[0].data.response.projects.project;
-        $scope.case = responses[7].data.response.cases.case;
+        var x2js = new X2JS();
+        $scope.projects = x2js.asArray(responses[0].data.projects.project);
+        $scope.priorities =  x2js.asArray(responses[1].data.priorities.priority);
+        $scope.people =  x2js.asArray(responses[2].data.people.person);
+        $scope.categories =  x2js.asArray(responses[3].data.categories.category);
+        $scope.milestones =  x2js.asArray(responses[4].data.fixfors.fixfor);
+        $scope.areas = x2js.asArray(responses[5].data.areas.area);
+        $scope.case = responses[7].data.cases.case;
 
         $scope.project = $filter('filter')($scope.projects, { ixProject: $scope.case.ixProject }, null)[0];
+        $scope.priority = $filter('filter')($scope.priorities, { ixPriority: $scope.case.ixPriority }, null)[0];
+        $scope.milestone = $filter('filter')($scope.milestones, { ixFixFor: $scope.case.ixFixFor }, null)[0];
+        $scope.person = $filter('filter')($scope.people, { ixPerson: $scope.case.ixPersonAssignedTo }, null)[0];
+        $scope.area = $filter('filter')($scope.areas, { ixArea: $scope.case.ixArea }, null)[0];
+        $scope.category = $filter('filter')($scope.categories, { ixCategory: $scope.case.ixCategory }, null)[0];
       });
     };
 

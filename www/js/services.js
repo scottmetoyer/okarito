@@ -2,7 +2,7 @@
 function transform(data) {
     var x2js = new X2JS();
     var json = x2js.xml_str2json(data);
-    return json;
+    return json.response;
 }
 
 angular.module('okarito.services', ['angular-storage'])
@@ -91,13 +91,13 @@ angular.module('okarito.services', ['angular-storage'])
         .get(root + 'api.xml',{ transformResponse: transform })
         .then(function(response) {
           // Retrive the FogBugz API url
-          user.api_url = root + response.data.response.url;
-
+          user.api_url = root + response.data.url;
+          console.log(response);
           return $http.get(user.api_url + 'cmd=logon&email=' + userEmail + '&password=' + password,
             { transformResponse: transform });
         })
         .then(function(response) {
-          user.access_token = response.data.response.token.__cdata;
+          user.access_token = response.data.token.__cdata;
           deferred.resolve(user);
         })
         .catch(function(error) {
@@ -119,7 +119,7 @@ angular.module('okarito.services', ['angular-storage'])
   }
 })
 
-.service('authInterceptor', function($rootScope, userService){
+.service('authInterceptor', function($q, $rootScope, userService){
   var service = this;
 
   service.request = function(config) {
@@ -140,7 +140,7 @@ angular.module('okarito.services', ['angular-storage'])
   };
 
   service.response = function(response) {
-    if (response.data.response && response.data.response.error) {
+    if (response.data && response.data.error) {
       $rootScope.$broadcast('unauthorized');
     }
     return response;
