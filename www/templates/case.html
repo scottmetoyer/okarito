@@ -28,56 +28,19 @@
               <div class="input-label">Priority</div>
               <select ng-model="priority" ng-options="p.sPriority for p in priorities"></select>
             </label>
-            <label class="item item-input">
-                <span class="input-label">Tags</span>
-                <input type="text">
+            <label class="item" ng-show="tags.length > 0">
+                <span ng-repeat="tag in tags">{{ tag.__cdata }}&nbsp;</span>
             </label>
         </div>
-        <a href="#/comment" class="btn btn-block btn-primary">Add case note</a>
-        <div class="case-note">
-            <div class="heading">Edited by Sam Wilson 4/5/15 10:17AM</div>
-            <div class="note">
-                akslfjsdf
-                sdf asdfkasdf asd
-
-                sdf
-                asdf
-                asd
-                fasdflajsdlfkjhasldjhflaksdf
-                asd;fkasd
-                fasd;kfjasdlf
-                asadlfkasjdlkfj
-            </div>
-        </div>
-        <div class="case-note">
-            <div class="heading">Edited by Sam Wilson 4/5/15 10:17AM</div>
-            <div class="note">
-                akslfjsdf
-                sdf asdfkasdf asd
-
-                sdf
-                asdf
-                asd
-                fasdflajsdlfkjhasldjhflaksdf
-                asd;fkasd
-                fasd;kfjasdlf
-                asadlfkasjdlkfj
-            </div>
-        </div>
-        <div class="case-note">
-            <div class="heading">Edited by Sam Wilson 4/5/15 10:17AM</div>
-            <div class="note">
-                akslfjsdf
-                sdf asdfkasdf asd
-
-                sdf
-                asdf
-                asd
-                fasdflajsdlfkjhasldjhflaksdf
-                asd;fkasd
-                fasd;kfjasdlf
-                asadlfkasjdlkfj
-            </div>
-        </div>
+        <div class="padding">
+          <a href="#/comment" class="btn btn-block btn-primary">Add case note</a>
+          <div class="case-note" ng-repeat="event in events">
+              <div class="heading">{{ event.evtDescription.__cdata }} {{ event.dt }}</div>
+              <div class="subheading">{{ event.sChanges.__cdata }}</div>
+              <div class="note" ng-bind-html="event.sHtml.__cdata">
+              </div>
+              <br/>
+          </div>
+      </div>
     </ion-content>
 </ion-view>

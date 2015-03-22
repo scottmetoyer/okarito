@@ -28,7 +28,7 @@ angular.module('okarito.services', ['angular-storage'])
 
   return {
     getCase: function (id) {
-      return $http.get('cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags',
+      return $http.get('cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events',
         { transformResponse: transform });
     },
     getProjects: function() {
@@ -61,10 +61,6 @@ angular.module('okarito.services', ['angular-storage'])
     },
     getMilestones: function(projectId) {
       return $http.get('cmd=listFixFors&ixProject=' +projectId,
-        { transformResponse: transform });
-    },
-    getBugEvents: function(caseId) {
-      return $http.get('cmd=search&q=' + caseId + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags',
         { transformResponse: transform });
     },
     getCases: function (filter) {
