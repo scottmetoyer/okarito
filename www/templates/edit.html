@@ -1,0 +1,49 @@
+<ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Edit Case</h1>
+    </ion-header-bar>
+    <ion-content>
+      <div class="list">
+        <label class="item item-input">
+            <textarea msd-elastic ng-model="case.sTitle"></textarea>
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label">Project</div>
+          <select ng-model="project" ng-options="p.sProject for p in projects"></select>
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label">Area</div>
+          <select ng-model="area" ng-options="a.sArea for a in areas"></select>
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label">Milestone</div>
+          <select ng-model="milestone" ng-options="m.sFixFor for m in milestones"></select>
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label">Category</div>
+          <select ng-model="category" ng-options="c.sCategory for c in categories"></select>
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label">Assigned To</div>
+          <select ng-model="person" ng-options="p.sFullName for p in people"></select>
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label">Priority</div>
+          <select ng-model="priority" ng-options="p.sPriority for p in priorities"></select>
+        </label>
+        <label class="item" ng-show="tags.length > 0">
+            <span ng-repeat="tag in tags">{{ tag.__cdata }}&nbsp;</span>
+        </label>
+    </div>
+    <div class="padding">
+      <a href="#/comment" class="btn btn-block btn-primary">Add case note</a>
+      <div class="case-note" ng-repeat="event in events">
+          <div class="heading">{{ event.evtDescription.__cdata }} {{ event.dt }}</div>
+          <div class="subheading">{{ event.sChanges.__cdata }}</div>
+          <div class="note" ng-bind-html="event.sHtml.__cdata">
+          </div>
+          <br/>
+      </div>
+    </div>
+    </ion-content>
+</ion-modal-view>

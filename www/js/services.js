@@ -28,7 +28,7 @@ angular.module('okarito.services', ['angular-storage'])
 
   return {
     getCase: function (id) {
-      return $http.get('cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events',
+      return $http.get('cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events',
         { transformResponse: transform });
     },
     getProjects: function() {
