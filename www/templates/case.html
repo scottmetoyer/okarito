@@ -1,0 +1,51 @@
+<ion-view view-title="Case {{case.ixBug}}">
+  <ion-content>
+    <div class="list card">
+      <div class="item item-avatar">
+        <img src="img/bug.png">
+        <h2>{{ case.sTitle.__cdata }}</h2>
+        <p><a href="#">{{ case.sProject.__cdata }}</a>: <a href="#">{{ case.sArea.__cdata }}</a> (Milestone: <a href="#">{{ case.sFixFor.__cdata }}</a>)</p>
+      </div>
+      <div class="item tabs tabs-secondary tabs-icon-left">
+        <a class="tab-item" href="#">
+          <i class="icon ion-person"></i>
+          Assign
+        </a>
+        <a class="tab-item" href="#">
+          <i class="icon ion-checkmark"></i>
+          Resolve
+        </a>
+        <a class="tab-item" href="#">
+          <i class="icon ion-edit"></i>
+          Edit
+        </a>
+      </div>
+      <div class="item item-body">
+        <div class="row">
+          <div class="col col-50">Status</div>
+          <div class="col">{{ case.sStatus.__cdata }}</div>
+        </div>
+      <div class="row">
+        <div class="col col-50">Category</div>
+        <div class="col"><i class="icon ion-bug"></i>&nbsp;{{ case.sCategory.__cdata }}</div>
+      </div>
+      <div class="row">
+        <div class="col col-50">Assigned To</div>
+        <div class="col">{{ case.sPersonAssignedTo.__cdata }}</div>
+      </div>
+      <div class="row">
+        <div class="col col-50">Priority</div>
+        <div class="col">{{ case.sPriority.__cdata }}</div>
+      </div>
+    </div>
+    <span ng-repeat="event in events">
+      <div class="item item-divider">
+        <h3>{{ event.evtDescription.__cdata }}</h3>
+        <h4 class="subdued">{{ event.dt }}</h4>
+      </div>
+      <div class="item item-text-wrap" ng-bind-html="event.sHtml.__cdata" ng-show="event.s != ''"></div>
+      <div class="spacer" ng-hide="event.s != ''"></div>
+    </span>
+  </div>
+</ion-content>
+</ion-view>
