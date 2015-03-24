@@ -1,11 +1,15 @@
 <ion-modal-view>
-    <ion-header-bar>
-      <h1 class="title">Edit Case</h1>
-    </ion-header-bar>
-    <ion-content>
+  <ion-header-bar>
+    <button class="button" ng-click="closeModal()">Cancel</button>
+    <h1 class="title">Edit Case {{ case.ixBug }}</h1>
+    <button class="button button-positive">Save</button>
+  </ion-header-bar>
+  <ion-content>
+    <div class="card">
       <div class="list">
         <label class="item item-input">
-            <textarea msd-elastic ng-model="case.sTitle"></textarea>
+          <div class="input-label">Title</div>
+          <input type="text" ng-model="case.sTitle">
         </label>
         <label class="item item-input item-select">
           <div class="input-label">Project</div>
@@ -31,19 +35,18 @@
           <div class="input-label">Priority</div>
           <select ng-model="priority" ng-options="p.sPriority for p in priorities"></select>
         </label>
-        <label class="item" ng-show="tags.length > 0">
-            <span ng-repeat="tag in tags">{{ tag.__cdata }}&nbsp;</span>
+        <label class="item item-input item-input">
+          <div class="input-label">Tags</div>
+          <input type="text">
         </label>
-    </div>
-    <div class="padding">
-      <a href="#/comment" class="btn btn-block btn-primary">Add case note</a>
-      <div class="case-note" ng-repeat="event in events">
-          <div class="heading">{{ event.evtDescription.__cdata }} {{ event.dt }}</div>
-          <div class="subheading">{{ event.sChanges.__cdata }}</div>
-          <div class="note" ng-bind-html="event.sHtml.__cdata">
-          </div>
-          <br/>
       </div>
-    </div>
-    </ion-content>
+      <div class="item item-divider">
+        <h3>Edited by logged in user</h3>
+        <h4 class="subdued">Current date</h4>
+      </div>
+      <div class="item item-text-wrap">
+        <textarea ng-model="case.sNewEvent" placeholder="Add a case note..."></textarea>
+      </div>
+  </div>
+</ion-content>
 </ion-modal-view>

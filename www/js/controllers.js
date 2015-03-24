@@ -62,7 +62,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     });
 })
 
-.controller('CaseCtrl', function ($q, $scope, $stateParams, $filter, dataService) {
+.controller('CaseCtrl', function ($q, $scope, $stateParams, $ionicModal, $filter, dataService) {
   var x2js = new X2JS();
 
   // Lists for the selects and bug events view
@@ -84,7 +84,33 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.area = {};
   $scope.category = {};
 
-  function showModal() {
+  // Set up the edit modal
+  $ionicModal.fromTemplateUrl('templates/edit.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  $scope.editCase = function() {
+    $scope.modal.show();
+  };
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+  // Execute action on hide modal
+  $scope.$on('modal.hidden', function() {
+    // Execute action
+  });
+  // Execute action on remove modal
+  $scope.$on('modal.removed', function() {
+    // Execute action
+  });
+
+  function showEdit() {
     $q.all([
         dataService.getProjects(),
         dataService.getPriorities(),
