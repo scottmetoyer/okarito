@@ -110,33 +110,6 @@ angular.module('okarito.controllers', ['okarito.services'])
     // Execute action
   });
 
-  function showEdit() {
-    $q.all([
-        dataService.getProjects(),
-        dataService.getPriorities(),
-        dataService.getPeople(),
-        dataService.getCategories(),
-        dataService.getMilestones($stateParams.projectId),
-        dataService.getAreas($stateParams.projectId),
-        dataService.getCase($stateParams.caseId)
-    ])
-    .then(function(responses) {
-      $scope.projects = x2js.asArray(responses[0].data.projects.project);
-      $scope.priorities =  x2js.asArray(responses[1].data.priorities.priority);
-      $scope.people =  x2js.asArray(responses[2].data.people.person);
-      $scope.categories =  x2js.asArray(responses[3].data.categories.category);
-      $scope.milestones =  x2js.asArray(responses[4].data.fixfors.fixfor);
-      $scope.areas = x2js.asArray(responses[5].data.areas.area);
-
-      $scope.project = $filter('filter')($scope.projects, { ixProject: $scope.case.ixProject }, null)[0];
-      $scope.priority = $filter('filter')($scope.priorities, { ixPriority: $scope.case.ixPriority }, null)[0];
-      $scope.milestone = $filter('filter')($scope.milestones, { ixFixFor: $scope.case.ixFixFor }, null)[0];
-      $scope.person = $filter('filter')($scope.people, { ixPerson: $scope.case.ixPersonAssignedTo }, null)[0];
-      $scope.area = $filter('filter')($scope.areas, { ixArea: $scope.case.ixArea }, null)[0];
-      $scope.category = $filter('filter')($scope.categories, { ixCategory: $scope.case.ixCategory }, null)[0];
-    });
-  }
-
   var init = function () {
     dataService.getCase($stateParams.caseId)
     .then(function(response) {
@@ -147,6 +120,31 @@ angular.module('okarito.controllers', ['okarito.services'])
       if ($scope.tags[0] == null) {
         $scope.tags = [];
       }
+
+      // Populate the dropdowns in the edit view
+      $q.all([
+          dataService.getProjects(),
+          dataService.getPriorities(),
+          dataService.getPeople(),
+          dataService.getCategories(),
+          dataService.getMilestones($stateParams.projectId),
+          dataService.getAreas($stateParams.projectId),
+      ])
+      .then(function(responses) {
+        $scope.projects = x2js.asArray(responses[0].data.projects.project);
+        $scope.priorities =  x2js.asArray(responses[1].data.priorities.priority);
+        $scope.people =  x2js.asArray(responses[2].data.people.person);
+        $scope.categories =  x2js.asArray(responses[3].data.categories.category);
+        $scope.milestones =  x2js.asArray(responses[4].data.fixfors.fixfor);
+        $scope.areas = x2js.asArray(responses[5].data.areas.area);
+
+        $scope.project = $filter('filter')($scope.projects, { ixProject: $scope.case.ixProject }, null)[0];
+        $scope.priority = $filter('filter')($scope.priorities, { ixPriority: $scope.case.ixPriority }, null)[0];
+        $scope.milestone = $filter('filter')($scope.milestones, { ixFixFor: $scope.case.ixFixFor }, null)[0];
+        $scope.person = $filter('filter')($scope.people, { ixPerson: $scope.case.ixPersonAssignedTo }, null)[0];
+        $scope.area = $filter('filter')($scope.areas, { ixArea: $scope.case.ixArea }, null)[0];
+        $scope.category = $filter('filter')($scope.categories, { ixCategory: $scope.case.ixCategory }, null)[0];
+      });
     });
   };
 
