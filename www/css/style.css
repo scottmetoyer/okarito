@@ -1,3 +1,7 @@
 .spacer {
   height: 10px;
 }
+
+.dirty {
+  border-left: solid 2px red !important;
+}

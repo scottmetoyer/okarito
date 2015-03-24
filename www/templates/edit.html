@@ -4,49 +4,61 @@
     <h1 class="title">Edit Case {{ case.ixBug }}</h1>
     <button class="button button-positive">Save</button>
   </ion-header-bar>
-  <ion-content>
+  <ion-content style="overflow:hidden !important;">
     <div class="card">
-      <div class="list">
-        <label class="item item-input">
-          <div class="input-label">Title</div>
-          <input type="text" ng-model="case.sTitle">
-        </label>
-        <label class="item item-input item-select">
-          <div class="input-label">Project</div>
-          <select ng-model="project" ng-options="p.sProject for p in projects"></select>
-        </label>
-        <label class="item item-input item-select">
-          <div class="input-label">Area</div>
-          <select ng-model="area" ng-options="a.sArea for a in areas"></select>
-        </label>
-        <label class="item item-input item-select">
-          <div class="input-label">Milestone</div>
-          <select ng-model="milestone" ng-options="m.sFixFor for m in milestones"></select>
-        </label>
-        <label class="item item-input item-select">
-          <div class="input-label">Category</div>
-          <select ng-model="category" ng-options="c.sCategory for c in categories"></select>
-        </label>
-        <label class="item item-input item-select">
-          <div class="input-label">Assigned To</div>
-          <select ng-model="person" ng-options="p.sFullName for p in people"></select>
-        </label>
-        <label class="item item-input item-select">
-          <div class="input-label">Priority</div>
-          <select ng-model="priority" ng-options="p.sPriority for p in priorities"></select>
-        </label>
-        <label class="item item-input item-input">
-          <div class="input-label">Tags</div>
-          <input type="text">
-        </label>
-      </div>
-      <div class="item item-divider">
-        <h3>Edited by logged in user</h3>
-        <h4 class="subdued">Current date</h4>
-      </div>
-      <div class="item item-text-wrap">
-        <textarea ng-model="case.sNewEvent" placeholder="Add a case note..."></textarea>
-      </div>
-  </div>
-</ion-content>
+      <span ng-form="editForm">
+        <div class="list">
+          <label class="item item-input" ng-class="{dirty: editForm.title.$dirty}">
+            <div class="input-label">Title</div>
+            <input type="text" name="title" ng-model="case.sTitle">
+          </label>
+          <label class="item item-input item-select" ng-class="{dirty: editForm.project.$dirty}">
+            <div class="input-label">Project</div>
+            <select name="project" ng-model="project" ng-options="p.sProject for p in projects"></select>
+          </label>
+          <label class="item item-input item-select" ng-class="{dirty: editForm.area.$dirty}">
+            <div class="input-label">Area</div>
+            <select name="area" ng-model="area" ng-options="a.sArea for a in areas"></select>
+          </label>
+          <label class="item item-input item-select" ng-class="{dirty: editForm.milestone.$dirty}">
+            <div class="input-label">Milestone</div>
+            <select name="milestone" ng-model="milestone" ng-options="m.sFixFor for m in milestones"></select>
+          </label>
+          <label class="item item-input item-select" ng-class="{dirty: editForm.category.$dirty}">
+            <div class="input-label">Category</div>
+            <select name="category" ng-model="category" ng-options="c.sCategory for c in categories"></select>
+          </label>
+          <label class="item item-input item-select" ng-class="{dirty: editForm.person.$dirty}">
+            <div class="input-label">Assigned To</div>
+            <select name="person" ng-model="person" ng-options="p.sFullName for p in people"></select>
+          </label>
+          <label class="item item-input item-select" ng-class="{dirty: editForm.priority.$dirty}">
+            <div class="input-label">Priority</div>
+            <select name="priority" ng-model="priority" ng-options="p.sPriority for p in priorities"></select>
+          </label>
+          <label class="item item-input item-input" ng-class="{dirty: editForm.tags.$dirty}">
+            <div class="input-label">Tags</div>
+            <input name="tags" ng-model="tags" type="text">
+          </label>
+          <label class="item tabs tabs-secondary tabs-icon-left">
+            <a class="tab-item" href="#">
+              <i class="icon ion-paperclip positive"></i>
+              Add Attachment
+            </a>
+            <a class="tab-item" href="#">
+              <i class="icon ion-camera positive"></i>
+              Take Photo
+            </a>
+          </label>
+          <label class="item item-divider">
+            <h3>Edited by logged in user</h3>
+            <h4 class="subdued">Current date</h4>
+          </label>
+          <label class="item item-text-wrap">
+            <textarea id="event" name="event" ng-model="case.sNewEvent" placeholder="Add a case note..."></textarea>
+          </label>
+        </div>
+      </span>
+    </div>
+  </ion-content>
 </ion-modal-view>
