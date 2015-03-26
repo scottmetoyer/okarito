@@ -75,7 +75,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.events = {};
   $scope.tags = {};
 
-  // Properties for the selected items
+  // Properties for the individual case items
   $scope.case = {};
   $scope.project = {};
   $scope.priority = {};
