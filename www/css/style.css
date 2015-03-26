@@ -9,3 +9,7 @@
 textarea {
   padding-top: 1em;
 }
+
+.item-avatar > img {
+  border-radius: 0 !important;
+}
