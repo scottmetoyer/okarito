@@ -5,3 +5,7 @@
 .dirty {
   border-left: solid 2px red !important;
 }
+
+textarea {
+  padding-top: 1em;
+}

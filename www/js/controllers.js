@@ -62,7 +62,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     });
 })
 
-.controller('CaseCtrl', function ($q, $scope, $stateParams, $ionicModal, $filter, dataService) {
+.controller('CaseCtrl', function ($q, $scope, $stateParams, $ionicModal, $ionicScrollDelegate, $filter, dataService) {
   var x2js = new X2JS();
 
   // Lists for the selects and bug events view
