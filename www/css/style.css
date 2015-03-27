@@ -3,7 +3,7 @@
 }
 
 .dirty {
-  background-image: url("../img/corner.png") no-repeat left top;
+  background: url('../img/corner.png') no-repeat left top !important;
 }
 
 textarea {
