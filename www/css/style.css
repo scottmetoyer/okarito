@@ -13,3 +13,7 @@ textarea {
 .item-avatar > img {
   border-radius: 0 !important;
 }
+
+.title {
+  font-size: 1em !important;
+}

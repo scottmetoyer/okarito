@@ -62,29 +62,8 @@ angular.module('okarito.controllers', ['okarito.services'])
     });
 })
 
-.controller('CaseCtrl', function ($q, $scope, $stateParams, $ionicModal, $ionicScrollDelegate, $filter, dataService) {
+.controller('CaseCtrl', function ($q, $scope, $stateParams, $ionicModal, $filter, dataService, utilityService) {
   var x2js = new X2JS();
-
-  // Lists for the selects and bug events view
-  $scope.projects = {};
-  $scope.priorities = {};
-  $scope.milestones = {};
-  $scope.people = {};
-  $scope.areas = {};
-  $scope.categories = {};
-  $scope.events = {};
-  $scope.tags = {};
-
-  // Properties for the individual case items
-  $scope.case = {};
-  $scope.project = {};
-  $scope.priority = {};
-  $scope.milestone = {};
-  $scope.person = {};
-  $scope.area = {};
-  $scope.category = {};
-  $scope.icon = "";
-  $scope.iconImage = "";
 
   // Set up the edit modal
   $ionicModal.fromTemplateUrl('templates/edit.html', {
@@ -111,55 +90,6 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.$on('modal.removed', function() {
     // Execute action
   });
-
-  function getCategoryIcon(categoryId) {
-    var icon = '';
-
-    switch (categoryId)
-    {
-      case '1':
-        icon = 'bug'
-        break;
-
-      case '2':
-        icon = 'lightbulb'
-        break;
-
-      case '3':
-        icon = 'email'
-        break;
-
-      case '4':
-        icon = 'clock'
-        break;
-
-      case '5':
-        icon = 'alert'
-        break;
-
-      case '6':
-        icon = 'wrench'
-        break;
-
-      case '7':
-        icon = 'search'
-        break;
-
-      case '8':
-        icon = 'key'
-        break;
-
-      case '9':
-        icon = 'alert-circled'
-        break;
-
-      default:
-        icon = 'document-text'
-        break;
-    }
-
-    return icon;
-  }
 
   var init = function () {
     dataService.getCase($stateParams.caseId)
@@ -196,7 +126,7 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.area = $filter('filter')($scope.areas, { ixArea: $scope.case.ixArea }, null)[0];
         $scope.category = $filter('filter')($scope.categories, { ixCategory: $scope.case.ixCategory }, null)[0];
 
-        var icon = getCategoryIcon($scope.category.nIconType);
+        var icon = utilityService.categoryIcon($scope.category.nIconType);
         $scope.iconImage = 'img/' + icon + '.png';
         $scope.icon = 'ion-' + icon;
       });

@@ -115,6 +115,59 @@ angular.module('okarito.services', ['angular-storage'])
   }
 })
 
+.factory("utilityService", function() {
+  return {
+    categoryIcon: function (categoryId) {
+        var icon = '';
+
+        switch (categoryId)
+        {
+          case '1':
+            icon = 'bug'
+            break;
+
+          case '2':
+            icon = 'lightbulb'
+            break;
+
+          case '3':
+            icon = 'email'
+            break;
+
+          case '4':
+            icon = 'clock'
+            break;
+
+          case '5':
+            icon = 'alert'
+            break;
+
+          case '6':
+            icon = 'wrench'
+            break;
+
+          case '7':
+            icon = 'search'
+            break;
+
+          case '8':
+            icon = 'key'
+            break;
+
+          case '9':
+            icon = 'alert-circled'
+            break;
+
+          default:
+            icon = 'document-text'
+            break;
+        }
+
+        return icon;
+      }
+    }
+})
+
 .service('authInterceptor', function($q, $rootScope, userService){
   var service = this;
 
