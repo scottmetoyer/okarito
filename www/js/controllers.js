@@ -85,6 +85,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   // Execute action on hide modal
   $scope.$on('modal.hidden', function() {
     // Execute action
+    console.log($scope.category);
   });
   // Execute action on remove modal
   $scope.$on('modal.removed', function() {
@@ -110,6 +111,7 @@ angular.module('okarito.controllers', ['okarito.services'])
           dataService.getCategories(),
           dataService.getMilestones($stateParams.projectId),
           dataService.getAreas($stateParams.projectId),
+          dataService.getStatuses()
       ])
       .then(function(responses) {
         $scope.projects = x2js.asArray(responses[0].data.projects.project);
@@ -118,6 +120,7 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.categories =  x2js.asArray(responses[3].data.categories.category);
         $scope.milestones =  x2js.asArray(responses[4].data.fixfors.fixfor);
         $scope.areas = x2js.asArray(responses[5].data.areas.area);
+        $scope.statuses = x2js.asArray(responses[6].data.statuses.status);
 
         $scope.project = $filter('filter')($scope.projects, { ixProject: $scope.case.ixProject }, null)[0];
         $scope.priority = $filter('filter')($scope.priorities, { ixPriority: $scope.case.ixPriority }, null)[0];
@@ -125,6 +128,7 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.person = $filter('filter')($scope.people, { ixPerson: $scope.case.ixPersonAssignedTo }, null)[0];
         $scope.area = $filter('filter')($scope.areas, { ixArea: $scope.case.ixArea }, null)[0];
         $scope.category = $filter('filter')($scope.categories, { ixCategory: $scope.case.ixCategory }, null)[0];
+        $scope.status = $filter('filter')($scope.statuses, { ixStatus: $scope.case.ixStatus }, null)[0]
 
         var icon = utilityService.categoryIcon($scope.category.nIconType);
         $scope.iconImage = 'img/' + icon + '.png';

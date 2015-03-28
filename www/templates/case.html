@@ -4,7 +4,7 @@
       <div class="item item-avatar">
         <img ng-src="{{ iconImage }}">
         <h2>{{ case.sTitle.__cdata }}</h2>
-        <p><a href="#">{{ case.sProject.__cdata }}</a>: <a href="#">{{ case.sArea.__cdata }}</a> (Milestone: <a href="#">{{ case.sFixFor.__cdata }}</a>)</p>
+        <p><a href="#">{{ project.sProject.__cdata }}</a>: <a href="#">{{ area.sArea.__cdata }}</a> (Milestone: <a href="#">{{ milestone.sFixFor.__cdata }}</a>)</p>
       </div>
       <div class="item tabs tabs-secondary tabs-icon-left">
         <a class="tab-item" href="#">
@@ -23,19 +23,19 @@
       <div class="item item-body">
         <div class="row">
           <div class="col col-50">Status</div>
-          <div class="col">{{ case.sStatus.__cdata }}</div>
+          <div class="col">{{ status.sStatus.__cdata }}</div>
         </div>
       <div class="row">
         <div class="col col-50">Category</div>
-        <div class="col"><i class="icon {{ icon }}"></i>&nbsp;{{ case.sCategory.__cdata }}</div>
+        <div class="col"><i class="icon {{ icon }}"></i>&nbsp;{{ category.sCategory.__cdata }}</div>
       </div>
       <div class="row">
         <div class="col col-50">Assigned To</div>
-        <div class="col">{{ case.sPersonAssignedTo.__cdata }}</div>
+        <div class="col">{{ person.sFullName.__cdata }}</div>
       </div>
       <div class="row">
         <div class="col col-50">Priority</div>
-        <div class="col">{{ case.sPriority.__cdata }}</div>
+        <div class="col">{{ priority.sPriority.__cdata }}</div>
       </div>
     </div>
     <span ng-repeat="event in events">

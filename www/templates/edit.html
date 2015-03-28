@@ -16,7 +16,7 @@
             <h4 class="subdued">Current date</h4>
           </label>
           <label class="item item-input" ng-class="{dirty: editForm.event.$dirty}">
-            <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.sNewEvent" placeholder="Add a case note..."></textarea>
+            <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a case note..."></textarea>
           </label>
           <label class="item tabs tabs-secondary tabs-icon-left">
             <a class="tab-item" href="#">
@@ -27,6 +27,10 @@
               <i class="icon ion-camera positive"></i>
               Take Photo
             </a>
+          </label>
+          <label class="item item-input item-select" ng-class="{dirty: editForm.status.$dirty}">
+            <div class="input-label">Status</div>
+            <select name="status" ng-model="status" ng-options="s.sStatus for s in statuses"></select>
           </label>
           <label class="item item-input item-select" ng-class="{dirty: editForm.project.$dirty}">
             <div class="input-label">Project</div>
