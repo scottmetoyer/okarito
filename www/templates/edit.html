@@ -1,12 +1,12 @@
 <ion-modal-view>
   <ion-header-bar>
-    <button class="button" ng-click="closeModal()">Cancel</button>
+    <button class="button" ng-click="cancel()">Cancel</button>
     <h1 class="title">Edit Case {{ case.ixBug }}</h1>
-    <button class="button button-positive">Save</button>
+    <button class="button button-positive" ng-click="save()">Save</button>
   </ion-header-bar>
   <ion-content scroll="true">
     <div class="card">
-      <span ng-form="editForm">
+      <span ng-form="editForm" ng-submit="save()">
         <div class="list">
           <label class="item item-input" ng-class="{dirty: editForm.title.$dirty}">
             <input type="text" name="title" ng-model="case.sTitle.__cdata" class="title">

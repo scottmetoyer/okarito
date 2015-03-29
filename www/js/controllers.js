@@ -64,6 +64,7 @@ angular.module('okarito.controllers', ['okarito.services'])
 
 .controller('CaseCtrl', function ($q, $scope, $stateParams, $ionicModal, $filter, dataService, utilityService) {
   var x2js = new X2JS();
+  var backup = {};
 
   // Set up the edit modal
   $ionicModal.fromTemplateUrl('templates/edit.html', {
@@ -73,6 +74,8 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.modal = modal;
   });
   $scope.editCase = function() {
+    // Backup the case to support non-destructive edit
+    backup = angular.copy($scope.case);
     $scope.modal.show();
   };
   $scope.closeModal = function() {
@@ -129,6 +132,15 @@ angular.module('okarito.controllers', ['okarito.services'])
         });
       });
     });
+  };
+
+  $scope.save = function() {
+    $scope.closeModal();
+  };
+
+  $scope.cancel = function() {
+    $scope.case = backup;
+    $scope.closeModal();
   };
 
   $scope.$on('$ionicView.enter', function(){
