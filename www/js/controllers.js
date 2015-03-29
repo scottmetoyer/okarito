@@ -85,7 +85,6 @@ angular.module('okarito.controllers', ['okarito.services'])
   // Execute action on hide modal
   $scope.$on('modal.hidden', function() {
     // Execute action
-    console.log($scope.category);
   });
   // Execute action on remove modal
   $scope.$on('modal.removed', function() {
@@ -122,17 +121,12 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.areas = x2js.asArray(responses[5].data.areas.area);
         $scope.statuses = x2js.asArray(responses[6].data.statuses.status);
 
-        $scope.project = $filter('filter')($scope.projects, { ixProject: $scope.case.ixProject }, null)[0];
-        $scope.priority = $filter('filter')($scope.priorities, { ixPriority: $scope.case.ixPriority }, null)[0];
-        $scope.milestone = $filter('filter')($scope.milestones, { ixFixFor: $scope.case.ixFixFor }, null)[0];
-        $scope.person = $filter('filter')($scope.people, { ixPerson: $scope.case.ixPersonAssignedTo }, null)[0];
-        $scope.area = $filter('filter')($scope.areas, { ixArea: $scope.case.ixArea }, null)[0];
-        $scope.category = $filter('filter')($scope.categories, { ixCategory: $scope.case.ixCategory }, null)[0];
-        $scope.status = $filter('filter')($scope.statuses, { ixStatus: $scope.case.ixStatus }, null)[0]
-
-        var icon = utilityService.categoryIcon($scope.category.nIconType);
-        $scope.iconImage = 'img/' + icon + '.png';
-        $scope.icon = 'ion-' + icon;
+        $scope.$watch("case.sCategory", function(newValue, oldValue) {
+          var category = $filter('filter')($scope.categories, { sCategory: $scope.case.sCategory }, null)[0];
+          var icon = utilityService.categoryIcon(category.nIconType);
+          $scope.iconImage = 'img/' + icon + '.png';
+          $scope.icon = 'ion-' + icon;
+        });
       });
     });
   };
