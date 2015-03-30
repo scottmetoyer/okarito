@@ -30,7 +30,7 @@
           </label>
           <label class="item item-input item-select" ng-class="{dirty: editForm.status.$dirty}">
             <div class="input-label">Status</div>
-            <select name="status" ng-model="case.sStatus" ng-options="s.sStatus as s.sStatus for s in statuses track by s.sStatus"></select>
+            <select name="status" ng-model="case.sStatus.__cdata" ng-options="s.sStatus.__cdata as s.sStatus.__cdata for s in statuses track by s.sStatus.__cdata"></select>
           </label>
           <label class="item item-input item-select" ng-class="{dirty: editForm.project.$dirty}">
             <div class="input-label">Project</div>
