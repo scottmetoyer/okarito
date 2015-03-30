@@ -6,7 +6,6 @@
   </ion-header-bar>
   <ion-content scroll="true">
     <div class="card">
-      {{ case.sProject }}
       <span ng-form="editForm" ng-submit="save()">
         <div class="list">
           <label class="item item-input" ng-class="{dirty: editForm.title.$dirty}">
@@ -31,31 +30,31 @@
           </label>
           <label class="item item-input item-select" ng-class="{dirty: editForm.status.$dirty}">
             <div class="input-label">Status</div>
-            <select name="status" ng-model="case.sStatus.__cdata" ng-options="s.sStatus.__cdata as s.sStatus.__cdata for s in statuses"></select>
+            <select name="status" ng-model="case.status" ng-options="s.sStatus.__cdata for s in statuses track by s.sStatus.__cdata"></select>
           </label>
           <label class="item item-input item-select" ng-class="{dirty: editForm.project.$dirty}">
             <div class="input-label">Project</div>
-            <select name="project" ng-model="case.sProject.__cdata" ng-options="p.sProject.__cdata as p.sProject.__cdata for p in projects"></select>
+            <select name="project" ng-model="case.project" ng-options="p.sProject.__cdata for p in projects track by p.sProject.__cdata"></select>
           </label>
           <label class="item item-input item-select" ng-class="{dirty: editForm.area.$dirty}">
             <div class="input-label">Area</div>
-            <select name="area" ng-model="case.sArea.__cdata" ng-options="a.sArea.__cdata as a.sArea.__cdata for a in areas"></select>
+            <select name="area" ng-model="case.area" ng-options="a.sArea.__cdata for a in areas track by a.sArea.__cdata"></select>
           </label>
           <label class="item item-input item-select" ng-class="{dirty: editForm.milestone.$dirty}">
             <div class="input-label">Milestone</div>
-            <select name="milestone" ng-model="case.sFixFor.__cdata" ng-options="m.sFixFor.__cdata as m.sFixFor.__cdata for m in milestones"></select>
+            <select name="milestone" ng-model="case.milestone" ng-options="m.sFixFor.__cdata for m in milestones track by m.sFixFor.__cdata"></select>
           </label>
           <label class="item item-input item-select" ng-class="{dirty: editForm.category.$dirty}">
             <div class="input-label">Category</div>
-            <select name="category" ng-model="case.sCategory.__cdata" ng-options="c.sCategory.__cdata as c.sCategory.__cdata for c in categories"></select>
+            <select name="category" ng-model="case.category" ng-options="c.sCategory.__cdata for c in categories track by c.sCategory.__cdata"></select>
           </label>
           <label class="item item-input item-select" ng-class="{dirty: editForm.person.$dirty}">
             <div class="input-label">Assigned To</div>
-            <select name="person" ng-model="case.sPersonAssignedTo.__cdata" ng-options="p.sFullName.__cdata as p.sFullName.__cdata for p in people"></select>
+            <select name="person" ng-model="case.personAssignedTo" ng-options="p.sFullName.__cdata for p in people track by p.sFullName.__cdata"></select>
           </label>
           <label class="item item-input item-select" ng-class="{dirty: editForm.priority.$dirty}">
             <div class="input-label">Priority</div>
-            <select name="priority" ng-model="case.sPriority.__cdata" ng-options="p.sPriority.__cdata as p.sPriority.__cdata for p in priorities"></select>
+            <select name="priority" ng-model="case.priority" ng-options="p.sPriority.__cdata for p in priorities track by p.sPriority.__cdata"></select>
           </label>
           <label class="item item-input item-input" ng-class="{dirty: editForm.tags.$dirty}">
             <div class="input-label">Tags</div>

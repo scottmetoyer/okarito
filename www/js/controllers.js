@@ -124,8 +124,17 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.areas = x2js.asArray(responses[5].data.areas.area);
         $scope.statuses = x2js.asArray(responses[6].data.statuses.status);
 
+        // Hang child objects off the scope to handle the selected list items
+        $scope.case.project = $filter('filter')($scope.projects, { ixProject: $scope.case.ixProject }, true)[0];
+        $scope.case.priority = $filter('filter')($scope.priorities, { ixPriority: $scope.case.ixPriority }, true)[0];
+        $scope.case.personAssignedTo = $filter('filter')($scope.people, { ixPerson: $scope.case.ixPersonAssignedTo }, true)[0];
+        $scope.case.category = $filter('filter')($scope.categories, { ixCategory: $scope.case.ixCategory }, true)[0];
+        $scope.case.milestone = $filter('filter')($scope.milestones, { ixFixFor: $scope.case.ixFixFor }, true)[0];
+        $scope.case.area = $filter('filter')($scope.areas, { ixArea: $scope.case.ixArea }, null)[0];
+        $scope.case.status = $filter('filter')($scope.statuses, { ixStatus: $scope.case.ixStatus }, true)[0];
+
         $scope.$watch("case.sCategory", function(newValue, oldValue) {
-          var category = $filter('filter')($scope.categories, { sCategory: $scope.case.sCategory }, null)[0];
+          var category = $filter('filter')($scope.categories, { sCategory: $scope.case.sCategory }, true)[0];
           var icon = utilityService.categoryIcon(category.nIconType);
           $scope.iconImage = 'img/' + icon + '.png';
           $scope.icon = 'ion-' + icon;
@@ -139,8 +148,8 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.cancel = function() {
-    angular.copy(backup, $scope.case);
-    // $scope.case = backup;
+    // angular.copy(backup, $scope.case);
+    $scope.case = backup;
     $scope.closeModal();
   };
 
