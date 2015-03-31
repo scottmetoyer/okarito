@@ -25,6 +25,7 @@ angular.module('okarito.services', ['angular-storage'])
 
 .factory('dataService', function ($http, userService) {;
   var data = this;
+  var cases = {};
 
   return {
     getCase: function (id) {
@@ -65,7 +66,10 @@ angular.module('okarito.services', ['angular-storage'])
     },
     getCases: function (filter) {
       return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events',
-        { transformResponse: transform });
+        { transformResponse: transform }).then(function(response){
+          cases = response;
+          return cases;
+        });
     },
     saveCase: function(case) {
     }
