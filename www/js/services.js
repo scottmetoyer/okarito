@@ -64,8 +64,10 @@ angular.module('okarito.services', ['angular-storage'])
         { transformResponse: transform });
     },
     getCases: function (filter) {
-      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,ixProject',
+      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events',
         { transformResponse: transform });
+    },
+    saveCase: function(case) {
     }
   }
 })

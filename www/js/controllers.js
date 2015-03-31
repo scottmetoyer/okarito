@@ -144,11 +144,12 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.save = function() {
-    // $scope.closeModal();
+    dataService
+    .saveCase($scope.case);
+    $scope.closeModal();
   };
 
   $scope.cancel = function() {
-    // angular.copy(backup, $scope.case);
     $scope.case = backup;
     $scope.closeModal();
   };
