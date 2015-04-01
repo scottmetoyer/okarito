@@ -62,7 +62,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     });
 })
 
-.controller('CaseCtrl', function ($q, $scope, $stateParams, $ionicModal, $filter, dataService, utilityService) {
+.controller('CaseCtrl', function ($q, $scope, $stateParams, $ionicModal, $filter, $ionicLoading, dataService, utilityService) {
   var x2js = new X2JS();
   var backup = {};
 
