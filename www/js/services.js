@@ -29,8 +29,15 @@ angular.module('okarito.services', ['angular-storage'])
 
   return {
     getCase: function (id) {
-      return $http.get('cmd=search&q=' + id + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events',
-        { transformResponse: transform });
+      var bug = null;
+
+      for (var i = 0; i < cases.case.length; i++) {
+        if (cases.case[i].ixBug == id) {
+          bug = cases.case[i];
+        }
+      }
+
+      return bug;
     },
     getProjects: function() {
       return $http.get('cmd=listProjects',
@@ -66,12 +73,12 @@ angular.module('okarito.services', ['angular-storage'])
     },
     getCases: function (filter) {
       return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events',
-        { transformResponse: transform }).then(function(response){
-          cases = response;
+        { transformResponse: transform }).then(function(response) {
+          cases = response.data.cases;
           return cases;
         });
     },
-    saveCase: function(case) {
+    saveCase: function(bug) {
     }
   }
 })

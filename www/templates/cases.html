@@ -2,8 +2,8 @@
     <ion-content>
       <div class="padding"><h5 class="subdued">All cases</h5></div>
         <ion-list>
-            <ion-item ng-repeat="case in cases.case" href="#/app/cases/{{case.ixBug}}?projectId={{case.ixProject}}">
-                {{case.sTitle.__cdata}}
+            <ion-item ng-repeat="bug in cases.case" href="#/app/cases/{{bug.ixBug}}?projectId={{bug.ixProject}}">
+                {{bug.sTitle.__cdata}}
             </ion-item>
         </ion-list>
     </ion-content>
