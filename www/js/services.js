@@ -79,6 +79,11 @@ angular.module('okarito.services', ['angular-storage'])
         });
     },
     saveCase: function(bug) {
+      return $http.post('', {
+        cmd: 'edit'
+      }).then(function(response){
+        // Save success
+      });
     }
   }
 })
@@ -189,13 +194,23 @@ angular.module('okarito.services', ['angular-storage'])
     var access_token = currentUser ? currentUser.access_token : null;
     var api_url = currentUser ? currentUser.api_url : null;
 
-    // If the request is a FogBugz command and we have a token save, append it
-    if (config.url.indexOf('cmd=') > -1 && config.url.indexOf('cmd=logon') == -1) {
-      if (access_token && api_url) {
-        config.url = api_url + config.url + '&token=' + access_token;
-      } else {
-        $rootScope.$broadcast('unauthorized');
+    // Process GET requests
+    if (config.method == 'GET')
+    {
+      // If the request is a FogBugz command and we have a token save, append it
+      if (config.url.indexOf('cmd=') > -1 && config.url.indexOf('cmd=logon') == -1) {
+        if (access_token && api_url) {
+          config.url = api_url + config.url + '&token=' + access_token;
+        } else {
+          $rootScope.$broadcast('unauthorized');
+        }
       }
+    }
+
+    // Process POST requests
+    if (config.method == 'POST')
+    {
+
     }
 
     return config;
