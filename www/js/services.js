@@ -72,19 +72,13 @@ angular.module('okarito.services', ['angular-storage'])
         { transformResponse: transform });
     },
     getCases: function (filter) {
-      return $http.post('',
-        {
-          cmd: 'search',
-          q: filter,
-          cols: 'sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events',
-        }
+      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events',
         { transformResponse: transform }).then(function(response) {
           cases = response.data.cases;
           return cases;
         });
     },
     saveCase: function(bug) {
-      return $http.get('cmd=edit ')
     }
   }
 })
@@ -107,13 +101,8 @@ angular.module('okarito.services', ['angular-storage'])
         .then(function(response) {
           // Retrive the FogBugz API url
           user.api_url = root + response.data.url;
-          return $http.post(
-            user.api_url,
-            {
-              cmd = 'logon',
-              email = userEmail,
-              password = password
-            },
+          console.log(response);
+          return $http.get(user.api_url + 'cmd=logon&email=' + userEmail + '&password=' + password,
             { transformResponse: transform });
         })
         .then(function(response) {
@@ -201,10 +190,9 @@ angular.module('okarito.services', ['angular-storage'])
     var api_url = currentUser ? currentUser.api_url : null;
 
     // If the request is a FogBugz command and we have a token save, append it
-    if (config.data.cmd != null && config.data.cmd == 'logon') {
+    if (config.url.indexOf('cmd=') > -1 && config.url.indexOf('cmd=logon') == -1) {
       if (access_token && api_url) {
-        config.url = api_url + config.url;
-        config.data.token = access_token;
+        config.url = api_url + config.url + '&token=' + access_token;
       } else {
         $rootScope.$broadcast('unauthorized');
       }
