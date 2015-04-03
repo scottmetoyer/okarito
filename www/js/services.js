@@ -79,10 +79,15 @@ angular.module('okarito.services', ['angular-storage'])
         });
     },
     saveCase: function(bug) {
-      return $http.post('', {
-        cmd: 'edit'
+      return $http({
+        method: 'POST',
+        url: '',
+        data: "cmd=edit&ixBug=" + bug.ixBug + "&sTitle=" + bug.sTitle.__cdata,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        transformResponse: transform
       }).then(function(response){
         // Save success
+        return response;
       });
     }
   }
@@ -210,7 +215,14 @@ angular.module('okarito.services', ['angular-storage'])
     // Process POST requests
     if (config.method == 'POST')
     {
-
+      if (config.data.indexOf('cmd=') > -1) {
+        if (access_token && api_url) {
+          config.url = api_url + config.url;
+          config.data = config.data + "&token=" + access_token;
+        } else {
+          $rootScope.$broadcast('unauthorized');
+        }
+      }
     }
 
     return config;
@@ -218,6 +230,18 @@ angular.module('okarito.services', ['angular-storage'])
 
   service.response = function(response) {
     if (response.data && response.data.error) {
+      console.log(response.data.error);
+      // TODO: Appropriate actions based on the specific errors go here, ie. login error to unauthorized, saving errors show messagem etc.
+      var code = response.data.error._code;
+      switch(code)
+      {
+        case '3':
+          // Not logged in
+          break;
+
+        default:
+      };
+
       $rootScope.$broadcast('unauthorized');
     }
     return response;

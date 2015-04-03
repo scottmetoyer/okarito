@@ -8,7 +8,8 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   $rootScope.$on('http-error', function(event, args) {
-    $state.go('login');
+    alert('Connection error.')
+    // $state.go('login');
   });
 
   $rootScope.$on('authorized', function() {
@@ -95,7 +96,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   var init = function () {
-    $scope.case =   dataService.getCase($stateParams.caseId)
+    $scope.case = dataService.getCase($stateParams.caseId)
     $scope.events = x2js.asArray($scope.case.events.event);
     $scope.tags = x2js.asArray($scope.case.tags.tag);
 
@@ -141,9 +142,10 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.save = function() {
-    dataService
-    .saveCase($scope.case);
-    $scope.closeModal();
+    dataService.saveCase($scope.case)
+    .then(function(result){
+      $scope.closeModal();
+    });
   };
 
   $scope.cancel = function() {
