@@ -82,7 +82,15 @@ angular.module('okarito.services', ['angular-storage'])
       return $http({
         method: 'POST',
         url: '',
-        data: "cmd=edit&ixBug=" + bug.ixBug + "&sTitle=" + bug.sTitle.__cdata,
+        data: "cmd=edit&ixBug=" + bug.ixBug +
+              "&sTitle=" + bug.sTitle.__cdata +
+              "&ixArea=" + bug.ixArea +
+              "&ixStatus=" + bug.ixStatus +
+              "&ixProject=" + bug.ixProject +
+              "&ixPriority=" + bug.ixPriority +
+              "&ixCategory=" + bug.ixCategory +
+              "&ixFixFor=" + bug.ixFixFor +
+              "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformResponse: transform
       }).then(function(response){

@@ -124,13 +124,13 @@ angular.module('okarito.controllers', ['okarito.services'])
       $scope.statuses = x2js.asArray(responses[6].data.statuses.status);
 
       // Hang child objects off the scope to handle the selected list items
-      $scope.case.project = $filter('filter')($scope.projects, { ixProject: $scope.case.ixProject }, true)[0];
-      $scope.case.priority = $filter('filter')($scope.priorities, { ixPriority: $scope.case.ixPriority }, true)[0];
-      $scope.case.personAssignedTo = $filter('filter')($scope.people, { ixPerson: $scope.case.ixPersonAssignedTo }, true)[0];
-      $scope.case.category = $filter('filter')($scope.categories, { ixCategory: $scope.case.ixCategory }, true)[0];
-      $scope.case.milestone = $filter('filter')($scope.milestones, { ixFixFor: $scope.case.ixFixFor }, true)[0];
-      $scope.case.area = $filter('filter')($scope.areas, { ixArea: $scope.case.ixArea }, null)[0];
-      $scope.case.status = $filter('filter')($scope.statuses, { ixStatus: $scope.case.ixStatus }, true)[0];
+      $scope.project = $filter('filter')($scope.projects, { ixProject: $scope.case.ixProject }, true)[0];
+      $scope.priority = $filter('filter')($scope.priorities, { ixPriority: $scope.case.ixPriority }, true)[0];
+      $scope.personAssignedTo = $filter('filter')($scope.people, { ixPerson: $scope.case.ixPersonAssignedTo }, true)[0];
+      $scope.category = $filter('filter')($scope.categories, { ixCategory: $scope.case.ixCategory }, true)[0];
+      $scope.milestone = $filter('filter')($scope.milestones, { ixFixFor: $scope.case.ixFixFor }, true)[0];
+      $scope.area = $filter('filter')($scope.areas, { ixArea: $scope.case.ixArea }, null)[0];
+      $scope.status = $filter('filter')($scope.statuses, { ixStatus: $scope.case.ixStatus }, true)[0];
 
       $scope.$watch("case.sCategory", function(newValue, oldValue) {
         var category = $filter('filter')($scope.categories, { sCategory: $scope.case.sCategory }, true)[0];
@@ -142,6 +142,22 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.save = function() {
+    // Map the child objects back to the case
+    $scope.case.ixProject = $scope.project.ixProject;
+    $scope.case.sProject = $scope.project.sProject;
+    $scope.case.ixPriority = $scope.priority.ixPriority;
+    $scope.case.sPriority = $scope.priority.sPriority;
+    $scope.case.ixPersonAssignedTo = $scope.personAssignedTo.ixPerson;
+    $scope.case.sPersonAssignedTo = $scope.personAssignedTo.sFullName;
+    $scope.case.ixCategory = $scope.category.ixCategory;
+    $scope.case.sCategory = $scope.category.sCategory;
+    $scope.case.ixFixFor = $scope.milestone.ixFixFor;
+    $scope.case.sFixFor = $scope.milestone.sFixFor;
+    $scope.case.ixArea = $scope.area.ixArea;
+    $scope.case.sArea = $scope.area.sArea;
+    $scope.case.ixStatus = $scope.status.ixStatus;
+    $scope.case.sStatus = $scope.status.sStatus;
+    
     dataService.saveCase($scope.case)
     .then(function(result){
       $scope.closeModal();
