@@ -157,7 +157,9 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.case.sArea = $scope.area.sArea;
     $scope.case.ixStatus = $scope.status.ixStatus;
     $scope.case.sStatus = $scope.status.sStatus;
-    
+
+    alert($scope.case.sStatus.__cdata);
+
     dataService.saveCase($scope.case)
     .then(function(result){
       $scope.closeModal();
