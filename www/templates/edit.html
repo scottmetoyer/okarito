@@ -8,6 +8,9 @@
     <div class="card">
       <form name="form.edit" ng-submit="save()">
         <div class="list">
+          <label class="item item-divider">
+            <h3>{{case.sStatus.__cdata}}</h3>
+          </label>
           <label class="item item-input" ng-class="{dirty: form.edit.title.$dirty}">
             <input type="text" name="title" ng-model="case.sTitle.__cdata" class="title">
           </label>
@@ -27,10 +30,6 @@
               <i class="icon ion-camera positive"></i>
               Take Photo
             </a>
-          </label>
-          <label class="item item-input item-select" ng-class="{dirty: form.edit.status.$dirty}">
-            <div class="input-label">Status</div>
-            <select name="status" ng-model="case.status" ng-options="s.sStatus.__cdata for s in statuses track by s.ixStatus"></select>
           </label>
           <label class="item item-input item-select" ng-class="{dirty: form.edit.project.$dirty}">
             <div class="input-label">Project</div>
