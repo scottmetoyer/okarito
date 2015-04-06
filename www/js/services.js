@@ -47,8 +47,8 @@ angular.module('okarito.services', ['angular-storage'])
       return $http.get('cmd=listPriorities',
         { transformResponse: transform });
     },
-    getStatuses: function() {
-      return $http.get('cmd=listStatuses',
+    getStatuses: function(categoryId) {
+      return $http.get('cmd=listStatuses&ixCategory=' + categoryId,
         { transformResponse: transform });
     },
     getPeople: function() {
@@ -84,13 +84,13 @@ angular.module('okarito.services', ['angular-storage'])
         url: '',
         data: "cmd=edit&ixBug=" + bug.ixBug +
               "&sTitle=" + bug.sTitle.__cdata +
-              "&ixArea=" + bug.ixArea +
-              "&ixStatus=" + bug.ixStatus +
-              "&ixProject=" + bug.ixProject +
-              "&ixPriority=" + bug.ixPriority +
-              "&ixCategory=" + bug.ixCategory +
-              "&ixFixFor=" + bug.ixFixFor +
-              "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo,
+              "&ixArea=" + bug.area.ixArea +
+              "&ixStatus=" + bug.status.ixStatus +
+              "&ixProject=" + bug.project.ixProject +
+              "&ixPriority=" + bug.priority.ixPriority +
+              "&ixCategory=" + bug.category.ixCategory +
+              "&ixFixFor=" + bug.milestone.ixFixFor +
+              "&ixPersonAssignedTo=" + bug.personAssignedTo.ixPerson,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformResponse: transform
       }).then(function(response){
