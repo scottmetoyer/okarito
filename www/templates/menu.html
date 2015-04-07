@@ -15,12 +15,30 @@
         </ion-header-bar>
         <ion-content>
             <ion-list>
-              <ion-item nav-clear menu-close href="#/app/search">
-                  Search
+              <div class="item item-divider">
+                Search
+              </div>
+              <ion-item nav-clear menu-close ng-click="logout()">
+                  Logout
               </ion-item>
-                <ion-item nav-clear menu-close ng-click="logout()">
-                    Logout
-                </ion-item>
+              <div class="item item-divider">
+                Filters
+              </div>
+              <ion-item nav-clear menu-close ng-click="logout()">
+                  Logout
+              </ion-item>
+              <div class="item item-divider">
+                Saved
+              </div>
+              <ion-item nav-clear menu-close ng-click="logout()">
+                  Logout
+              </ion-item>
+              <div class="item item-divider">
+                Shared
+              </div>
+              <ion-item nav-clear menu-close ng-click="logout()">
+                  Logout
+              </ion-item>
             </ion-list>
         </ion-content>
     </ion-side-menu>

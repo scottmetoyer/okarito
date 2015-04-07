@@ -28,6 +28,10 @@ angular.module('okarito.services', ['angular-storage'])
   var cases = {};
 
   return {
+    getFilters: function() {
+      return $http.get('cmd=listFilters',
+        { transformResponse: transform });
+    },
     getCase: function (id) {
       var bug = null;
 

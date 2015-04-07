@@ -19,7 +19,15 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.logout = function() {
     userService.setCurrentUser(null);
     $state.go('login');
-  }
+  };
+
+  $scope.$on('$ionicView.enter', function(){
+    init();
+  });
+
+  var init = function() {
+    $scope.filters = "hola senor!";
+  };
 })
 
 .controller('LoginCtrl', function($scope, $rootScope, $state, $ionicPopup, loginService, userService) {
@@ -58,9 +66,9 @@ angular.module('okarito.controllers', ['okarito.services'])
       })
     };
 
-    $scope.$on('$ionicView.enter', function(){
-      init();
-    });
+  $scope.$on('$ionicView.enter', function(){
+    init();
+  });
 })
 
 .controller('CaseCtrl', function ($q, $scope, $stateParams, $ionicModal, $filter, $ionicLoading, dataService, utilityService) {
