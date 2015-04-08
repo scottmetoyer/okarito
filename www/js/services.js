@@ -24,20 +24,25 @@ angular.module('okarito.services', ['angular-storage'])
 })
 
 .factory('dataService', function ($http, userService) {;
+  var x2js = new X2JS();
   var data = this;
   var cases = {};
+  var filters = {};
 
   return {
     getFilters: function() {
       return $http.get('cmd=listFilters',
-        { transformResponse: transform });
+        { transformResponse: transform }).then(function(response){
+          filters = x2js.asArray(response.data.filters.filter);
+          return filters;
+        });
     },
     getCase: function (id) {
       var bug = null;
 
-      for (var i = 0; i < cases.case.length; i++) {
-        if (cases.case[i].ixBug == id) {
-          bug = cases.case[i];
+      for (var i = 0; i < cases.length; i++) {
+        if (cases[i].ixBug == id) {
+          bug = cases[i];
         }
       }
 
@@ -45,7 +50,9 @@ angular.module('okarito.services', ['angular-storage'])
     },
     getProjects: function() {
       return $http.get('cmd=listProjects',
-        { transformResponse: transform });
+        { transformResponse: transform }).then(function(response){
+          return x2js.asArray(response.data.projects.project);
+        });
     },
     getPriorities: function() {
       return $http.get('cmd=listPriorities',
@@ -78,7 +85,7 @@ angular.module('okarito.services', ['angular-storage'])
     getCases: function (filter) {
       return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events',
         { transformResponse: transform }).then(function(response) {
-          cases = response.data.cases;
+          cases = x2js.asArray(response.data.cases.case);
           return cases;
         });
     },

@@ -11,7 +11,7 @@
     </ion-side-menu-content>
     <ion-side-menu side="left">
         <ion-header-bar class="bar-stable">
-            <h1 class="title">Left</h1>
+            <h1 class="title">Title</h1>
         </ion-header-bar>
         <ion-content>
             <ion-list>
@@ -24,18 +24,21 @@
               <div class="item item-divider">
                 Filters
               </div>
-              <ion-item nav-clear menu-close ng-click="logout()">
-                  Logout
+              <ion-item nav-clear menu-close ng-repeat="f in filters | filter:{_type: 'builtin'}">
+                  {{ f.__text }}
               </ion-item>
               <div class="item item-divider">
                 Saved
               </div>
-              <ion-item nav-clear menu-close ng-click="logout()">
-                  Logout
+              <ion-item nav-clear menu-close ng-repeat="f in filters | filter:{_type: 'saved' }">
+                  {{ f.__text }}
               </ion-item>
               <div class="item item-divider">
                 Shared
               </div>
+              <ion-item nav-clear menu-close ng-repeat="f in filters | filter:{_type: 'shared' }">
+                  {{ f.__text }}
+              </ion-item>
               <ion-item nav-clear menu-close ng-click="logout()">
                   Logout
               </ion-item>

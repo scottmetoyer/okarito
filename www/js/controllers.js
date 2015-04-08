@@ -1,6 +1,6 @@
 angular.module('okarito.controllers', ['okarito.services'])
 
-.controller('AppCtrl', function ($scope, $rootScope, $state, $ionicModal, $timeout, loginService, userService) {
+.controller('AppCtrl', function ($scope, $rootScope, $state, $ionicModal, $timeout, loginService, userService, dataService) {
   var app = this;
 
   $rootScope.$on('unauthorized', function(event, args) {
@@ -26,7 +26,11 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   var init = function() {
-    $scope.filters = "hola senor!";
+    dataService
+      .getFilters()
+      .then(function (response) {
+        $scope.filters = response;
+      })
   };
 })
 
@@ -56,7 +60,6 @@ angular.module('okarito.controllers', ['okarito.services'])
 
 .controller('CasesCtrl', function ($scope, dataService) {
   $scope.filter = '';
-  $scope.cases = [];
 
   var init = function () {
     dataService
@@ -105,7 +108,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   var init = function () {
-    $scope.case = dataService.getCase($stateParams.caseId)
+    $scope.case = dataService.getCase($stateParams.caseId);
     $scope.events = x2js.asArray($scope.case.events.event);
     $scope.tags = x2js.asArray($scope.case.tags.tag);
 
@@ -124,7 +127,7 @@ angular.module('okarito.controllers', ['okarito.services'])
         dataService.getStatuses($scope.case.ixCategory)
     ])
     .then(function(responses) {
-      $scope.projects = x2js.asArray(responses[0].data.projects.project);
+      $scope.projects = responses[0];
       $scope.priorities =  x2js.asArray(responses[1].data.priorities.priority);
       $scope.people =  x2js.asArray(responses[2].data.people.person);
       $scope.categories =  x2js.asArray(responses[3].data.categories.category);
