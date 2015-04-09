@@ -1,6 +1,6 @@
 angular.module('okarito.controllers', ['okarito.services'])
 
-.controller('AppCtrl', function ($scope, $rootScope, $state, $ionicModal, $timeout, loginService, userService, dataService) {
+.controller('AppCtrl', function ($scope, $rootScope, $state, $filter, $ionicModal, $timeout, loginService, userService, dataService) {
   var app = this;
 
   $rootScope.$on('unauthorized', function(event, args) {
@@ -29,7 +29,9 @@ angular.module('okarito.controllers', ['okarito.services'])
     dataService
       .getFilters()
       .then(function (response) {
-        $scope.filters = response;
+        $scope.builtinFilters = $filter('filter')(response, { _type: 'builtin' }, true);
+        $scope.savedFilters = $filter('filter')(response, { _type: 'saved' }, true);
+        $scope.sharedFilters = $filter('filter')(response, { _type: 'shared' }, true);
       })
   };
 })

@@ -15,32 +15,46 @@
         </ion-header-bar>
         <ion-content>
             <ion-list>
-              <div class="item item-divider">
-                Search
+              <div class="item item-input-inset">
+                <label class="item-input-wrapper">
+                  <input type="text" placeholder="Search">
+                </label>
+                <button class="button button-small">
+                  Submit
+                </button>
               </div>
-              <ion-item nav-clear menu-close ng-click="logout()">
-                  Logout
+              <ion-item class="item-icon-left" nav-clear menu-close ng-repeat="f in builtinFilters">
+                <i class="icon ion-android-funnel"></i>
+                {{ f.__text }}
+              </ion-item>
+              <div class="item item-divider" ng-show="savedFilters.length > 0">
+                Saved Filters
+              </div>
+              <ion-item class="item-icon-left" nav-clear menu-close ng-repeat="f in savedFilters">
+                <i class="icon ion-android-funnel"></i>
+                {{ f.__cdata }}
+              </ion-item>
+              <div class="item item-divider" ng-show="sharedFilters.length > 0">
+                Shared Filters
+              </div>
+              <ion-item class="item-icon-left" nav-clear menu-close ng-repeat="f in sharedFilters">
+                <i class="icon ion-android-funnel"></i>
+                {{ f.__cdata }}
               </ion-item>
               <div class="item item-divider">
-                Filters
+                Options
               </div>
-              <ion-item nav-clear menu-close ng-repeat="f in filters | filter:{_type: 'builtin'}">
-                  {{ f.__text }}
+              <ion-item class="item-icon-left" nav-clear menu-close ng-click="logout()">
+                <i class="icon ion-gear-a"></i>
+                App Settings
               </ion-item>
-              <div class="item item-divider">
-                Saved
-              </div>
-              <ion-item nav-clear menu-close ng-repeat="f in filters | filter:{_type: 'saved' }">
-                  {{ f.__text }}
+              <ion-item class="item-icon-left" nav-clear menu-close ng-click="logout()">
+                <i class="icon ion-help"></i>
+                Help
               </ion-item>
-              <div class="item item-divider">
-                Shared
-              </div>
-              <ion-item nav-clear menu-close ng-repeat="f in filters | filter:{_type: 'shared' }">
-                  {{ f.__text }}
-              </ion-item>
-              <ion-item nav-clear menu-close ng-click="logout()">
-                  Logout
+              <ion-item class="item-icon-left" nav-clear menu-close ng-click="logout()">
+                <i class="icon ion-log-out"></i>
+                Logout
               </ion-item>
             </ion-list>
         </ion-content>
