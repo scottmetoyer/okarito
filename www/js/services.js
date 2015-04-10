@@ -89,6 +89,9 @@ angular.module('okarito.services', ['angular-storage'])
           return cases;
         });
     },
+    setFilter: function(filterId) {
+      return $http.get('cmd=setCurrentFilter&sFilter=' + filterId);
+    },
     saveCase: function(bug) {
       return $http({
         method: 'POST',

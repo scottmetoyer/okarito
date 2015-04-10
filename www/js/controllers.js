@@ -25,6 +25,14 @@ angular.module('okarito.controllers', ['okarito.services'])
     init();
   });
 
+  $scope.setFilter = function(filterId) {
+      dataService
+        .setFilter(filterId)
+        .then(function(response) {
+          $rootScope.$broadcast('refresh-cases');
+        });
+  };
+
   var init = function() {
     dataService
       .getFilters()
@@ -60,7 +68,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       }
 })
 
-.controller('CasesCtrl', function ($scope, dataService) {
+.controller('CasesCtrl', function ($rootScope, $scope, $ionicScrollDelegate, dataService) {
   $scope.filter = '';
 
   var init = function () {
@@ -72,6 +80,11 @@ angular.module('okarito.controllers', ['okarito.services'])
     };
 
   $scope.$on('$ionicView.enter', function(){
+    init();
+  });
+
+  $rootScope.$on('refresh-cases', function() {
+    $ionicScrollDelegate.scrollTop();
     init();
   });
 })
