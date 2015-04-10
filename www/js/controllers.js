@@ -8,7 +8,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   $rootScope.$on('http-error', function(event, args) {
-    alert('Connection error.')
+    // TODO: Handle fundamental HTTP errors here
     // $state.go('login');
   });
 
