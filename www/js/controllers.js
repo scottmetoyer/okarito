@@ -89,7 +89,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 })
 
-.controller('CaseCtrl', function ($q, $scope, $stateParams, $ionicModal, $filter, $ionicLoading, dataService, utilityService) {
+.controller('CaseCtrl', function ($q, $scope, $stateParams, $timeout, $ionicModal, $filter, $ionicLoading, dataService, utilityService) {
   var x2js = new X2JS();
   var backup = {};
   $scope.form = {};
@@ -169,17 +169,24 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.save = function() {
-    dataService.saveCase($scope.case)
-    .then(function(result){
-      $scope.form.edit.$setPristine();
-      $scope.closeModal();
-    });
+    $timeout(function() {
+      dataService.saveCase($scope.case)
+      .then(function(result){
+        $scope.form.edit.$setPristine();
+        $scope.closeModal();
+      });
+    }, 1000);
   };
 
   $scope.cancel = function() {
-    $scope.case = backup;
-    $scope.form.edit.$setPristine();
-    $scope.closeModal();
+    $timeout(function() {
+      dataService.saveCase($scope.case)
+      .then(function(result){
+        $scope.case = backup;
+        $scope.form.edit.$setPristine();
+        $scope.closeModal();
+      });
+    }, 1000);
   };
 
   $scope.$on('$ionicView.enter', function(){
