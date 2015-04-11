@@ -56,31 +56,39 @@ angular.module('okarito.services', ['angular-storage'])
     },
     getPriorities: function() {
       return $http.get('cmd=listPriorities',
-        { transformResponse: transform });
+        { transformResponse: transform }).then(function(response){
+          return x2js.asArray(response.data.priorities.priority);
+        });
     },
     getStatuses: function(categoryId) {
       return $http.get('cmd=listStatuses&ixCategory=' + categoryId,
-        { transformResponse: transform });
+        { transformResponse: transform }).then(function(response){
+          return x2js.asArray(response.data.statuses.status);
+        });
     },
     getPeople: function() {
       return $http.get('cmd=listPeople',
-        { transformResponse: transform });
-    },
-    getPriorities: function() {
-      return $http.get('cmd=listPriorities',
-        { transformResponse: transform });
+        { transformResponse: transform }).then(function(response){
+          return x2js.asArray(response.data.people.person);
+        });
     },
     getCategories: function() {
       return $http.get('cmd=listCategories',
-        { transformResponse: transform });
+        { transformResponse: transform }).then(function(response){
+          return x2js.asArray(response.data.categories.category);
+        });
     },
     getAreas: function(projectId) {
       return $http.get('cmd=listAreas&ixProject=' + projectId,
-        { transformResponse: transform });
+        { transformResponse: transform }).then(function(response){
+          return x2js.asArray(response.data.areas.area);
+        });
     },
     getMilestones: function(projectId) {
       return $http.get('cmd=listFixFors&ixProject=' +projectId,
-        { transformResponse: transform });
+        { transformResponse: transform }).then(function(response){
+          return x2js.asArray(response.data.fixfors.fixfor);
+        });
     },
     getCases: function (filter) {
       return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events',

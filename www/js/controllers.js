@@ -143,12 +143,12 @@ angular.module('okarito.controllers', ['okarito.services'])
     ])
     .then(function(responses) {
       $scope.projects = responses[0];
-      $scope.priorities =  x2js.asArray(responses[1].data.priorities.priority);
-      $scope.people =  x2js.asArray(responses[2].data.people.person);
-      $scope.categories =  x2js.asArray(responses[3].data.categories.category);
-      $scope.milestones =  x2js.asArray(responses[4].data.fixfors.fixfor);
-      $scope.areas = x2js.asArray(responses[5].data.areas.area);
-      $scope.statuses = x2js.asArray(responses[6].data.statuses.status);
+      $scope.priorities =  responses[1];
+      $scope.people =  responses[2];
+      $scope.categories =  responses[3];
+      $scope.milestones =  responses[4];
+      $scope.areas = responses[5];
+      $scope.statuses = responses[6];
 
       // Hang child objects off the case to handle the selected list items
       $scope.case.project = $filter('filter')($scope.projects, { ixProject: $scope.case.ixProject }, true)[0];

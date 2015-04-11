@@ -1,12 +1,12 @@
 <ion-modal-view>
+  <form name="form.edit" ng-submit="save()">
   <ion-header-bar>
-    <button class="button" ng-click="cancel()">Cancel</button>
+    <button type="button" class="button" ng-click="cancel()">Cancel</button>
     <h1 class="title">Edit Case {{ case.ixBug }}</h1>
-    <button class="button button-positive" ng-click="save()">Save</button>
+    <button type="submit" class="button button-positive">Save</button>
   </ion-header-bar>
   <ion-content scroll="true">
     <div class="card">
-      <form name="form.edit" ng-submit="save()">
         <div class="list">
           <label class="item item-divider">
             <h3>{{case.sStatus.__cdata}}</h3>
@@ -60,7 +60,7 @@
             <input name="tags" ng-model="tags" type="text">
           </label>
         </div>
-      </form>
     </div>
   </ion-content>
+  </form>
 </ion-modal-view>
