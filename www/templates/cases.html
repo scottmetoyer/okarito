@@ -4,7 +4,8 @@
       <div class="list">
         <a class="item item-avatar" ng-repeat="bug in cases" href="#/app/cases/{{bug.ixBug}}">
           <img src="img/bug.png">
-          <h2>{{bug.ixBug}} - {{bug.sTitle.__cdata}}</h2>
+          <span class="case-number">{{bug.ixBug}}</span>
+          <h2>{{bug.sTitle.__cdata}}</h2>
           <p></p>
         </a>
       </div>
