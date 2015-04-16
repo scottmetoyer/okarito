@@ -1,10 +1,12 @@
 <ion-view view-title="Cases">
     <ion-content>
       <div class="padding"><h5 class="subdued">All cases</h5></div>
-        <ion-list>
-            <ion-item ng-repeat="bug in cases" href="#/app/cases/{{bug.ixBug}}">
-                {{bug.sTitle.__cdata}}
-            </ion-item>
-        </ion-list>
+      <div class="list">
+        <a class="item item-avatar" ng-repeat="bug in cases" href="#/app/cases/{{bug.ixBug}}">
+          <img src="img/bug.png">
+          <h2>{{bug.ixBug}} - {{bug.sTitle.__cdata}}</h2>
+          <p></p>
+        </a>
+      </div>
     </ion-content>
 </ion-view>
