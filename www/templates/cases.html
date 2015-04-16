@@ -2,11 +2,14 @@
     <ion-content>
       <div class="padding"><h5 class="subdued">All cases</h5></div>
       <div class="list">
-        <a class="item item-avatar" ng-repeat="bug in cases" href="#/app/cases/{{bug.ixBug}}">
-          <img src="img/bug.png">
-          <span class="case-number">{{bug.ixBug}}</span>
-          <h2>{{bug.sTitle.__cdata}}</h2>
-          <p></p>
+        <a class="item" style="padding: .4em;" ng-repeat="bug in cases" href="#/app/cases/{{bug.ixBug}}">
+          <div class="row">
+            <div class="col"><span class="case-number">{{bug.ixBug}}</span></div>
+            <div class="col col-80">
+              <h2>{{bug.sTitle.__cdata}}</h2>
+              <p><i class="icon ion-bug"></i> Bug (Active)</p>
+            </div>
+          </div>
         </a>
       </div>
     </ion-content>
