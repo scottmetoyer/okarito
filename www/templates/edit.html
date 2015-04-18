@@ -1,12 +1,12 @@
 <ion-modal-view>
   <form name="form.edit" ng-submit="save()">
-  <ion-header-bar>
-    <button type="button" class="button" ng-click="cancel()">Cancel</button>
-    <h1 class="title">Edit Case {{ case.ixBug }}</h1>
-    <button type="submit" class="button button-positive">Save</button>
-  </ion-header-bar>
-  <ion-content scroll="true">
-    <div class="card">
+    <ion-header-bar>
+      <button type="button" class="button" ng-click="cancel()">Cancel</button>
+      <h1 class="title">Edit Case {{ case.ixBug }}</h1>
+      <button type="submit" class="button button-positive">Save</button>
+    </ion-header-bar>
+    <ion-content scroll="true">
+      <div class="card">
         <div class="list">
           <label class="item item-divider">
             <h3>{{case.sStatus.__cdata}}</h3>
@@ -23,14 +23,14 @@
           </label>
           <label class="item tabs tabs-secondary tabs-icon-left">
             <a class="tab-item" href="#">
-              <i class="icon ion-paperclip positive"></i>
-              Add Attachment
+              <i class="icon ion-paperclip positive"></i> Add Attachment
             </a>
             <a class="tab-item" href="#">
-              <i class="icon ion-camera positive"></i>
-              Take Photo
+              <i class="icon ion-camera positive"></i> Take Photo
             </a>
           </label>
+          <fancy-select header-text="Test Fancy Select" allow-empty='false' value="val.single1" text="countries_text_single" items="countries">
+          </fancy-select>
           <label class="item item-input item-select" ng-class="{dirty: form.edit.project.$dirty}">
             <div class="input-label">Project</div>
             <select name="project" ng-model="case.project" ng-options="p.sProject.__cdata for p in projects track by p.ixProject"></select>
@@ -60,7 +60,7 @@
             <input name="tags" ng-model="tags" type="text">
           </label>
         </div>
-    </div>
-  </ion-content>
+      </div>
+    </ion-content>
   </form>
 </ion-modal-view>
