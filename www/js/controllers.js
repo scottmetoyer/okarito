@@ -113,6 +113,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.modal.show();
   };
   $scope.closeModal = function() {
+    console.log($scope.case);
     $scope.modal.hide();
   };
   $scope.$on('$destroy', function() {
@@ -162,21 +163,15 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.save = function() {
-    //$timeout(function() {
     dataService.saveCase($scope.case)
       .then(function(result) {
-        $scope.form.edit.$setPristine();
         $scope.closeModal();
       });
-    //}, 1000);
   };
 
   $scope.cancel = function() {
-    //$timeout(function() {
-      $scope.case = backup;
-      $scope.form.edit.$setPristine();
-      $scope.closeModal();
-    //}, 1000);
+    $scope.case = angular.copy(backup);
+    $scope.closeModal();
   };
 
   $scope.$on('$ionicView.enter', function() {
