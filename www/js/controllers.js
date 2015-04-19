@@ -152,7 +152,7 @@ angular.module('okarito.controllers', ['okarito.services'])
 
         $scope.$watch("case.sCategory", function(newValue, oldValue) {
           var category = $filter('filter')($scope.categories, {
-            text: $scope.case.sCategory
+            text: $scope.case.sCategory.__cdata
           }, true)[0];
           var icon = utilityService.categoryIcon(category.nIconType);
           $scope.iconImage = 'img/' + icon + '.png';

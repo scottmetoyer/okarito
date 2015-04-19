@@ -9,7 +9,7 @@ angular.module('okarito.directives', ['ionic'])
       templateUrl: 'templates/fancy-select.html',
       scope: {
         'items': '=',
-        'label': '=',
+        'label': '@label',
         'text': '=',
         'value': '=',
         'callback': '&'
