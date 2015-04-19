@@ -3,6 +3,8 @@ angular.module('okarito.directives', ['ionic'])
 .directive('fancySelect', [
   '$ionicModal',
   function($ionicModal) {
+    var originalValue = '';
+
     return {
       restrict: 'E',
       replace: true,
@@ -16,7 +18,6 @@ angular.module('okarito.directives', ['ionic'])
       },
 
       link: function(scope, element, attrs) {
-        scope.isDirty = false;
         scope.allowEmpty = attrs.allowEmpty === 'false' ? false : true;
         scope.headerText = attrs.headerText || '';
         scope.defaultText = scope.text || '';
@@ -50,13 +51,8 @@ angular.module('okarito.directives', ['ionic'])
         });
 
         scope.validateSingle = function(item) {
-          if (scope.text != item.text) {
-            scope.isDirty = true;
-          }
-
           scope.text = item.text;
           scope.value = item.id;
-
           scope.hideItems();
 
           // Execute callback function

@@ -11,14 +11,14 @@
           <label class="item item-divider">
             <h3>{{case.sStatus.__cdata}}</h3>
           </label>
-          <label class="item item-input" ng-class="{dirty: form.edit.title.$dirty}">
+          <label class="item item-input">
             <input type="text" name="title" ng-model="case.sTitle.__cdata" class="title">
           </label>
           <label class="item item-divider">
             <h3>Edited by logged in user</h3>
             <h4 class="subdued">Current date</h4>
           </label>
-          <label class="item item-input" ng-class="{dirty: form.edit.event.$dirty}">
+          <label class="item item-input">
             <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a case note..."></textarea>
           </label>
           <label class="item tabs tabs-secondary tabs-icon-left">
@@ -35,7 +35,7 @@
           <fancy-select header-text="Choose a Category" label="Category" allow-empty="true" value="case.ixCategory" text="case.sCategory.__cdata" items="categories"></fancy-select>
           <fancy-select header-text="Choose a Person" label="Assigned To" allow-empty="true" value="case.ixPersonAssignedTo" text="case.sPersonAssignedTo.__cdata" items="people"></fancy-select>
           <fancy-select header-text="Choose a Priority" label="Priority" allow-empty="true" value="case.ixPriority" text="case.sPriority.__cdata" items="priorities"></fancy-select>
-          <label class="item item-input item-input" ng-class="{dirty: form.edit.tags.$dirty}">
+          <label class="item item-input item-input">
             <div class="input-label">Tags</div>
             <input name="tags" ng-model="tags" type="text">
           </label>
