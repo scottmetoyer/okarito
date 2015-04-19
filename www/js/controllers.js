@@ -109,7 +109,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
   $scope.editCase = function() {
     // Backup the case to support non-destructive edit
-    backup = angular.copy($scope.case);
+    angular.copy($scope.case, backup);
     $scope.modal.show();
   };
   $scope.closeModal = function() {
@@ -123,7 +123,6 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.$on('modal.removed', function() {});
 
   var init = function() {
-    // Test values for fancy select
     $scope.case = dataService.getCase($stateParams.caseId);
     $scope.events = x2js.asArray($scope.case.events.event);
     $scope.tags = x2js.asArray($scope.case.tags.tag);
@@ -170,7 +169,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.cancel = function() {
-    $scope.case = angular.copy(backup);
+    angular.copy(backup, $scope.case);
     $scope.closeModal();
   };
 
