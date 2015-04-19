@@ -51,43 +51,120 @@ angular.module('okarito.services', ['angular-storage'])
     getProjects: function() {
       return $http.get('cmd=listProjects',
         { transformResponse: transform }).then(function(response){
-          return x2js.asArray(response.data.projects.project);
+          var projects = x2js.asArray(response.data.projects.project);
+          var list = [];
+
+          for (var i = 0; i < projects.length; i++) {
+              list.push({
+                id: projects[i].ixProject,
+                text: projects[i].sProject.__cdata,
+                checked: false,
+                icon: null
+                });
+          };
+          return list;
         });
     },
     getPriorities: function() {
       return $http.get('cmd=listPriorities',
         { transformResponse: transform }).then(function(response){
-          return x2js.asArray(response.data.priorities.priority);
+          var priorities = x2js.asArray(response.data.priorities.priority);
+          var list = [];
+
+          for (var i = 0; i < priorities.length; i++) {
+              list.push({
+                id: priorities[i].ixPriority,
+                text: priorities[i].sPriority.__cdata,
+                checked: false,
+                icon: null
+                });
+          };
+          return list;
         });
     },
     getStatuses: function(categoryId) {
       return $http.get('cmd=listStatuses&ixCategory=' + categoryId,
         { transformResponse: transform }).then(function(response){
-          return x2js.asArray(response.data.statuses.status);
+          var statuses = x2js.asArray(response.data.statuses.status);
+          var list = [];
+
+          for (var i = 0; i < statuses.length; i++) {
+              list.push({
+                id: statuses[i].ixStatus,
+                text: statuses[i].sStatus.__cdata,
+                checked: false,
+                icon: null
+                });
+          };
+          return list;
         });
     },
     getPeople: function() {
       return $http.get('cmd=listPeople',
         { transformResponse: transform }).then(function(response){
-          return x2js.asArray(response.data.people.person);
+          var people = x2js.asArray(response.data.people.person);
+          var list = [];
+
+          for (var i = 0; i < people.length; i++) {
+              list.push({
+                id: people[i].ixPerson,
+                text: people[i].sFullName.__cdata,
+                checked: false,
+                icon: null
+                });
+          };
+          return list;
         });
     },
     getCategories: function() {
       return $http.get('cmd=listCategories',
         { transformResponse: transform }).then(function(response){
-          return x2js.asArray(response.data.categories.category);
+          var categories = x2js.asArray(response.data.categories.category);
+          var list = [];
+
+          for (var i = 0; i < categories.length; i++) {
+              list.push({
+                id: categories[i].ixCategory,
+                text: categories[i].sCategory.__cdata,
+                checked: false,
+                icon: null
+                });
+          };
+          return list;
         });
     },
     getAreas: function(projectId) {
       return $http.get('cmd=listAreas&ixProject=' + projectId,
         { transformResponse: transform }).then(function(response){
-          return x2js.asArray(response.data.areas.area);
+          var areas = x2js.asArray(response.data.areas.area);
+          var list = [];
+
+          for (var i = 0; i < areas.length; i++) {
+              list.push({
+                id: areas[i].ixArea,
+                text: areas[i].sArea.__cdata,
+                checked: false,
+                icon: null
+                });
+          };
+          return list;
         });
     },
     getMilestones: function(projectId) {
       return $http.get('cmd=listFixFors&ixProject=' +projectId,
         { transformResponse: transform }).then(function(response){
-          return x2js.asArray(response.data.fixfors.fixfor);
+          var milestones = x2js.asArray(response.data.fixfors.fixfor);
+          var list = [];
+
+          for (var i = 0; i < milestones.length; i++) {
+              list.push({
+                id: milestones[i].ixFixFor,
+                text: milestones[i].sFixFor.__cdata,
+                checked: false,
+                icon: null
+                });
+          };
+          return list;
         });
     },
     getCases: function (filter) {

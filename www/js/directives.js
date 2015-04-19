@@ -5,19 +5,22 @@ angular.module('okarito.directives', ['ionic'])
   function($ionicModal) {
     return {
       restrict: 'E',
+      replace: true,
       templateUrl: 'templates/fancy-select.html',
       scope: {
         'items': '=',
+        'label': '=',
         'text': '=',
         'value': '=',
         'callback': '&'
       },
 
       link: function(scope, element, attrs) {
-
+        scope.isDirty = false;
         scope.allowEmpty = attrs.allowEmpty === 'false' ? false : true;
         scope.headerText = attrs.headerText || '';
         scope.defaultText = scope.text || '';
+        scope.label = attrs.label || '';
 
         /* Notes in the right side of the label */
         scope.noteText = attrs.noteText || '';
@@ -32,25 +35,6 @@ angular.module('okarito.directives', ['ionic'])
           scope.modal = modal;
         });
 
-        /* Validate selection from header bar */
-        scope.validate = function(event) {
-          // Select first value if not nullable
-          if (typeof scope.value == 'undefined' || scope.value == '' || scope.value == null) {
-            if (scope.allowEmpty == false) {
-              scope.value = scope.items[0].id;
-              scope.text = scope.items[0].text;
-            } else {
-              scope.text = scope.defaultText;
-            }
-          }
-
-          scope.hideItems();
-
-          if (typeof scope.callback == 'function') {
-            scope.callback(scope.value);
-          }
-        }
-
         scope.showItems = function(event) {
           event.preventDefault();
           scope.modal.show();
@@ -62,9 +46,14 @@ angular.module('okarito.directives', ['ionic'])
 
         scope.$on('$destroy', function() {
           scope.modal.remove();
+          scope.isDirty = false;
         });
 
         scope.validateSingle = function(item) {
+          if (scope.text != item.text) {
+            scope.isDirty = true;
+          }
+
           scope.text = item.text;
           scope.value = item.id;
 

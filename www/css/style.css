@@ -57,3 +57,26 @@ fancy-select .list {
   width: 30px;
   text-align: center;
 }
+.select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding: 14px 48px 16px 16px;
+  max-width: 65%;
+  border: none;
+  background: #fff;
+  color: #333;
+  text-indent: 0.01px;
+  text-overflow: '';
+  white-space: nowrap;
+  font-size: 14px;
+  cursor: pointer;
+  direction: rtl;
+}
+.item-input.activated {
+  background: none !important;
+}

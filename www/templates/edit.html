@@ -29,32 +29,12 @@
               <i class="icon ion-camera positive"></i> Take Photo
             </a>
           </label>
-          <fancy-select header-text="Test Fancy Select" allow-empty='false' value="val.single1" text="countries_text_single" items="countries">
-          </fancy-select>
-          <label class="item item-input item-select" ng-class="{dirty: form.edit.project.$dirty}">
-            <div class="input-label">Project</div>
-            <select name="project" ng-model="case.project" ng-options="p.sProject.__cdata for p in projects track by p.ixProject"></select>
-          </label>
-          <label class="item item-input item-select" ng-class="{dirty: form.edit.area.$dirty}">
-            <div class="input-label">Area</div>
-            <select name="area" ng-model="case.area" ng-options="a.sArea.__cdata for a in areas track by a.ixArea"></select>
-          </label>
-          <label class="item item-input item-select" ng-class="{dirty: form.edit.milestone.$dirty}">
-            <div class="input-label">Milestone</div>
-            <select name="milestone" ng-model="case.milestone" ng-options="m.sFixFor.__cdata for m in milestones track by m.ixFixFor"></select>
-          </label>
-          <label class="item item-input item-select" ng-class="{dirty: form.edit.category.$dirty}">
-            <div class="input-label">Category</div>
-            <select name="category" ng-model="case.category" ng-options="c.sCategory.__cdata for c in categories track by c.ixCategory"></select>
-          </label>
-          <label class="item item-input item-select" ng-class="{dirty: form.edit.person.$dirty}">
-            <div class="input-label">Assigned To</div>
-            <select name="person" ng-model="case.personAssignedTo" ng-options="p.sFullName.__cdata for p in people track by p.ixPerson"></select>
-          </label>
-          <label class="item item-input item-select" ng-class="{dirty: form.edit.priority.$dirty}">
-            <div class="input-label">Priority</div>
-            <select name="priority" ng-model="case.priority" ng-options="p.sPriority.__cdata for p in priorities track by p.ixPriority"></select>
-          </label>
+          <fancy-select header-text="Choose a Project" label="Project" allow-empty="true" value="case.ixProject" text="case.sProject.__cdata" items="projects"></fancy-select>
+          <fancy-select header-text="Choose an Area" label="Area" allow-empty="true" value="case.ixArea" text="case.sArea.__cdata" items="areas"></fancy-select>
+          <fancy-select header-text="Choose a Milestone" label="Milestone" allow-empty="true" value="case.ixFixFor" text="case.sFixFor.__cdata" items="milestones"></fancy-select>
+          <fancy-select header-text="Choose a Category" label="Category" allow-empty="true" value="case.ixCategory" text="case.sCategory.__cdata" items="categories"></fancy-select>
+          <fancy-select header-text="Choose a Person" label="Assigned To" allow-empty="true" value="case.ixPersonAssignedTo" text="case.sPersonAssignedTo.__cdata" items="people"></fancy-select>
+          <fancy-select header-text="Choose a Priority" label="Priority" allow-empty="true" value="case.ixPriority" text="case.sPriority.__cdata" items="priorities"></fancy-select>
           <label class="item item-input item-input" ng-class="{dirty: form.edit.tags.$dirty}">
             <div class="input-label">Tags</div>
             <input name="tags" ng-model="tags" type="text">

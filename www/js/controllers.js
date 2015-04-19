@@ -118,37 +118,11 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.$on('$destroy', function() {
     $scope.modal.remove();
   });
-  $scope.$on('modal.hidden', function() {
-  });
-  $scope.$on('modal.removed', function() {
-  });
+  $scope.$on('modal.hidden', function() {});
+  $scope.$on('modal.removed', function() {});
 
   var init = function() {
     // Test values for fancy select
-    $scope.countries = [{
-      id: 1,
-      text: 'USA',
-      checked: false,
-      icon: null
-    }, {
-      id: 2,
-      text: 'France',
-      checked: false,
-      icon: 'https://www.zeendoc.com/wp-content/themes/zeendoc/img/french_flag_small.jpg'
-    }, {
-      id: 3,
-      text: 'Japan',
-      checked: true,
-      icon: null
-    }];
-
-    $scope.countries_text_single = 'Choose country';
-    $scope.val = {
-      single1: null,
-      single2: null
-    };
-    // --
-
     $scope.case = dataService.getCase($stateParams.caseId);
     $scope.events = x2js.asArray($scope.case.events.event);
     $scope.tags = x2js.asArray($scope.case.tags.tag);
@@ -176,32 +150,9 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.areas = responses[5];
         $scope.statuses = responses[6];
 
-        // Hang child objects off the case to handle the selected list items
-        $scope.case.project = $filter('filter')($scope.projects, {
-          ixProject: $scope.case.ixProject
-        }, true)[0];
-        $scope.case.priority = $filter('filter')($scope.priorities, {
-          ixPriority: $scope.case.ixPriority
-        }, true)[0];
-        $scope.case.personAssignedTo = $filter('filter')($scope.people, {
-          ixPerson: $scope.case.ixPersonAssignedTo
-        }, true)[0];
-        $scope.case.category = $filter('filter')($scope.categories, {
-          ixCategory: $scope.case.ixCategory
-        }, true)[0];
-        $scope.case.milestone = $filter('filter')($scope.milestones, {
-          ixFixFor: $scope.case.ixFixFor
-        }, true)[0];
-        $scope.case.area = $filter('filter')($scope.areas, {
-          ixArea: $scope.case.ixArea
-        }, null)[0];
-        $scope.case.status = $filter('filter')($scope.statuses, {
-          ixStatus: $scope.case.ixStatus
-        }, true)[0];
-
         $scope.$watch("case.sCategory", function(newValue, oldValue) {
           var category = $filter('filter')($scope.categories, {
-            sCategory: $scope.case.sCategory
+            text: $scope.case.sCategory
           }, true)[0];
           var icon = utilityService.categoryIcon(category.nIconType);
           $scope.iconImage = 'img/' + icon + '.png';
@@ -222,12 +173,9 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   $scope.cancel = function() {
     //$timeout(function() {
-    dataService.saveCase($scope.case)
-      .then(function(result) {
-        $scope.case = backup;
-        $scope.form.edit.$setPristine();
-        $scope.closeModal();
-      });
+      $scope.case = backup;
+      $scope.form.edit.$setPristine();
+      $scope.closeModal();
     //}, 1000);
   };
 
