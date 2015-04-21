@@ -2,6 +2,9 @@ angular.module('okarito.controllers', ['okarito.services'])
 
 .controller('AppCtrl', function($scope, $rootScope, $state, $filter, $ionicModal, $timeout, loginService, userService, dataService) {
   var app = this;
+  $scope.s = {
+    searchString: ''
+  };
 
   $rootScope.$on('unauthorized', function(event, args) {
     $state.go('login');
@@ -26,11 +29,15 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   $scope.setFilter = function(filterId) {
-    dataService
-      .setFilter(filterId)
-      .then(function(response) {
-        $rootScope.$broadcast('refresh-cases');
-      });
+    $rootScope.$broadcast('set-filter', {filter: filterId});
+  };
+
+  $scope.search = function() {
+    var s = $scope.s.searchString;
+    $rootScope.$broadcast('search-cases', { search: s });
+
+    // Clear the search box
+    $scope.s.searchString = '';
   };
 
   var init = function() {
@@ -74,7 +81,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   }
 })
 
-.controller('CasesCtrl', function($rootScope, $scope, $ionicScrollDelegate, dataService) {
+.controller('CasesCtrl', function($rootScope, $scope, $ionicScrollDelegate, $ionicSideMenuDelegate, dataService) {
   $scope.filter = '';
 
   var init = function() {
@@ -89,9 +96,27 @@ angular.module('okarito.controllers', ['okarito.services'])
     init();
   });
 
-  $rootScope.$on('refresh-cases', function() {
+  $rootScope.$on('set-filter', function(event, args) {
+    dataService
+      .setFilter(args.filter)
+      .then(function(response) {
+        // Set filter name to the screen
+
+        // Clear custom search
+        $scope.filter = '';
+
+        // Refresh case list
+        init();
+      })
     $ionicScrollDelegate.scrollTop();
     init();
+  });
+
+  $scope.$on('search-cases', function(event, args) {
+    $ionicScrollDelegate.scrollTop();
+    $scope.filter = args.search;
+    init();
+    $ionicSideMenuDelegate.toggleLeft(false);
   });
 })
 
