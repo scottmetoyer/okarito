@@ -29,12 +29,16 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   $scope.setFilter = function(filterId) {
-    $rootScope.$broadcast('set-filter', {filter: filterId});
+    $rootScope.$broadcast('set-filter', {
+      filter: filterId
+    });
   };
 
   $scope.search = function() {
     var s = $scope.s.searchString;
-    $rootScope.$broadcast('search-cases', { search: s });
+    $rootScope.$broadcast('search-cases', {
+      search: s
+    });
 
     // Clear the search box
     $scope.s.searchString = '';

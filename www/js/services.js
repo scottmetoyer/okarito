@@ -1,8 +1,18 @@
 // Shared service utility functions
 function transform(data) {
-    var x2js = new X2JS();
-    var json = x2js.xml_str2json(data);
-    return json.response;
+  var x2js = new X2JS();
+  var json = x2js.xml_str2json(data);
+  return json.response;
+}
+
+function normalizeArray(data) {
+  var x2js = new X2JS();
+  var array = x2js.asArray(data);
+  if (array[0] == undefined) {
+    return [];
+  } else {
+    return array;
+  }
 }
 
 angular.module('okarito.services', ['angular-storage'])
@@ -19,25 +29,25 @@ angular.module('okarito.services', ['angular-storage'])
     getCurrentUser: function() {
       currentUser = store.get('user');
       return currentUser;
-   }
+    }
   }
 })
 
-.factory('dataService', function ($http, userService) {;
-  var x2js = new X2JS();
+.factory('dataService', function($http, userService) {;
   var data = this;
   var cases = {};
   var filters = {};
 
   return {
     getFilters: function() {
-      return $http.get('cmd=listFilters',
-        { transformResponse: transform }).then(function(response){
-          filters = x2js.asArray(response.data.filters.filter);
-          return filters;
-        });
+      return $http.get('cmd=listFilters', {
+        transformResponse: transform
+      }).then(function(response) {
+        filters = normalizeArray(response.data.filters.filter);
+        return filters;
+      });
     },
-    getCase: function (id) {
+    getCase: function(id) {
       var bug = null;
 
       for (var i = 0; i < cases.length; i++) {
@@ -49,130 +59,138 @@ angular.module('okarito.services', ['angular-storage'])
       return bug;
     },
     getProjects: function() {
-      return $http.get('cmd=listProjects',
-        { transformResponse: transform }).then(function(response){
-          var projects = x2js.asArray(response.data.projects.project);
-          var list = [];
+      return $http.get('cmd=listProjects', {
+        transformResponse: transform
+      }).then(function(response) {
+        var projects = normalizeArray(response.data.projects.project);
+        var list = [];
 
-          for (var i = 0; i < projects.length; i++) {
-              list.push({
-                id: projects[i].ixProject,
-                text: projects[i].sProject.__cdata,
-                checked: false,
-                icon: null
-                });
-          };
-          return list;
-        });
+        for (var i = 0; i < projects.length; i++) {
+          list.push({
+            id: projects[i].ixProject,
+            text: projects[i].sProject.__cdata,
+            checked: false,
+            icon: null
+          });
+        };
+        return list;
+      });
     },
     getPriorities: function() {
-      return $http.get('cmd=listPriorities',
-        { transformResponse: transform }).then(function(response){
-          var priorities = x2js.asArray(response.data.priorities.priority);
-          var list = [];
+      return $http.get('cmd=listPriorities', {
+        transformResponse: transform
+      }).then(function(response) {
+        var priorities = normalizeArray(response.data.priorities.priority);
+        var list = [];
 
-          for (var i = 0; i < priorities.length; i++) {
-              list.push({
-                id: priorities[i].ixPriority,
-                text: priorities[i].sPriority.__cdata,
-                checked: false,
-                icon: null
-                });
-          };
-          return list;
-        });
+        for (var i = 0; i < priorities.length; i++) {
+          list.push({
+            id: priorities[i].ixPriority,
+            text: priorities[i].sPriority.__cdata,
+            checked: false,
+            icon: null
+          });
+        };
+        return list;
+      });
     },
     getStatuses: function(categoryId) {
-      return $http.get('cmd=listStatuses&ixCategory=' + categoryId,
-        { transformResponse: transform }).then(function(response){
-          var statuses = x2js.asArray(response.data.statuses.status);
-          var list = [];
+      return $http.get('cmd=listStatuses&ixCategory=' + categoryId, {
+        transformResponse: transform
+      }).then(function(response) {
+        var statuses = normalizeArray(response.data.statuses.status);
+        var list = [];
 
-          for (var i = 0; i < statuses.length; i++) {
-              list.push({
-                id: statuses[i].ixStatus,
-                text: statuses[i].sStatus.__cdata,
-                checked: false,
-                icon: null
-                });
-          };
-          return list;
-        });
+        for (var i = 0; i < statuses.length; i++) {
+          list.push({
+            id: statuses[i].ixStatus,
+            text: statuses[i].sStatus.__cdata,
+            checked: false,
+            icon: null
+          });
+        };
+        return list;
+      });
     },
     getPeople: function() {
-      return $http.get('cmd=listPeople',
-        { transformResponse: transform }).then(function(response){
-          var people = x2js.asArray(response.data.people.person);
-          var list = [];
+      return $http.get('cmd=listPeople', {
+        transformResponse: transform
+      }).then(function(response) {
+        var people = normalizeArray(response.data.people.person);
+        var list = [];
 
-          for (var i = 0; i < people.length; i++) {
-              list.push({
-                id: people[i].ixPerson,
-                text: people[i].sFullName.__cdata,
-                checked: false,
-                icon: null
-                });
-          };
-          return list;
-        });
+        for (var i = 0; i < people.length; i++) {
+          list.push({
+            id: people[i].ixPerson,
+            text: people[i].sFullName.__cdata,
+            checked: false,
+            icon: null
+          });
+        };
+        return list;
+      });
     },
     getCategories: function() {
-      return $http.get('cmd=listCategories',
-        { transformResponse: transform }).then(function(response){
-          var categories = x2js.asArray(response.data.categories.category);
-          var list = [];
+      return $http.get('cmd=listCategories', {
+        transformResponse: transform
+      }).then(function(response) {
+        var categories = normalizeArray(response.data.categories.category);
+        var list = [];
 
-          for (var i = 0; i < categories.length; i++) {
-              list.push({
-                id: categories[i].ixCategory,
-                text: categories[i].sCategory.__cdata,
-                checked: false,
-                icon: null
-                });
-          };
-          return list;
-        });
+        for (var i = 0; i < categories.length; i++) {
+          list.push({
+            id: categories[i].ixCategory,
+            text: categories[i].sCategory.__cdata,
+            checked: false,
+            icon: null
+          });
+        };
+        return list;
+      });
     },
     getAreas: function(projectId) {
-      return $http.get('cmd=listAreas&ixProject=' + projectId,
-        { transformResponse: transform }).then(function(response){
-          var areas = x2js.asArray(response.data.areas.area);
-          var list = [];
+      return $http.get('cmd=listAreas&ixProject=' + projectId, {
+        transformResponse: transform
+      }).then(function(response) {
+        var areas = normalizeArray(response.data.areas.area);
+        var list = [];
 
-          for (var i = 0; i < areas.length; i++) {
-              list.push({
-                id: areas[i].ixArea,
-                text: areas[i].sArea.__cdata,
-                checked: false,
-                icon: null
-                });
-          };
-          return list;
-        });
+        for (var i = 0; i < areas.length; i++) {
+          list.push({
+            id: areas[i].ixArea,
+            text: areas[i].sArea.__cdata,
+            checked: false,
+            icon: null
+          });
+        };
+        return list;
+      });
     },
     getMilestones: function(projectId) {
-      return $http.get('cmd=listFixFors&ixProject=' +projectId,
-        { transformResponse: transform }).then(function(response){
-          var milestones = x2js.asArray(response.data.fixfors.fixfor);
-          var list = [];
+      return $http.get('cmd=listFixFors&ixProject=' + projectId, {
+        transformResponse: transform
+      }).then(function(response) {
+        var milestones = normalizeArray(response.data.fixfors.fixfor);
+        var list = [];
 
-          for (var i = 0; i < milestones.length; i++) {
-              list.push({
-                id: milestones[i].ixFixFor,
-                text: milestones[i].sFixFor.__cdata,
-                checked: false,
-                icon: null
-                });
-          };
-          return list;
-        });
+        for (var i = 0; i < milestones.length; i++) {
+          list.push({
+            id: milestones[i].ixFixFor,
+            text: milestones[i].sFixFor.__cdata,
+            checked: false,
+            icon: null
+          });
+        };
+        return list;
+      });
     },
-    getCases: function (filter) {
-      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events',
-        { transformResponse: transform }).then(function(response) {
-          cases = x2js.asArray(response.data.cases.case);
-          return cases;
-        });
+    getCases: function(filter) {
+      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
+        transformResponse: transform
+      }).then(function(response) {
+        cases = normalizeArray(response.data.cases.case);
+        return cases;
+      });
     },
     setFilter: function(filterId) {
       return $http.get('cmd=setCurrentFilter&sFilter=' + filterId);
@@ -182,17 +200,19 @@ angular.module('okarito.services', ['angular-storage'])
         method: 'POST',
         url: '',
         data: "cmd=edit&ixBug=" + bug.ixBug +
-              "&sTitle=" + bug.sTitle.__cdata +
-              "&ixArea=" + bug.ixArea +
-              "&ixStatus=" + bug.ixStatus +
-              "&ixProject=" + bug.ixProject +
-              "&ixPriority=" + bug.ixPriority +
-              "&ixCategory=" + bug.ixCategory +
-              "&ixFixFor=" + bug.ixFixFor +
-              "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          "&sTitle=" + bug.sTitle.__cdata +
+          "&ixArea=" + bug.ixArea +
+          "&ixStatus=" + bug.ixStatus +
+          "&ixProject=" + bug.ixProject +
+          "&ixPriority=" + bug.ixPriority +
+          "&ixCategory=" + bug.ixCategory +
+          "&ixFixFor=" + bug.ixFixFor +
+          "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
         transformResponse: transform
-      }).then(function(response){
+      }).then(function(response) {
         // Save success
         return response;
       });
@@ -207,20 +227,22 @@ angular.module('okarito.services', ['angular-storage'])
       var promise = deferred.promise;
       var user = {
         email: userEmail,
-        api_url : '',
+        api_url: '',
         access_token: ''
       };
 
       root = root.replace(/\/?$/, '/');
 
       $http
-        .get(root + 'api.xml',{ transformResponse: transform })
+        .get(root + 'api.xml', {
+          transformResponse: transform
+        })
         .then(function(response) {
           // Retrive the FogBugz API url
           user.api_url = root + response.data.url;
-          console.log(response);
-          return $http.get(user.api_url + 'cmd=logon&email=' + userEmail + '&password=' + password,
-            { transformResponse: transform });
+          return $http.get(user.api_url + 'cmd=logon&email=' + userEmail + '&password=' + password, {
+            transformResponse: transform
+          });
         })
         .then(function(response) {
           user.access_token = response.data.token.__cdata;
@@ -247,58 +269,57 @@ angular.module('okarito.services', ['angular-storage'])
 
 .factory("utilityService", function() {
   return {
-    categoryIcon: function (categoryId) {
-        var icon = '';
+    categoryIcon: function(categoryId) {
+      var icon = '';
 
-        switch (categoryId)
-        {
-          case '1':
-            icon = 'bug'
-            break;
+      switch (categoryId) {
+        case '1':
+          icon = 'bug'
+          break;
 
-          case '2':
-            icon = 'lightbulb'
-            break;
+        case '2':
+          icon = 'lightbulb'
+          break;
 
-          case '3':
-            icon = 'email'
-            break;
+        case '3':
+          icon = 'email'
+          break;
 
-          case '4':
-            icon = 'clock'
-            break;
+        case '4':
+          icon = 'clock'
+          break;
 
-          case '5':
-            icon = 'alert'
-            break;
+        case '5':
+          icon = 'alert'
+          break;
 
-          case '6':
-            icon = 'wrench'
-            break;
+        case '6':
+          icon = 'wrench'
+          break;
 
-          case '7':
-            icon = 'search'
-            break;
+        case '7':
+          icon = 'search'
+          break;
 
-          case '8':
-            icon = 'key'
-            break;
+        case '8':
+          icon = 'key'
+          break;
 
-          case '9':
-            icon = 'alert-circled'
-            break;
+        case '9':
+          icon = 'alert-circled'
+          break;
 
-          default:
-            icon = 'document-text'
-            break;
-        }
-
-        return icon;
+        default:
+          icon = 'document-text'
+          break;
       }
+
+      return icon;
     }
+  }
 })
 
-.service('authInterceptor', function($q, $rootScope, userService){
+.service('authInterceptor', function($q, $rootScope, userService) {
   var service = this;
 
   service.request = function(config) {
@@ -307,8 +328,7 @@ angular.module('okarito.services', ['angular-storage'])
     var api_url = currentUser ? currentUser.api_url : null;
 
     // Process GET requests
-    if (config.method == 'GET')
-    {
+    if (config.method == 'GET') {
       // If the request is a FogBugz command and we have a token save, append it
       if (config.url.indexOf('cmd=') > -1 && config.url.indexOf('cmd=logon') == -1) {
         if (access_token && api_url) {
@@ -320,8 +340,7 @@ angular.module('okarito.services', ['angular-storage'])
     }
 
     // Process POST requests
-    if (config.method == 'POST')
-    {
+    if (config.method == 'POST') {
       if (config.data.indexOf('cmd=') > -1) {
         if (access_token && api_url) {
           config.url = api_url + config.url;
@@ -340,8 +359,7 @@ angular.module('okarito.services', ['angular-storage'])
       console.log(response.data.error);
       // TODO: Appropriate actions based on the specific errors go here, ie. login error to unauthorized, saving errors show messagem etc.
       var code = response.data.error._code;
-      switch(code)
-      {
+      switch (code) {
         case '3':
           // Not logged in
           break;
