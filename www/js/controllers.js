@@ -187,6 +187,9 @@ angular.module('okarito.controllers', ['okarito.services'])
           $scope.iconImage = 'img/' + icon + '.png';
           $scope.icon = 'ion-' + icon;
         });
+
+        // Done loading, hide the loader
+        $ionicLoading.hide();
       });
   };
 
@@ -201,6 +204,12 @@ angular.module('okarito.controllers', ['okarito.services'])
     angular.copy(backup, $scope.case);
     $scope.closeModal();
   };
+
+  $scope.$on('$ionicView.beforeEnter', function(){
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
+  });
 
   $scope.$on('$ionicView.enter', function() {
     init();

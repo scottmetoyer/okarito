@@ -1,6 +1,6 @@
 <ion-modal-view>
   <form name="form.edit" ng-submit="save()">
-    <ion-header-bar>
+    <ion-header-bar class="bar-calm">
       <button type="button" class="button" ng-click="cancel()">Cancel</button>
       <h1 class="title">Edit Case {{ case.ixBug }}</h1>
       <button type="submit" class="button button-positive">Save</button>
@@ -23,10 +23,13 @@
           </label>
           <label class="item tabs tabs-secondary tabs-icon-left">
             <a class="tab-item" href="#">
-              <i class="icon ion-paperclip positive"></i> Add Attachment
+              <i class="icon ion-location positive"></i>
             </a>
             <a class="tab-item" href="#">
-              <i class="icon ion-camera positive"></i> Take Photo
+              <i class="icon ion-mic-a positive"></i>
+            </a>
+            <a class="tab-item" href="#">
+              <i class="icon ion-camera positive"></i>
             </a>
           </label>
           <fancy-select header-text="Choose a Project" label="Project" allow-empty="true" value="case.ixProject" text="case.sProject.__cdata" items="projects"></fancy-select>

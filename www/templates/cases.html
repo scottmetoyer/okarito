@@ -1,16 +1,23 @@
 <ion-view view-title="Cases">
-    <ion-content>
-      <div class="padding"><h5 class="subdued">All cases</h5></div>
-      <div class="list">
-        <a class="item" style="padding: .4em;" ng-repeat="bug in cases" href="#/app/cases/{{bug.ixBug}}">
-          <div class="row">
-            <div class="col"><span class="case-number">{{bug.ixBug}}</span></div>
-            <div class="col col-80">
-              <h2>{{bug.sTitle.__cdata}}</h2>
-              <p><i class="icon ion-bug"></i> Bug (Active)</p>
-            </div>
+  <ion-content>
+    <div class="padding">
+      <h5 class="subdued">All cases</h5>
+    </div>
+    <div class="list">
+      <a class="item" style="padding: .4em;" ng-repeat="bug in cases" href="#/app/cases/{{bug.ixBug}}">
+        <div class="row">
+          <div class="col">
+            <span class="case-number">{{bug.ixBug}}</span>
           </div>
-        </a>
-      </div>
-    </ion-content>
+          <div class="col col-80">
+            <h2>{{bug.sTitle.__cdata}}</h2>
+            <p><i class="icon ion-bug"></i> Bug (Active)</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </ion-content>
+  <button class="round-overlay-button bottom-right assertive button button-icon icon ion-ios7-search-strong light">
+    <i class="icon ion-plus"></i>
+  </button>
 </ion-view>
