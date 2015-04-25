@@ -96,6 +96,11 @@ angular.module('okarito.controllers', ['okarito.services'])
       })
   };
 
+  $scope.doRefresh = function() {
+    $scope.$broadcast('scroll.refreshComplete');
+    $scope.$apply();
+  };
+
   $scope.$on('$ionicView.enter', function() {
     init();
   });
@@ -124,10 +129,25 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 })
 
-.controller('CaseCtrl', function($q, $scope, $stateParams, $timeout, $ionicModal, $filter, $ionicLoading, dataService, utilityService) {
+.controller('CaseCtrl', function($q, $scope, $stateParams, $timeout, $ionicModal, $ionicPopover,  $filter, $ionicLoading, dataService, utilityService) {
   var x2js = new X2JS();
   var backup = {};
   $scope.form = {};
+
+  $ionicPopover.fromTemplateUrl('templates/more-actions.html', {
+    scope: $scope,
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+
+  // Display Popover
+  $scope.openPopover = function($event) {
+    $scope.popover.show($event);
+  };
+
+  $scope.closePopover = function() {
+    $scope.popover.hide();
+  };
 
   // Set up the edit modal
   $ionicModal.fromTemplateUrl('templates/edit.html', {
@@ -139,6 +159,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.editCase = function() {
     // Backup the case to support non-destructive edit
     angular.copy($scope.case, backup);
+    $scope.closePopover();
     $scope.modal.show();
   };
   $scope.closeModal = function() {
@@ -162,13 +183,13 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     // Populate the dropdowns in the edit view
     $q.all([
-        dataService.getProjects(),
-        dataService.getPriorities(),
-        dataService.getPeople(),
-        dataService.getCategories(),
-        dataService.getMilestones($scope.case.ixProject),
-        dataService.getAreas($scope.case.ixProject),
-        dataService.getStatuses($scope.case.ixCategory)
+        dataService.getProjects(true),
+        dataService.getPriorities(true),
+        dataService.getPeople(true),
+        dataService.getCategories(true),
+        dataService.getMilestones($scope.case.ixProject, true),
+        dataService.getAreas($scope.case.ixProject, true),
+        dataService.getStatuses($scope.case.ixCategory, true)
       ])
       .then(function(responses) {
         $scope.projects = responses[0];
@@ -205,7 +226,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.closeModal();
   };
 
-  $scope.$on('$ionicView.beforeEnter', function(){
+  $scope.$on('$ionicView.beforeEnter', function() {
     $ionicLoading.show({
       template: 'Loading...'
     });

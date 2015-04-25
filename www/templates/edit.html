@@ -1,15 +1,15 @@
 <ion-modal-view>
   <form name="form.edit" ng-submit="save()">
-    <ion-header-bar class="bar-calm">
+    <ion-header-bar class="bar-positive">
       <button type="button" class="button" ng-click="cancel()">Cancel</button>
-      <h1 class="title">Edit Case {{ case.ixBug }}</h1>
+      <h1 class="title"></h1>
       <button type="submit" class="button button-positive">Save</button>
     </ion-header-bar>
     <ion-content scroll="true">
       <div class="card">
         <div class="list">
           <label class="item item-divider">
-            <h3>{{case.sStatus.__cdata}}</h3>
+            Edit Case {{ case.ixBug }} ({{case.sStatus.__cdata}})
           </label>
           <label class="item item-input">
             <input type="text" name="title" ng-model="case.sTitle.__cdata" class="title">

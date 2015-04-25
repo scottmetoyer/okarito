@@ -35,15 +35,14 @@ angular.module('okarito.services', ['angular-storage'])
 
 .factory('dataService', function($http, userService) {;
   var data = this;
-  var cases = {};
-  var filters = {};
+  var cases = [];
 
   return {
     getFilters: function() {
       return $http.get('cmd=listFilters', {
         transformResponse: transform
       }).then(function(response) {
-        filters = normalizeArray(response.data.filters.filter);
+        var filters = normalizeArray(response.data.filters.filter);
         return filters;
       });
     },
@@ -58,9 +57,10 @@ angular.module('okarito.services', ['angular-storage'])
 
       return bug;
     },
-    getProjects: function() {
+    getProjects: function(cacheResponse) {
       return $http.get('cmd=listProjects', {
-        transformResponse: transform
+        transformResponse: transform,
+        cache: cacheResponse
       }).then(function(response) {
         var projects = normalizeArray(response.data.projects.project);
         var list = [];
@@ -76,9 +76,10 @@ angular.module('okarito.services', ['angular-storage'])
         return list;
       });
     },
-    getPriorities: function() {
+    getPriorities: function(cacheResponse) {
       return $http.get('cmd=listPriorities', {
-        transformResponse: transform
+        transformResponse: transform,
+        cache: cacheResponse
       }).then(function(response) {
         var priorities = normalizeArray(response.data.priorities.priority);
         var list = [];
@@ -94,9 +95,10 @@ angular.module('okarito.services', ['angular-storage'])
         return list;
       });
     },
-    getStatuses: function(categoryId) {
+    getStatuses: function(categoryId, cacheResponse) {
       return $http.get('cmd=listStatuses&ixCategory=' + categoryId, {
-        transformResponse: transform
+        transformResponse: transform,
+        cache: cacheResponse
       }).then(function(response) {
         var statuses = normalizeArray(response.data.statuses.status);
         var list = [];
@@ -112,9 +114,10 @@ angular.module('okarito.services', ['angular-storage'])
         return list;
       });
     },
-    getPeople: function() {
+    getPeople: function(cacheResponse) {
       return $http.get('cmd=listPeople', {
-        transformResponse: transform
+        transformResponse: transform,
+        cache: cacheResponse
       }).then(function(response) {
         var people = normalizeArray(response.data.people.person);
         var list = [];
@@ -130,9 +133,10 @@ angular.module('okarito.services', ['angular-storage'])
         return list;
       });
     },
-    getCategories: function() {
+    getCategories: function(cacheResponse) {
       return $http.get('cmd=listCategories', {
-        transformResponse: transform
+        transformResponse: transform,
+        cache: cacheResponse
       }).then(function(response) {
         var categories = normalizeArray(response.data.categories.category);
         var list = [];
@@ -148,9 +152,10 @@ angular.module('okarito.services', ['angular-storage'])
         return list;
       });
     },
-    getAreas: function(projectId) {
+    getAreas: function(projectId, cacheResponse) {
       return $http.get('cmd=listAreas&ixProject=' + projectId, {
-        transformResponse: transform
+        transformResponse: transform,
+        cache: cacheResponse
       }).then(function(response) {
         var areas = normalizeArray(response.data.areas.area);
         var list = [];
@@ -166,9 +171,10 @@ angular.module('okarito.services', ['angular-storage'])
         return list;
       });
     },
-    getMilestones: function(projectId) {
+    getMilestones: function(projectId, cacheResponse) {
       return $http.get('cmd=listFixFors&ixProject=' + projectId, {
-        transformResponse: transform
+        transformResponse: transform,
+        cache: cacheResponse
       }).then(function(response) {
         var milestones = normalizeArray(response.data.fixfors.fixfor);
         var list = [];
@@ -184,7 +190,7 @@ angular.module('okarito.services', ['angular-storage'])
         return list;
       });
     },
-    getCases: function(filter) {
+    getCases: function(filter, cacheResponse) {
       return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
         transformResponse: transform
       }).then(function(response) {

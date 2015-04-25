@@ -1,52 +1,51 @@
-<ion-view view-title="Case {{case.ixBug}}">
+<ion-view view-title="">
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon ion-person">
+    </button>
+    <button class="button button-icon icon ion-checkmark">
+    </button>
+    <button class="button button-icon icon ion-edit" ng-click="editCase()">
+    </button>
+    <button class="button button-icon icon ion-more" ng-click="openPopover($event)">
+    </button>
+  </ion-nav-buttons>
   <ion-content>
     <div class="list card">
-      <div class="item item-avatar">
+      <div class="item item-divider">
+        Case {{case.ixBug}}
+      </div>
+      <div class="item item-avatar item-text-wrap">
         <img ng-src="{{ iconImage }}">
         <h2>{{ case.sTitle.__cdata }}</h2>
         <p><a href="#">{{ case.sProject.__cdata }}</a>: <a href="#">{{ case.sArea.__cdata }}</a> (Milestone: <a href="#">{{ case.sFixFor.__cdata }}</a>)</p>
       </div>
-      <div class="item tabs tabs-secondary tabs-icon-left">
-        <a class="tab-item" href="#">
-          <i class="icon ion-person positive"></i>
-          Assign
-        </a>
-        <a class="tab-item" href="#">
-          <i class="icon ion-checkmark positive"></i>
-          Resolve
-        </a>
-        <a class="tab-item" href="#" ng-click="editCase()">
-          <i class="icon ion-edit positive"></i>
-          Edit
-        </a>
-      </div>
       <div class="item item-body">
         <div class="row">
-          <div class="col col-50">Status</div>
+          <div class="col col-50 subdued">Status</div>
           <div class="col">{{ case.sStatus.__cdata }}</div>
         </div>
-      <div class="row">
-        <div class="col col-50">Category</div>
-        <div class="col"><i class="icon {{ icon }}"></i>&nbsp;{{ case.sCategory.__cdata }}</div>
+        <div class="row">
+          <div class="col col-50 subdued">Category</div>
+          <div class="col"><i class="icon {{ icon }}"></i>&nbsp;{{ case.sCategory.__cdata }}</div>
+        </div>
+        <div class="row">
+          <div class="col col-50 subdued">Assigned To</div>
+          <div class="col">{{ case.sPersonAssignedTo.__cdata }}</div>
+        </div>
+        <div class="row">
+          <div class="col col-50 subdued">Priority</div>
+          <div class="col">{{ case.sPriority.__cdata }}</div>
+        </div>
       </div>
-      <div class="row">
-        <div class="col col-50">Assigned To</div>
-        <div class="col">{{ case.sPersonAssignedTo.__cdata }}</div>
-      </div>
-      <div class="row">
-        <div class="col col-50">Priority</div>
-        <div class="col">{{ case.sPriority.__cdata }}</div>
-      </div>
+      <span ng-repeat="event in events">
+        <div class="item item-divider">
+          <h3>{{ event.evtDescription.__cdata }}</h3>
+          <h4 class="subdued">{{ event.dt | date:'MM/dd/yyyy h:mma'}}</h4>
+          <h4 style="white-space: pre-wrap; font-weight: normal;">{{ event.sChanges.__cdata }}</h4>
+        </div>
+        <div class="item item-text-wrap" ng-bind-html="event.sHtml.__cdata" ng-show="event.s != ''"></div>
+        <div class="spacer" ng-hide="event.s != ''"></div>
+      </span>
     </div>
-    <span ng-repeat="event in events">
-      <div class="item item-divider">
-        <h3>{{ event.evtDescription.__cdata }}</h3>
-        <h4 class="subdued">{{ event.dt | date:'MM/dd/yyyy h:mma'}}</h4>
-        <h4 style="white-space: pre-wrap; font-weight: normal;">{{ event.sChanges.__cdata }}</h4>
-      </div>
-      <div class="item item-text-wrap" ng-bind-html="event.sHtml.__cdata" ng-show="event.s != ''"></div>
-      <div class="spacer" ng-hide="event.s != ''"></div>
-    </span>
-  </div>
-</ion-content>
+  </ion-content>
 </ion-view>
