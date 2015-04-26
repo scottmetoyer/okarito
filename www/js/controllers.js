@@ -1,18 +1,20 @@
 angular.module('okarito.controllers', ['okarito.services'])
 
-.controller('AppCtrl', function($scope, $rootScope, $state, $filter, $ionicModal, $timeout, loginService, userService, dataService) {
+.controller('AppCtrl', function($scope, $rootScope, $state, $filter, $ionicLoading, $ionicModal, $timeout, loginService, userService, dataService) {
   var app = this;
   $scope.s = {
     searchString: ''
   };
 
   $rootScope.$on('unauthorized', function(event, args) {
+    $ionicLoading.hide();
     $state.go('login');
   });
 
   $rootScope.$on('http-error', function(event, args) {
     // TODO: Handle fundamental HTTP errors here
     // $state.go('login');
+    $ionicLoading.hide();
   });
 
   $rootScope.$on('authorized', function() {
@@ -85,8 +87,25 @@ angular.module('okarito.controllers', ['okarito.services'])
   }
 })
 
-.controller('CasesCtrl', function($rootScope, $scope, $ionicScrollDelegate, $ionicSideMenuDelegate, dataService) {
+.controller('CasesCtrl', function($rootScope, $scope, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService) {
   $scope.filter = '';
+
+  // Set up the new case modal
+  $ionicModal.fromTemplateUrl('templates/edit.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+  $scope.newCase = function() {
+    $scope.modal.show();
+  }
 
   var init = function() {
     dataService
@@ -163,14 +182,11 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.modal.show();
   };
   $scope.closeModal = function() {
-    console.log($scope.case);
     $scope.modal.hide();
   };
   $scope.$on('$destroy', function() {
     $scope.modal.remove();
   });
-  $scope.$on('modal.hidden', function() {});
-  $scope.$on('modal.removed', function() {});
 
   var init = function() {
     $scope.case = dataService.getCase($stateParams.caseId);
