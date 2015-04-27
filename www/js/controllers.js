@@ -21,14 +21,14 @@ angular.module('okarito.controllers', ['okarito.services'])
     app.currentUser = userService.getCurrentUser();
   });
 
+  $scope.$on('$ionicView.enter', function() {
+    init();
+  });
+
   $scope.logout = function() {
     userService.setCurrentUser(null);
     $state.go('login');
   };
-
-  $scope.$on('$ionicView.enter', function() {
-    init();
-  });
 
   $scope.setFilter = function(filterId) {
     $rootScope.$broadcast('set-filter', {
@@ -148,55 +148,60 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 })
 
-.controller('CaseCtrl', function($q, $scope, $stateParams, $timeout, $ionicModal, $ionicPopover,  $filter, $ionicLoading, dataService, utilityService) {
+.controller('CaseCtrl', function($q, $scope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService) {
   var x2js = new X2JS();
   var backup = {};
   $scope.form = {};
 
+  // Action popover
   $ionicPopover.fromTemplateUrl('templates/more-actions.html', {
     scope: $scope,
   }).then(function(popover) {
     $scope.popover = popover;
   });
 
-  // Display Popover
-  $scope.openPopover = function($event) {
-    $scope.popover.show($event);
-  };
-
-  $scope.closePopover = function() {
-    $scope.popover.hide();
-  };
-
-  // Set up the edit modal
+  // Edit case modal
   $ionicModal.fromTemplateUrl('templates/edit.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
     $scope.modal = modal;
   });
-  $scope.editCase = function() {
-    // Backup the case to support non-destructive edit
-    angular.copy($scope.case, backup);
-    $scope.closePopover();
-    $scope.modal.show();
-  };
-  $scope.closeModal = function() {
-    $scope.modal.hide();
-  };
-  $scope.$on('$destroy', function() {
-    $scope.modal.remove();
-  });
 
   var init = function() {
     $scope.case = dataService.getCase($stateParams.caseId);
     $scope.events = x2js.asArray($scope.case.events.event);
     $scope.tags = x2js.asArray($scope.case.tags.tag);
+    $scope.tags = $scope.tags[0] == undefined ? [] : $scope.tags;
 
-    if ($scope.tags[0] == null) {
-      $scope.tags = [];
-    }
+    $scope.$watch("case.sCategory", function(newValue, oldValue) {
+      var category = $filter('filter')($scope.categories, {
+        text: $scope.case.sCategory.__cdata
+      }, true)[0];
+      var icon = utilityService.categoryIcon(category.nIconType);
+      $scope.iconImage = 'img/' + icon + '.png';
+      $scope.icon = 'ion-' + icon;
+    });
+  };
 
+  $scope.save = function() {
+    dataService.saveCase($scope.case)
+      .then(function(result) {
+        $scope.closeModal();
+      });
+  };
+
+  $scope.cancel = function() {
+    angular.copy(backup, $scope.case);
+    $scope.closeModal();
+  };
+
+  $scope.editCase = function() {
+    // Backup the case to support non-destructive edit
+    angular.copy($scope.case, backup);
+    $scope.closePopover();
+
+    // Load the select lists
     // Populate the dropdowns in the edit view
     $q.all([
         dataService.getProjects(true),
@@ -215,31 +220,21 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.milestones = responses[4];
         $scope.areas = responses[5];
         $scope.statuses = responses[6];
-
-        $scope.$watch("case.sCategory", function(newValue, oldValue) {
-          var category = $filter('filter')($scope.categories, {
-            text: $scope.case.sCategory.__cdata
-          }, true)[0];
-          var icon = utilityService.categoryIcon(category.nIconType);
-          $scope.iconImage = 'img/' + icon + '.png';
-          $scope.icon = 'ion-' + icon;
-        });
-
-        // Done loading, hide the loader
-        $ionicLoading.hide();
       });
+
+    $scope.modal.show();
   };
 
-  $scope.save = function() {
-    dataService.saveCase($scope.case)
-      .then(function(result) {
-        $scope.closeModal();
-      });
+  $scope.openPopover = function($event) {
+    $scope.popover.show($event);
   };
 
-  $scope.cancel = function() {
-    angular.copy(backup, $scope.case);
-    $scope.closeModal();
+  $scope.closePopover = function() {
+    $scope.popover.hide();
+  };
+
+  $scope.closeModal = function() {
+    $scope.modal.hide();
   };
 
   $scope.$on('$ionicView.beforeEnter', function() {
@@ -250,5 +245,9 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   $scope.$on('$ionicView.enter', function() {
     init();
+  });
+
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
   });
 });
