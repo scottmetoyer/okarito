@@ -146,7 +146,7 @@ angular.module('okarito.services', ['angular-storage'])
             id: categories[i].ixCategory,
             text: categories[i].sCategory.__cdata,
             checked: false,
-            icon: null
+            icon: categories[i].nIconType
           });
         };
         return list;
@@ -192,7 +192,8 @@ angular.module('okarito.services', ['angular-storage'])
     },
     getCases: function(filter, cacheResponse) {
       return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
-        transformResponse: transform
+        transformResponse: transform,
+        cache: cacheResponse
       }).then(function(response) {
         cases = normalizeArray(response.data.cases.case);
         return cases;
