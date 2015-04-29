@@ -264,7 +264,8 @@ angular.module('okarito.services', ['angular-storage'])
       var user = {
         email: userEmail,
         api_url: '',
-        access_token: ''
+        access_token: '',
+        full_name: ''
       };
 
       root = root.replace(/\/?$/, '/');

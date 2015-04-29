@@ -63,7 +63,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 })
 
-.controller('LoginCtrl', function($scope, $rootScope, $state, $ionicPopup, loginService, userService) {
+.controller('LoginCtrl', function($scope, $rootScope, $state, $filter, $ionicPopup, loginService, userService, dataService) {
   $scope.data = {
     email: 'scott.metoyer@gmail.com',
     url: 'https://scottmetoyer.fogbugz.com',
@@ -75,6 +75,18 @@ angular.module('okarito.controllers', ['okarito.services'])
       .loginUser($scope.data.email, $scope.data.password, $scope.data.url)
       .success(function(data) {
         userService.setCurrentUser(data);
+
+        // Fetch the users full name
+        dataService.getPeople(true)
+        .then(function(response) {
+          var fullName = $filter('filter')(response, {
+            email: $scope.data.email
+          }, true)[0].text;
+
+          data.full_name = fullName;
+          userService.setCurrentUser(data);
+        });
+
         $rootScope.$broadcast('authorized');
         $state.go('app.cases');
       })
@@ -105,10 +117,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.newCase = function() {
     $scope.label = 'New case';
     $scope.date = $filter('date')(new Date(), 'medium');
-    $scope.touched = 'Opened by ' +  $filter('filter')($rootScope.people, {
-      email: userService.getCurrentUser().email
-    }, true)[0].text;
-
+    $scope.touched = 'Opened by ' + userService.getCurrentUser().full_name;
     $scope.case = dataService.newCase();
     $scope.modal.show();
   }
@@ -268,9 +277,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.tags = $scope.tags[0] == undefined ? [] : $scope.tags;
     $scope.label = 'Edit Case ' + $scope.case.ixBug + ' (' + $scope.case.sStatus.__cdata + ')';
     $scope.date = $filter('date')(new Date(), 'medium');
-    $scope.touched = 'Edited by ' + $filter('filter')($rootScope.people, {
-      email: userService.getCurrentUser().email
-    }, true)[0].text;
+    $scope.touched = 'Edited by ' + userService.getCurrentUser().full_name;
 
     $scope.$watch("case.sCategory", function(newValue, oldValue) {
       var category = $filter('filter')($rootScope.categories, {
