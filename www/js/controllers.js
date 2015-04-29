@@ -87,7 +87,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   }
 })
 
-.controller('CasesCtrl', function($q, $rootScope, $scope, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService) {
+.controller('CasesCtrl', function($q, $filter, $rootScope, $scope, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService, userService) {
   $scope.filter = '';
 
   // Set up the new case modal
@@ -103,6 +103,36 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.newCase = function() {
+    $scope.label = 'New case';
+    $scope.date = $filter('date')(new Date(), 'medium');
+    $scope.touched = 'Opened by ' + userService.getCurrentUser().full_name;
+
+    $scope.case = {
+      ixProject: 0,
+      ixArea: 0,
+      ixFixFor: 0,
+      ixCategory: 0,
+      ixPersonAssignedTo: 0,
+      ixPriority: 0,
+      sProject: {
+        __cdata: 'Test'
+      },
+      sArea: {
+        __cdata: 'Test'
+      },
+      sFixFor: {
+        __cdata: 'Test'
+      },
+      sCategory: {
+        __cdata: 'Test'
+      },
+      sPersonAssignedTo: {
+        __cdata: 'Bilbo Baggins'
+      },
+      sPriority: {
+        __cdata: 'Low'
+      }
+    };
     $scope.modal.show();
   }
 
@@ -172,7 +202,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   var init = function() {};
 })
 
-.controller('CaseCtrl', function($q, $scope, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService) {
+.controller('CaseCtrl', function($q, $scope, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService, userService) {
   var x2js = new X2JS();
   var backup = {};
   $scope.form = {};
@@ -259,6 +289,9 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.events = x2js.asArray($scope.case.events.event);
     $scope.tags = x2js.asArray($scope.case.tags.tag);
     $scope.tags = $scope.tags[0] == undefined ? [] : $scope.tags;
+    $scope.label = 'Edit Case ' + $scope.case.ixBug + ' (' + $scope.case.sStatus.__cdata + ')';
+    $scope.date = $filter('date')(new Date(), 'medium');
+    $scope.touched = 'Edited by ' + userService.getCurrentUser().full_name;
 
     $scope.$watch("case.sCategory", function(newValue, oldValue) {
       var category = $filter('filter')($rootScope.categories, {
