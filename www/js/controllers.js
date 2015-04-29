@@ -105,34 +105,11 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.newCase = function() {
     $scope.label = 'New case';
     $scope.date = $filter('date')(new Date(), 'medium');
-    $scope.touched = 'Opened by ' + userService.getCurrentUser().full_name;
+    $scope.touched = 'Opened by ' +  $filter('filter')($rootScope.people, {
+      email: userService.getCurrentUser().email
+    }, true)[0].text;
 
-    $scope.case = {
-      ixProject: 0,
-      ixArea: 0,
-      ixFixFor: 0,
-      ixCategory: 0,
-      ixPersonAssignedTo: 0,
-      ixPriority: 0,
-      sProject: {
-        __cdata: 'Test'
-      },
-      sArea: {
-        __cdata: 'Test'
-      },
-      sFixFor: {
-        __cdata: 'Test'
-      },
-      sCategory: {
-        __cdata: 'Test'
-      },
-      sPersonAssignedTo: {
-        __cdata: 'Bilbo Baggins'
-      },
-      sPriority: {
-        __cdata: 'Low'
-      }
-    };
+    $scope.case = dataService.newCase();
     $scope.modal.show();
   }
 
@@ -291,7 +268,9 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.tags = $scope.tags[0] == undefined ? [] : $scope.tags;
     $scope.label = 'Edit Case ' + $scope.case.ixBug + ' (' + $scope.case.sStatus.__cdata + ')';
     $scope.date = $filter('date')(new Date(), 'medium');
-    $scope.touched = 'Edited by ' + userService.getCurrentUser().full_name;
+    $scope.touched = 'Edited by ' + $filter('filter')($rootScope.people, {
+      email: userService.getCurrentUser().email
+    }, true)[0].text;
 
     $scope.$watch("case.sCategory", function(newValue, oldValue) {
       var category = $filter('filter')($rootScope.categories, {
@@ -302,6 +281,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       $scope.iconImage = 'img/' + icon + '.png';
       $scope.icon = 'ion-' + icon;
     });
+
 
     $scope.ready = true;
   };

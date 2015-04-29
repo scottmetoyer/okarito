@@ -127,7 +127,8 @@ angular.module('okarito.services', ['angular-storage'])
             id: people[i].ixPerson,
             text: people[i].sFullName.__cdata,
             checked: false,
-            icon: null
+            icon: null,
+            email: people[i].sEmail.__cdata
           });
         };
         return list;
@@ -202,6 +203,34 @@ angular.module('okarito.services', ['angular-storage'])
     setFilter: function(filterId) {
       return $http.get('cmd=setCurrentFilter&sFilter=' + filterId);
     },
+    newCase: function() {
+      return {
+        ixProject: 0,
+        ixArea: 0,
+        ixFixFor: 0,
+        ixCategory: 0,
+        ixPersonAssignedTo: 0,
+        ixPriority: 0,
+        sProject: {
+          __cdata: ''
+        },
+        sArea: {
+          __cdata: ''
+        },
+        sFixFor: {
+          __cdata: ''
+        },
+        sCategory: {
+          __cdata: ''
+        },
+        sPersonAssignedTo: {
+          __cdata: ''
+        },
+        sPriority: {
+          __cdata: ''
+        }
+      };
+    },
     saveCase: function(bug) {
       return $http({
         method: 'POST',
@@ -235,8 +264,7 @@ angular.module('okarito.services', ['angular-storage'])
       var user = {
         email: userEmail,
         api_url: '',
-        access_token: '',
-        full_name: ''
+        access_token: ''
       };
 
       root = root.replace(/\/?$/, '/');
