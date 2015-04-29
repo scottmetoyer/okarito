@@ -279,16 +279,45 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.date = $filter('date')(new Date(), 'medium');
     $scope.touched = 'Edited by ' + userService.getCurrentUser().full_name;
 
-    $scope.$watch("case.sCategory", function(newValue, oldValue) {
+    $scope.$watch('case.sProject', function(newValue, oldValue) {
+      $q.all([
+          dataService.getMilestones($scope.case.ixProject, false),
+          dataService.getAreas($scope.case.ixProject, false),
+        ).then(function(responses){
+          $scope.milestones = responses[0];
+          $scope.areas = responses[1];
+
+          if ($scope.milestones.length > 0) {
+            $scope.case.sFixFor = $scope.milestones[0].text;
+            $scope.case.ixFixFor = $scope.milestones[0].id;
+          }
+
+          if ($scope.areas.length > 0) {
+            #scope.case.sArea = $scope.areas[0].text;
+            $scope.case.ixArea = $scope.areas[0].id;
+          }
+        });
+    });
+
+    $scope.$watch('case.sCategory', function(newValue, oldValue) {
       var category = $filter('filter')($rootScope.categories, {
         text: $scope.case.sCategory.__cdata
       }, true)[0];
+
+      dataService.getStatuses($scope.case.ixCategory, false)
+      .then(function(response){
+        $scope.statuses = response;
+
+        if ($scope.statuses.length > 0) {
+          $scope.case.sStatus = $scope.statuses[0].text;
+          $scope.case.ixStatus = $scope.statuses[0].id;
+        }
+      });
 
       var icon = utilityService.categoryIcon(category.icon);
       $scope.iconImage = 'img/' + icon + '.png';
       $scope.icon = 'ion-' + icon;
     });
-
 
     $scope.ready = true;
   };
