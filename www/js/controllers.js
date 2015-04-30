@@ -188,7 +188,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   var init = function() {};
 })
 
-.controller('CaseCtrl', function($q, $scope, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService, userService) {
+.controller('CaseCtrl', function($q, $scope, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService, userService, caseModalService) {
   var x2js = new X2JS();
   var backup = {};
   $scope.form = {};
@@ -200,13 +200,13 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.popover = popover;
   });
 
-  // Edit case modal
-  $ionicModal.fromTemplateUrl('templates/edit.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
+  $scope.editModal = function() {
+    caseModalService
+      .init('templates/edit.html', $scope)
+      .then(function(modal) {
+        modal.show();
+      });
+    };
 
   $scope.save = function() {
     dataService.saveCase($scope.case)
@@ -226,7 +226,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     });
 
     $scope.closePopover();
-    $scope.modal.show();
+    $scope.editModal();
 
     // Backup the case to support non-destructive edit
     angular.copy($scope.case, backup);
@@ -254,20 +254,12 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.popover.hide();
   };
 
-  $scope.closeModal = function() {
-    $scope.modal.hide();
-  };
-
   $scope.$on('$ionicView.enter', function() {
     init();
   });
 
   $scope.$on('$ionicView.beforeEnter', function() {
     $scope.ready = false;
-  });
-
-  $scope.$on('$destroy', function() {
-    $scope.modal.remove();
   });
 
   var init = function() {
@@ -279,33 +271,10 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.date = $filter('date')(new Date(), 'medium');
     $scope.touched = 'Edited by ' + userService.getCurrentUser().full_name;
 
-    $scope.$watch('case.ixProject', function(newValue, oldValue) {
-      alert($scope.case.ixProject);
-
-      $q.all([
-          dataService.getMilestones($scope.case.ixProject, false),
-          dataService.getAreas($scope.case.ixProject, false)
-        ])
-        .then(function(responses) {
-          $scope.milestones = responses[0];
-          $scope.areas = responses[1];
-        });
-    });
-
     $scope.$watch('case.sCategory', function(newValue, oldValue) {
       var category = $filter('filter')($rootScope.categories, {
         text: $scope.case.sCategory.__cdata
       }, true)[0];
-
-      dataService.getStatuses($scope.case.ixCategory, false)
-      .then(function(response){
-        $scope.statuses = response;
-
-        if ($scope.statuses.length > 0) {
-          $scope.case.sStatus = $scope.statuses[0].text;
-          $scope.case.ixStatus = $scope.statuses[0].id;
-        }
-      });
 
       var icon = utilityService.categoryIcon(category.icon);
       $scope.iconImage = 'img/' + icon + '.png';
