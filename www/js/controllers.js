@@ -101,6 +101,7 @@ angular.module('okarito.controllers', ['okarito.services'])
 
 .controller('CasesCtrl', function($q, $filter, $rootScope, $scope, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService, userService) {
   $scope.filter = '';
+  $scope.ready = false;
 
   // Set up the new case modal
   $ionicModal.fromTemplateUrl('templates/edit.html', {
@@ -183,9 +184,13 @@ angular.module('okarito.controllers', ['okarito.services'])
         $rootScope.categories = responses[3];
         $scope.cases = responses[4];
       });
+
+      $scope.ready = true;
   }
 
-  var init = function() {};
+  var init = function() {
+    $scope.ready = false;
+  };
 })
 
 .controller('CaseCtrl', function($q, $scope, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService, userService, caseModalService) {
