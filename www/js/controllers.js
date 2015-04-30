@@ -279,23 +279,16 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.date = $filter('date')(new Date(), 'medium');
     $scope.touched = 'Edited by ' + userService.getCurrentUser().full_name;
 
-    $scope.$watch('case.sProject', function(newValue, oldValue) {
+    $scope.$watch('case.ixProject', function(newValue, oldValue) {
+      alert($scope.case.ixProject);
+
       $q.all([
           dataService.getMilestones($scope.case.ixProject, false),
-          dataService.getAreas($scope.case.ixProject, false),
-        ).then(function(responses){
+          dataService.getAreas($scope.case.ixProject, false)
+        ])
+        .then(function(responses) {
           $scope.milestones = responses[0];
           $scope.areas = responses[1];
-
-          if ($scope.milestones.length > 0) {
-            $scope.case.sFixFor = $scope.milestones[0].text;
-            $scope.case.ixFixFor = $scope.milestones[0].id;
-          }
-
-          if ($scope.areas.length > 0) {
-            #scope.case.sArea = $scope.areas[0].text;
-            $scope.case.ixArea = $scope.areas[0].id;
-          }
         });
     });
 
