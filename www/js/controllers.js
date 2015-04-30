@@ -99,29 +99,32 @@ angular.module('okarito.controllers', ['okarito.services'])
   }
 })
 
-.controller('CasesCtrl', function($q, $filter, $rootScope, $scope, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService, userService) {
+.controller('CasesCtrl', function($q, $filter, $rootScope, $scope, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService, userService, caseModalService) {
   $scope.filter = '';
   $scope.ready = false;
 
-  // Set up the new case modal
-  $ionicModal.fromTemplateUrl('templates/edit.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  $scope.closeModal = function() {
-    $scope.modal.hide();
-  };
+  $scope.newModal = function() {
+    caseModalService
+      .init('templates/edit.html', $scope)
+      .then(function(modal) {
+        modal.show();
+      });
+    };
 
   $scope.newCase = function() {
     $scope.label = 'New case';
     $scope.date = $filter('date')(new Date(), 'medium');
     $scope.touched = 'Opened by ' + userService.getCurrentUser().full_name;
-    $scope.case = dataService.newCase();
-    $scope.modal.show();
+    $scope.case = dataService.stubCase();
+    $scope.newModal();
   }
+
+  $scope.save = function() {
+    dataService.newCase($scope.case)
+      .then(function(result) {
+        $scope.closeModal();
+      });
+  };
 
   $scope.doRefresh = function() {
     $scope.$broadcast('scroll.refreshComplete');
@@ -129,13 +132,8 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.cancel = function() {
-    // TODO: Reset the form here
     $scope.closeModal();
   };
-
-  $scope.$on('$destroy', function() {
-    $scope.modal.remove();
-  });
 
   $scope.$on('$ionicView.enter', function() {
     init();

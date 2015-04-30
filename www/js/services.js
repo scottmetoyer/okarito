@@ -203,7 +203,7 @@ angular.module('okarito.services', ['angular-storage'])
     setFilter: function(filterId) {
       return $http.get('cmd=setCurrentFilter&sFilter=' + filterId);
     },
-    newCase: function() {
+    stubCase: function() {
       return {
         ixProject: 0,
         ixArea: 0,
@@ -230,6 +230,28 @@ angular.module('okarito.services', ['angular-storage'])
           __cdata: ''
         }
       };
+    },
+    newCase: function(bug) {
+      return $http({
+        method: 'POST',
+        url: '',
+        data: "cmd=new" +
+          "&sTitle=" + bug.sTitle.__cdata +
+          "&ixArea=" + bug.ixArea +
+          "&ixStatus=" + bug.ixStatus +
+          "&ixProject=" + bug.ixProject +
+          "&ixPriority=" + bug.ixPriority +
+          "&ixCategory=" + bug.ixCategory +
+          "&ixFixFor=" + bug.ixFixFor +
+          "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        transformResponse: transform
+      }).then(function(response) {
+        // Save success
+        return response;
+      });
     },
     saveCase: function(bug) {
       return $http({
@@ -455,17 +477,20 @@ angular.module('okarito.services', ['angular-storage'])
   service.response = function(response) {
     if (response.data && response.data.error) {
       console.log(response.data.error);
+
       // TODO: Appropriate actions based on the specific errors go here, ie. login error to unauthorized, saving errors show messagem etc.
       var code = response.data.error._code;
       switch (code) {
         case '3':
           // Not logged in
+          $rootScope.$broadcast('unauthorized');
           break;
 
+        case '4':
+          // Argument is required
+          break;
         default:
       };
-
-      $rootScope.$broadcast('unauthorized');
     }
     return response;
   };
