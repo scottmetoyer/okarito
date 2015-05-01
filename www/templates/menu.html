@@ -23,21 +23,21 @@
                   Submit
                 </button>
               </div>
-              <ion-item class="item-icon-left" nav-clear menu-close ng-repeat="f in builtinFilters" ng-click="setFilter(f._sFilter)">
+              <ion-item class="item-icon-left" nav-clear menu-close ng-repeat="f in builtinFilters" ng-click="setFilter(f._sFilter, f.__text)">
                   <i class="icon ion-android-funnel"></i>
                   {{ f.__text }}
               </ion-item>
               <div class="item item-divider" ng-show="savedFilters.length > 0">
                 Saved Filters
               </div>
-              <ion-item class="item-icon-left" nav-clear menu-close ng-repeat="f in savedFilters" ng-click="setFilter(f._sFilter)">
+              <ion-item class="item-icon-left" nav-clear menu-close ng-repeat="f in savedFilters" ng-click="setFilter(f._sFilter, f.__cdata)">
                 <i class="icon ion-android-funnel"></i>
                 {{ f.__cdata }}
               </ion-item>
               <div class="item item-divider" ng-show="sharedFilters.length > 0">
                 Shared Filters
               </div>
-              <ion-item class="item-icon-left" nav-clear menu-close ng-repeat="f in sharedFilters" ng-click="setFilter(f._sFilter)">
+              <ion-item class="item-icon-left" nav-clear menu-close ng-repeat="f in sharedFilters" ng-click="setFilter(f._sFilter, f.__cdata)">
                 <i class="icon ion-android-funnel"></i>
                 {{ f.__cdata }}
               </ion-item>

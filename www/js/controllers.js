@@ -30,9 +30,10 @@ angular.module('okarito.controllers', ['okarito.services'])
     $state.go('login');
   };
 
-  $scope.setFilter = function(filterId) {
+  $scope.setFilter = function(filterId, filterDescription) {
     $rootScope.$broadcast('set-filter', {
-      filter: filterId
+      filter: filterId,
+      description: filterDescription
     });
   };
 
@@ -99,8 +100,9 @@ angular.module('okarito.controllers', ['okarito.services'])
   }
 })
 
-.controller('CasesCtrl', function($q, $filter, $rootScope, $scope, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService, userService, caseModalService) {
+.controller('CasesCtrl', function($q, $filter, $rootScope, $scope, $ionicLoading, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService, userService, caseModalService) {
   $scope.filter = '';
+  $scope.filterDescription = '';
   $scope.ready = false;
 
   $scope.newModal = function() {
@@ -140,6 +142,8 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   $scope.$on('$ionicView.loaded', function() {
+    // TODO: Fetch the name of the current filter
+     
     loadCases();
   });
 
@@ -147,13 +151,14 @@ angular.module('okarito.controllers', ['okarito.services'])
     dataService
       .setFilter(args.filter)
       .then(function(response) {
-        // Set filter name to the screen
-
         // Clear custom search
         $scope.filter = '';
 
         // Refresh case list
         loadCases();
+
+        // Set filter label description
+        $scope.filterDescription = args.description;
       });
 
     $ionicScrollDelegate.scrollTop();
@@ -164,9 +169,16 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.filter = args.search;
     loadCases();
     $ionicSideMenuDelegate.toggleLeft(false);
+
+    // Set filter label
+    $scope.filterDescription = 'Search: ' + args.search;
   });
 
   var loadCases = function() {
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
+
     // Load the related entity lists
     $q.all([
         dataService.getProjects(false),
@@ -181,9 +193,10 @@ angular.module('okarito.controllers', ['okarito.services'])
         $rootScope.people = responses[2];
         $rootScope.categories = responses[3];
         $scope.cases = responses[4];
-      });
 
-      $scope.ready = true;
+        $ionicLoading.hide();
+        $scope.ready = true;
+      });
   }
 
   var init = function() {
