@@ -196,8 +196,10 @@ angular.module('okarito.services', ['angular-storage'])
         transformResponse: transform,
         cache: cacheResponse
       }).then(function(response) {
-        cases = normalizeArray(response.data.cases.case);
-        return cases;
+        console.log(response);
+        var description = response.data.description != undefined ? response.data.description.__cdata : 'Search: ' + filter;
+        var cases = normalizeArray(response.data.cases.case);
+        return { cases: cases, description: description };
       });
     },
     setFilter: function(filterId) {

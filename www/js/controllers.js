@@ -30,10 +30,9 @@ angular.module('okarito.controllers', ['okarito.services'])
     $state.go('login');
   };
 
-  $scope.setFilter = function(filterId, filterDescription) {
+  $scope.setFilter = function(filterId) {
     $rootScope.$broadcast('set-filter', {
-      filter: filterId,
-      description: filterDescription
+      filter: filterId
     });
   };
 
@@ -142,8 +141,6 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   $scope.$on('$ionicView.loaded', function() {
-    // TODO: Fetch the name of the current filter
-     
     loadCases();
   });
 
@@ -156,9 +153,6 @@ angular.module('okarito.controllers', ['okarito.services'])
 
         // Refresh case list
         loadCases();
-
-        // Set filter label description
-        $scope.filterDescription = args.description;
       });
 
     $ionicScrollDelegate.scrollTop();
@@ -169,9 +163,6 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.filter = args.search;
     loadCases();
     $ionicSideMenuDelegate.toggleLeft(false);
-
-    // Set filter label
-    $scope.filterDescription = 'Search: ' + args.search;
   });
 
   var loadCases = function() {
@@ -192,8 +183,9 @@ angular.module('okarito.controllers', ['okarito.services'])
         $rootScope.priorities = responses[1];
         $rootScope.people = responses[2];
         $rootScope.categories = responses[3];
-        $scope.cases = responses[4];
+        $scope.cases = responses[4].cases;
 
+        $scope.filterDescription = responses[4].description;
         $ionicLoading.hide();
         $scope.ready = true;
       });
