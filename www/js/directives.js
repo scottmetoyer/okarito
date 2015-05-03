@@ -47,7 +47,6 @@ angular.module('okarito.directives', ['ionic'])
 
         scope.$on('$destroy', function() {
           scope.modal.remove();
-          scope.isDirty = false;
         });
 
         scope.validateSingle = function(item) {

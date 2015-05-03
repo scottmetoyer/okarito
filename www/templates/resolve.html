@@ -1,0 +1,63 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-positive">
+    <button type="button" class="button" ng-click="cancel()">Cancel</button>
+    <h1 class="title"></h1>
+    <button type="button" class="button button-positive">Resolve and Close</button>
+    <button type="button" class="button button-positive">Resolve</button>
+  </ion-header-bar>
+  <ion-content scroll="true">
+    <div class="card">
+      <div class="list">
+        <label class="item item-divider">
+          {{ label }}
+        </label>
+        <label class="item item-input">
+          <input type="text" name="title" ng-model="case.sTitle.__cdata" class="title" placeholder="Case title...">
+        </label>
+        <label class="item item-divider">
+          <h3>{{ touched }}</h3>
+          <h4 class="subdued">{{ date }}</h4>
+        </label>
+        <label class="item item-input">
+          <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a resolution note..."></textarea>
+        </label>
+        <label class="item tabs tabs-secondary tabs-icon-left">
+          <a class="tab-item" href="#">
+            <i class="icon ion-location positive"></i>
+          </a>
+          <a class="tab-item" href="#">
+            <i class="icon ion-mic-a positive"></i>
+          </a>
+          <a class="tab-item" href="#">
+            <i class="icon ion-camera positive"></i>
+          </a>
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label subdued">Project</div>
+          <div class="select">
+            {{ case.sProject.__cdata }}
+          </div>
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label subdued">Area</div>
+          <div class="select">
+            {{ case.sArea.__cdata}}
+          </div>
+        </label>
+        <fancy-select header-text="Choose a Milestone" label="Milestone" allow-empty="true" value="case.ixFixFor" text="case.sFixFor.__cdata" items="milestones"></fancy-select>
+        <fancy-select header-text="Choose a Category" label="Category" allow-empty="true" value="case.ixCategory" text="case.sCategory.__cdata" items="categories"></fancy-select>
+        <label class="item item-input item-select">
+          <div class="input-label subdued">Assigned To</div>
+          <div class="select">
+            {{ case.sPersonAssignedTo.__cdata}}
+          </div>
+        </label>
+        <fancy-select header-text="Choose a Priority" label="Priority" allow-empty="true" value="case.ixPriority" text="case.sPriority.__cdata" items="priorities"></fancy-select>
+        <label class="item item-input item-input">
+          <div class="input-label">Tags</div>
+          <input name="tags" ng-model="tags" type="text">
+        </label>
+      </div>
+    </div>
+  </ion-content>
+</ion-modal-view>

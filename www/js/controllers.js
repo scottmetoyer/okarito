@@ -78,14 +78,14 @@ angular.module('okarito.controllers', ['okarito.services'])
 
         // Fetch the users full name
         dataService.getPeople(true)
-        .then(function(response) {
-          var fullName = $filter('filter')(response, {
-            email: $scope.data.email
-          }, true)[0].text;
+          .then(function(response) {
+            var fullName = $filter('filter')(response, {
+              email: $scope.data.email
+            }, true)[0].text;
 
-          data.full_name = fullName;
-          userService.setCurrentUser(data);
-        });
+            data.full_name = fullName;
+            userService.setCurrentUser(data);
+          });
 
         $rootScope.$broadcast('authorized');
         $state.go('app.cases');
@@ -110,7 +110,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       .then(function(modal) {
         modal.show();
       });
-    };
+  };
 
   $scope.newCase = function() {
     $scope.label = 'New case';
@@ -199,7 +199,6 @@ angular.module('okarito.controllers', ['okarito.services'])
 .controller('CaseCtrl', function($q, $scope, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService, userService, caseModalService) {
   var x2js = new X2JS();
   var backup = {};
-  $scope.form = {};
 
   // Action popover
   $ionicPopover.fromTemplateUrl('templates/more-actions.html', {
@@ -214,7 +213,15 @@ angular.module('okarito.controllers', ['okarito.services'])
       .then(function(modal) {
         modal.show();
       });
-    };
+  };
+
+  $scope.resolveModal = function() {
+    caseModalService
+      .init('templates/resolve.html', $scope)
+      .then(function(modal) {
+        modal.show();
+      });
+  };
 
   $scope.save = function() {
     dataService.saveCase($scope.case)
@@ -226,6 +233,10 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.cancel = function() {
     angular.copy(backup, $scope.case);
     $scope.closeModal();
+  };
+
+  $scope.resolveCase = function() {
+    $scope.resolveModal();
   };
 
   $scope.editCase = function() {
