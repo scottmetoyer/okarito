@@ -32,23 +32,23 @@
             <i class="icon ion-camera positive"></i>
           </a>
         </label>
-        <label class="item item-input item-select">
+        <label class="item item-input">
           <div class="input-label subdued">Project</div>
-          <div class="select">
+          <div class="select subdued">
             {{ case.sProject.__cdata }}
           </div>
         </label>
-        <label class="item item-input item-select">
+        <label class="item item-input">
           <div class="input-label subdued">Area</div>
-          <div class="select">
+          <div class="select subdued">
             {{ case.sArea.__cdata}}
           </div>
         </label>
         <fancy-select header-text="Choose a Milestone" label="Milestone" allow-empty="true" value="case.ixFixFor" text="case.sFixFor.__cdata" items="milestones"></fancy-select>
         <fancy-select header-text="Choose a Category" label="Category" allow-empty="true" value="case.ixCategory" text="case.sCategory.__cdata" items="categories"></fancy-select>
-        <label class="item item-input item-select">
+        <label class="item item-input">
           <div class="input-label subdued">Assigned To</div>
-          <div class="select">
+          <div class="select subdued">
             {{ case.sPersonAssignedTo.__cdata}}
           </div>
         </label>

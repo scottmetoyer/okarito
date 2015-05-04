@@ -236,6 +236,10 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.resolveCase = function() {
+    $scope.label = 'Resolve Case ' + $scope.case.ixBug;
+    $scope.touched = 'Resolved by ' + userService.getCurrentUser().full_name;
+
+    angular.copy($scope.case, backup);
     $scope.resolveModal();
   };
 
@@ -244,11 +248,14 @@ angular.module('okarito.controllers', ['okarito.services'])
       template: 'Loading...'
     });
 
-    $scope.closePopover();
-    $scope.editModal();
+    $scope.label = 'Edit Case ' + $scope.case.ixBug + ' (' + $scope.case.sStatus.__cdata + ')';
+    $scope.touched = 'Edited by ' + userService.getCurrentUser().full_name;
 
     // Backup the case to support non-destructive edit
     angular.copy($scope.case, backup);
+
+    $scope.closePopover();
+    $scope.editModal();
 
     // Load related entities for dropdown lists
     $q.all([
@@ -286,10 +293,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.events = x2js.asArray($scope.case.events.event);
     $scope.tags = x2js.asArray($scope.case.tags.tag);
     $scope.tags = $scope.tags[0] == undefined ? [] : $scope.tags;
-    $scope.label = 'Edit Case ' + $scope.case.ixBug + ' (' + $scope.case.sStatus.__cdata + ')';
     $scope.date = $filter('date')(new Date(), 'medium');
-    $scope.touched = 'Edited by ' + userService.getCurrentUser().full_name;
-
     $scope.$watch('case.sCategory', function(newValue, oldValue) {
       var category = $filter('filter')($rootScope.categories, {
         text: $scope.case.sCategory.__cdata
