@@ -32,10 +32,10 @@
               <i class="icon ion-camera positive"></i>
             </a>
           </label>
-          <fancy-select header-text="Choose a Project" label="Project" allow-empty="true" value="case.ixProject" text="case.sProject.__cdata" items="projects"></fancy-select>
+          <fancy-select header-text="Choose a Project" label="Project" allow-empty="true" value="case.ixProject" text="case.sProject.__cdata" items="projects" callback="projectUpdated(val)"></fancy-select>
           <fancy-select header-text="Choose an Area" label="Area" allow-empty="true" value="case.ixArea" text="case.sArea.__cdata" items="areas"></fancy-select>
           <fancy-select header-text="Choose a Milestone" label="Milestone" allow-empty="true" value="case.ixFixFor" text="case.sFixFor.__cdata" items="milestones"></fancy-select>
-          <fancy-select header-text="Choose a Category" label="Category" allow-empty="true" value="case.ixCategory" text="case.sCategory.__cdata" items="categories"></fancy-select>
+          <fancy-select header-text="Choose a Category" label="Category" allow-empty="true" value="case.ixCategory" text="case.sCategory.__cdata" items="categories" callback="categoryUpdated(val)"></fancy-select>
           <fancy-select header-text="Choose a Person" label="Assigned To" allow-empty="true" value="case.ixPersonAssignedTo" text="case.sPersonAssignedTo.__cdata" items="people"></fancy-select>
           <fancy-select header-text="Choose a Priority" label="Priority" allow-empty="true" value="case.ixPriority" text="case.sPriority.__cdata" items="priorities"></fancy-select>
           <label class="item item-input item-input">

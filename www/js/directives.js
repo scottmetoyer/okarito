@@ -56,7 +56,7 @@ angular.module('okarito.directives', ['ionic'])
 
           // Execute callback function
           if (typeof scope.callback == 'function') {
-            scope.callback(scope.value);
+            scope.callback({val: scope.value});
           }
         }
       }
