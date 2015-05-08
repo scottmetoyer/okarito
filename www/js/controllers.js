@@ -283,9 +283,6 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.projectUpdated = function(val) {
     alert('Got the project: ' + val);
 
-    /*
-    $scope.$watch('case.ixProject', function(newValue, oldValue) {
-      if (newValue !== oldValue) {
         $q.all([
             dataService.getMilestones($scope.case.ixProject, false),
             dataService.getAreas($scope.case.ixProject, false)
@@ -298,24 +295,19 @@ angular.module('okarito.controllers', ['okarito.services'])
             $scope.case.sArea.__cdata = $scope.areas[0].text;
             $scope.case.ixArea = $scope.areas[0].id;
           });
-      }
-    });*/
+    });
   }
 
   $scope.categoryUpdated = function(val) {
     alert('Got the category: ' + val);
 
-    /*
-    $scope.$watch('case.ixCategory', function(newValue, oldValue) {
-      if (newValue !== oldValue) {
         dataService.getStatuses($scope.case.ixCategory, false)
         .then(function(response){
           $scope.statuses = response;
           $scope.case.sStatus.__cdata = $scope.statuses[0].text;
           $scope.case.ixStatus = $scope.statuses[0].id;
         });
-      }
-    });*/
+    });
   }
 
   $scope.$on('$ionicView.enter', function() {
