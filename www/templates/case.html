@@ -37,7 +37,7 @@
           <div class="col">{{ case.sPriority.__cdata }}</div>
         </div>
       </div>
-      <span ng-repeat="event in events">
+      <span ng-repeat="event in case.events.event">
         <div class="item item-divider">
           <h3>{{ event.evtDescription.__cdata }}</h3>
           <h4 class="subdued">{{ event.dt | date:'MM/dd/yyyy h:mma'}}</h4>

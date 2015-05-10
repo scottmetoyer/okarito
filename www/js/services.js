@@ -57,6 +57,19 @@ angular.module('okarito.services', ['angular-storage'])
 
       return bug;
     },
+    refreshEvents: function(bug) {
+      return $http.get('cmd=search&q=' + bug.ixBug + '&cols=events', {
+        transformResponse: transform
+      }).then(function(response) {
+        var refreshedCase = normalizeArray(response.data.cases.case);
+
+        if (refreshedCase.length > 0) {
+          bug.events = refreshedCase[0].events;
+        }
+
+        return;
+      });
+    },
     getProjects: function(cacheResponse) {
       return $http.get('cmd=listProjects', {
         transformResponse: transform,
@@ -196,7 +209,6 @@ angular.module('okarito.services', ['angular-storage'])
         transformResponse: transform,
         cache: cacheResponse
       }).then(function(response) {
-        console.log(response);
         var description = response.data.description != undefined ? response.data.description.__cdata : 'Search: ' + filter;
         cases = normalizeArray(response.data.cases.case);
         return { cases: cases, description: description };

@@ -224,9 +224,16 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.save = function() {
+    $ionicLoading.show({
+      template: 'Saving...'
+    });
+
     dataService.saveCase($scope.case)
       .then(function(result) {
-        $scope.closeModal();
+        dataService.refreshEvents($scope.case).then(function(){
+          $scope.closeModal();
+          $ionicLoading.hide();
+        })
       });
   };
 
@@ -319,7 +326,6 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   var init = function() {
     $scope.case = dataService.getCase($stateParams.caseId);
-    $scope.events = x2js.asArray($scope.case.events.event);
     $scope.tags = x2js.asArray($scope.case.tags.tag);
     $scope.tags = $scope.tags[0] == undefined ? [] : $scope.tags;
     $scope.date = $filter('date')(new Date(), 'medium');
