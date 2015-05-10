@@ -244,6 +244,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.editCase = function() {
+
     $ionicLoading.show({
       template: 'Loading...'
     });
@@ -281,33 +282,31 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.projectUpdated = function(val) {
-    alert('Got the project: ' + val);
+    $scope.case.ixProject = val;
 
-        $q.all([
-            dataService.getMilestones($scope.case.ixProject, false),
-            dataService.getAreas($scope.case.ixProject, false)
-          ])
-          .then(function(responses) {
-            $scope.milestones = responses[0];
-            $scope.areas = responses[1];
-            $scope.case.sFixFor.__cdata = $scope.milestones[0].text;
-            $scope.case.ixFixFor = $scope.milestones[0].id;
-            $scope.case.sArea.__cdata = $scope.areas[0].text;
-            $scope.case.ixArea = $scope.areas[0].id;
-          });
-    });
+    $q.all([
+        dataService.getMilestones(val, false),
+        dataService.getAreas(val, false)
+      ])
+      .then(function(responses) {
+        $scope.milestones = responses[0];
+        $scope.areas = responses[1];
+        $scope.case.sFixFor.__cdata = $scope.milestones[0].text;
+        $scope.case.ixFixFor = $scope.milestones[0].id;
+        $scope.case.sArea.__cdata = $scope.areas[0].text;
+        $scope.case.ixArea = $scope.areas[0].id;
+      });
   }
 
   $scope.categoryUpdated = function(val) {
-    alert('Got the category: ' + val);
+    $scope.case.ixCategory = val;
 
-        dataService.getStatuses($scope.case.ixCategory, false)
-        .then(function(response){
-          $scope.statuses = response;
-          $scope.case.sStatus.__cdata = $scope.statuses[0].text;
-          $scope.case.ixStatus = $scope.statuses[0].id;
-        });
-    });
+    dataService.getStatuses(val, false)
+      .then(function(response) {
+        $scope.statuses = response;
+        $scope.case.sStatus.__cdata = $scope.statuses[0].text;
+        $scope.case.ixStatus = $scope.statuses[0].id;
+      });
   }
 
   $scope.$on('$ionicView.enter', function() {
