@@ -313,6 +313,34 @@ angular.module('okarito.services', ['angular-storage'])
       $scope.modal.hide();
     };
 
+    $scope.projectUpdated = function(val) {
+      $scope.case.ixProject = val;
+
+      $q.all([
+          dataService.getMilestones(val, false),
+          dataService.getAreas(val, false)
+        ])
+        .then(function(responses) {
+          $scope.milestones = responses[0];
+          $scope.areas = responses[1];
+          $scope.case.sFixFor.__cdata = $scope.milestones[0].text;
+          $scope.case.ixFixFor = $scope.milestones[0].id;
+          $scope.case.sArea.__cdata = $scope.areas[0].text;
+          $scope.case.ixArea = $scope.areas[0].id;
+        });
+    }
+
+    $scope.categoryUpdated = function(val) {
+      $scope.case.ixCategory = val;
+
+      dataService.getStatuses(val, false)
+        .then(function(response) {
+          $scope.statuses = response;
+          $scope.case.sStatus.__cdata = $scope.statuses[0].text;
+          $scope.case.ixStatus = $scope.statuses[0].id;
+        });
+    }
+    
     $scope.$on('$destroy', function() {
       $scope.modal.remove();
     });
