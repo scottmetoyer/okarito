@@ -1,7 +1,6 @@
 <ion-view view-title="">
   <ion-nav-buttons side="right">
-    <button class="button button-icon icon ion-person">
-    </button>
+    <fancy-select mode="icon" header-text="Choose a Person" allow-empty="true" value="case.ixPersonAssignedTo" items="people" callback="assignCase(val, text)"></fancy-select>
     <button class="button button-icon icon ion-checkmark" ng-click="resolveCase()">
     </button>
     <button class="button button-icon icon ion-edit" ng-click="editCase()">

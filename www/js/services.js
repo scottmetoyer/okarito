@@ -267,6 +267,23 @@ angular.module('okarito.services', ['angular-storage'])
         return response;
       });
     },
+    assignCase: function(bug) {
+      return $http({
+        method: 'POST',
+        url: '',
+        data: "cmd=assign&ixBug=" + bug.ixBug +
+          "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        transformResponse: transform
+      }).then(function(response) {
+        // Save success
+        return response;
+      });
+    },
+    resolveCase: function(bug) {
+    },
     saveCase: function(bug) {
       return $http({
         method: 'POST',
@@ -340,7 +357,7 @@ angular.module('okarito.services', ['angular-storage'])
           $scope.case.ixStatus = $scope.statuses[0].id;
         });
     }
-    
+
     $scope.$on('$destroy', function() {
       $scope.modal.remove();
     });

@@ -8,7 +8,13 @@ angular.module('okarito.directives', ['ionic'])
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: 'templates/fancy-select.html',
+      templateUrl: function(elem, attrs) {
+        if (attrs.mode && attrs.mode == 'icon') {
+          return 'templates/icon-select.html';
+        } else {
+          return 'templates/fancy-select.html';
+        }
+      },
       scope: {
         'items': '=',
         'label': '@label',
@@ -56,7 +62,7 @@ angular.module('okarito.directives', ['ionic'])
 
           // Execute callback function
           if (typeof scope.callback == 'function') {
-            scope.callback({val: scope.value});
+            scope.callback({ val: scope.value, text: scope.text });
           }
         }
       }

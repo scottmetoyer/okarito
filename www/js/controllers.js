@@ -224,22 +224,31 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.save = function() {
-    $ionicLoading.show({
-      template: 'Saving...'
-    });
+    // TODO: Show save indicator in the case header area
 
     dataService.saveCase($scope.case)
       .then(function(result) {
         dataService.refreshEvents($scope.case).then(function(){
-          $scope.closeModal();
-          $ionicLoading.hide();
-        })
+          // TODO: Hide save indicator
+        });
       });
+
+    $scope.closeModal();
   };
 
   $scope.cancel = function() {
     angular.copy(backup, $scope.case);
     $scope.closeModal();
+  };
+
+  $scope.assignCase = function(val, text) {
+    $scope.case.ixPersonAssignedTo = val;
+    $scope.case.sPersonAssignedTo.__cdata = text;
+
+    dataService.assignCase($scope.case)
+      .then(function(result) {
+        dataService.refreshEvents($scope.case).then(function(){ });
+    });
   };
 
   $scope.resolveCase = function() {
