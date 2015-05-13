@@ -167,7 +167,7 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   var loadCases = function() {
     $ionicLoading.show({
-      template: 'Loading...'
+      template: '<ion-spinner icon="lines"></ion-spinner>'
     });
 
     // Load the related entity lists
@@ -262,7 +262,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.editCase = function() {
 
     $ionicLoading.show({
-      template: 'Loading...'
+      template: '<ion-spinner icon="lines"></ion-spinner>'
     });
 
     $scope.label = 'Edit Case ' + $scope.case.ixBug + ' (' + $scope.case.sStatus.__cdata + ')';

@@ -165,3 +165,9 @@ div.subdued {
 h5.subdued {
   color: #909090;
 }
+.spinner svg {
+  width: 28px;
+  height: 28px;
+  stroke: #FFF;
+  fill: #FFF;
+}
