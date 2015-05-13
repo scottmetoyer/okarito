@@ -1,5 +1,5 @@
 .spacer {
-  height: 10px;
+  height: .25em;
 }
 .dirty {
   background: url('../img/corner.png') no-repeat left top !important;
@@ -165,9 +165,13 @@ div.subdued {
 h5.subdued {
   color: #909090;
 }
-.spinner svg {
+.spinner.overlay svg {
   width: 28px;
   height: 28px;
   stroke: #FFF;
   fill: #FFF;
+}
+.star {
+  font-size: 1em !important;
+  color: #A8A8A8;
 }

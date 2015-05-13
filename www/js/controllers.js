@@ -167,7 +167,7 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   var loadCases = function() {
     $ionicLoading.show({
-      template: '<ion-spinner icon="lines"></ion-spinner>'
+      template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
     });
 
     // Load the related entity lists
@@ -199,6 +199,7 @@ angular.module('okarito.controllers', ['okarito.services'])
 .controller('CaseCtrl', function($q, $scope, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService, userService, caseModalService) {
   var x2js = new X2JS();
   var backup = {};
+  $scope.working = false;
 
   // Action popover
   $ionicPopover.fromTemplateUrl('templates/more-actions.html', {
@@ -241,13 +242,29 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.closeModal();
   };
 
+  $scope.showAssign = function(e) {
+    $scope.closePopover();
+    $scope.showItems(e);
+  };
+
+  $scope.refresh = function() {
+  };
+
+  $scope.emailCase = function() {
+  };
+
+  $scope.starCase = function() {
+  };
+
   $scope.assignCase = function(val, text) {
     $scope.case.ixPersonAssignedTo = val;
     $scope.case.sPersonAssignedTo.__cdata = text;
+    $scope.working = true;
 
     dataService.assignCase($scope.case)
       .then(function(result) {
         dataService.refreshEvents($scope.case).then(function(){ });
+        $scope.working = false;
     });
   };
 
@@ -256,13 +273,14 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.touched = 'Resolved by ' + userService.getCurrentUser().full_name;
 
     angular.copy($scope.case, backup);
+    $scope.closePopover();
     $scope.resolveModal();
   };
 
   $scope.editCase = function() {
 
     $ionicLoading.show({
-      template: '<ion-spinner icon="lines"></ion-spinner>'
+      template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
     });
 
     $scope.label = 'Edit Case ' + $scope.case.ixBug + ' (' + $scope.case.sStatus.__cdata + ')';

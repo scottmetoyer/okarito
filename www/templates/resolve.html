@@ -1,9 +1,12 @@
 <ion-modal-view>
   <ion-header-bar class="bar-positive">
-    <button type="button" class="button" ng-click="cancel()">Cancel</button>
-    <h1 class="title"></h1>
-    <button type="button" class="button button-positive">Resolve and Close</button>
-    <button type="button" class="button button-positive">Resolve</button>
+    <div class="buttons">
+      <button type="button" class="button button-clear" ng-click="cancel()">Cancel</button>
+    </div>
+    <h1 class="title">&nbsp;</h1>
+    <div class="buttons">
+      <button type="button" class="button button-clear">Resolve</button>
+    </div>
   </ion-header-bar>
   <ion-content scroll="true">
     <div class="card">
