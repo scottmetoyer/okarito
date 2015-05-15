@@ -184,7 +184,6 @@ angular.module('okarito.controllers', ['okarito.services'])
         $rootScope.people = responses[2];
         $rootScope.categories = responses[3];
         $scope.cases = responses[4].cases;
-
         $scope.filterDescription = responses[4].description;
         $ionicLoading.hide();
         $scope.ready = true;

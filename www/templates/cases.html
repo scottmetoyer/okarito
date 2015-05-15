@@ -9,11 +9,12 @@
       <a class="item" style="padding: .4em;" ng-repeat="bug in cases" href="#/app/cases/{{bug.ixBug}}">
         <div class="row">
           <div class="col">
-            <span class="case-number">{{bug.ixBug}}</span>
+            <span class="case-number priority{{bug.ixPriority}}">{{bug.ixBug}}</span>
           </div>
           <div class="col col-80">
             <h2>{{bug.sTitle.__cdata}}</h2>
-            <p><i class="icon ion-bug"></i> Bug (Active)</p>
+            <p class="small"><i class="icon ion-bug"></i> Bug (Active)</p>
+            <p class="small">{{bug.sProject.__cdata}}: {{bug.sArea.__cdata}} | Milestone: {{bug.sFixFor.__cdata}}</p>
           </div>
         </div>
       </a>

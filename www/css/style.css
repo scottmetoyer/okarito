@@ -25,6 +25,30 @@ span.case-number {
   text-align: center;
   font-size: .8em;
 }
+.case-number.closed {
+  background-color: black;
+}
+.case-number.priority1 {
+  background-color: red;
+}
+.case-number.priority2 {
+  background-color: orange;
+}
+.case-number.priority3 {
+  background-color: green;
+}
+.case-number.priority4 {
+  background-color: turquoise;
+}
+.case-number.priority5 {
+  background-color: blue;
+}
+.case-number.priority6 {
+  background-color: darkblue;
+}
+.case-number.priority7 {
+  background-color: gray;
+}
 fancy-select .list {
   margin: -1px 0;
 }
@@ -174,4 +198,11 @@ h5.subdued {
 .star {
   font-size: 1em !important;
   color: #A8A8A8;
+}
+.tall {
+  height: auto !important;
+}
+.small {
+  font-size: .8em !important;
+  color: #909090;
 }

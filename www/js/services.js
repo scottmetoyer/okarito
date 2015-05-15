@@ -205,7 +205,7 @@ angular.module('okarito.services', ['angular-storage'])
       });
     },
     getCases: function(filter, cacheResponse) {
-      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
+      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,fOpen,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
         transformResponse: transform,
         cache: cacheResponse
       }).then(function(response) {
