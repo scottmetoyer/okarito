@@ -25,30 +25,6 @@ span.case-number {
   text-align: center;
   font-size: .8em;
 }
-.case-number.closed {
-  background-color: black;
-}
-.case-number.priority1 {
-  background-color: red;
-}
-.case-number.priority2 {
-  background-color: orange;
-}
-.case-number.priority3 {
-  background-color: green;
-}
-.case-number.priority4 {
-  background-color: turquoise;
-}
-.case-number.priority5 {
-  background-color: blue;
-}
-.case-number.priority6 {
-  background-color: darkblue;
-}
-.case-number.priority7 {
-  background-color: gray;
-}
 fancy-select .list {
   margin: -1px 0;
 }
@@ -205,4 +181,48 @@ h5.subdued {
 .small {
   font-size: .8em !important;
   color: #909090;
+}
+
+.tropic {
+  background-color: #00A8C6 !important;
+}
+
+.teal {
+  background-color: #40C0CB !important;
+}
+
+.whitetrash {
+  background-color: #F9F2E7 !important;
+}
+
+.atomic {
+  background-color: #AEE239 !important;
+}
+
+.feeble {
+  background-color: #8FBE00 !important;
+}
+.case-number.closed {
+  background-color: black;
+}
+.case-number.priority1 {
+  background-color: #FF6347;
+}
+.case-number.priority2 {
+  background-color: #FF8C00;
+}
+.case-number.priority3 {
+  background-color: #66CDAA;
+}
+.case-number.priority4 {
+  background-color: #48D1CC;
+}
+.case-number.priority5 {
+  background-color: #00BFFF;
+}
+.case-number.priority6 {
+  background-color: #4169E1;
+}
+.case-number.priority7 {
+  background-color: #778899;
 }
