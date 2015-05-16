@@ -9,44 +9,42 @@
     </button>
   </ion-nav-buttons>
   <ion-content>
-    <div class="list card">
-      <div class="item item-divider item-icon-right">
-        <span ng-show="ready">
-          <strong>{{case.ixBug}}</strong>
-          <i class="icon ion-ios-star star" ng-click="starCase()"></i>
-        </span>
-      </div>
-      <div class="item item-text-wrap" ng-show="ready">
-        <h2>{{ case.sTitle.__cdata }}</h2>
-        <p><a href="#">{{ case.sProject.__cdata }}</a>: <a href="#">{{ case.sArea.__cdata }}</a> (Milestone: <a href="#">{{ case.sFixFor.__cdata }}</a>)</p>
-      </div>
-      <div class="item item-body">
-        <div class="row">
-          <div class="col col-50 subdued">Status</div>
-          <div class="col">{{ case.sStatus.__cdata }}</div>
-        </div>
-        <div class="row">
-          <div class="col col-50 subdued">Category</div>
-          <div class="col"><i class="icon {{ icon }}"></i>&nbsp;{{ case.sCategory.__cdata }}</div>
-        </div>
-        <div class="row">
-          <div class="col col-50 subdued">Assigned To</div>
-          <div class="col">{{ case.sPersonAssignedTo.__cdata }}</div>
-        </div>
-        <div class="row">
-          <div class="col col-50 subdued">Priority</div>
-          <div class="col">{{ case.sPriority.__cdata }}</div>
-        </div>
-      </div>
-      <span ng-repeat="event in case.events.event">
-        <div class="item item-divider">
-          <h3>{{ event.evtDescription.__cdata }}</h3>
-          <h4 class="subdued">{{ event.dt | date:'MM/dd/yyyy h:mma'}}</h4>
-          <h4 style="white-space: pre-wrap; font-weight: normal;">{{ event.sChanges.__cdata }}</h4>
-        </div>
-        <div class="item item-text-wrap" ng-bind-html="event.sHtml.__cdata" ng-show="event.s != ''"></div>
-        <div class="spacer" ng-hide="event.s != ''"></div>
+    <div class="item item-divider item-icon-right">
+      <span ng-show="ready">
+        <strong>{{case.ixBug}}</strong>
+        <i class="icon ion-ios-star star" ng-click="starCase()"></i>
       </span>
     </div>
+    <div class="item item-text-wrap" ng-show="ready">
+      <h2>{{ case.sTitle.__cdata }}</h2>
+      <p><a href="#">{{ case.sProject.__cdata }}</a>: <a href="#">{{ case.sArea.__cdata }}</a> (Milestone: <a href="#">{{ case.sFixFor.__cdata }}</a>)</p>
+    </div>
+    <div class="item item-body">
+      <div class="row">
+        <div class="col col-50 subdued">Status</div>
+        <div class="col">{{ case.sStatus.__cdata }}</div>
+      </div>
+      <div class="row">
+        <div class="col col-50 subdued">Category</div>
+        <div class="col"><i class="icon {{ icon }}"></i>&nbsp;{{ case.sCategory.__cdata }}</div>
+      </div>
+      <div class="row">
+        <div class="col col-50 subdued">Assigned To</div>
+        <div class="col">{{ case.sPersonAssignedTo.__cdata }}</div>
+      </div>
+      <div class="row">
+        <div class="col col-50 subdued">Priority</div>
+        <div class="col">{{ case.sPriority.__cdata }}</div>
+      </div>
+    </div>
+    <span ng-repeat="event in case.events.event">
+      <div class="item item-divider">
+        <h3>{{ event.evtDescription.__cdata }}</h3>
+        <h4 class="subdued">{{ event.dt | date:'MM/dd/yyyy h:mma'}}</h4>
+        <h4 style="white-space: pre-wrap; font-weight: normal;">{{ event.sChanges.__cdata }}</h4>
+      </div>
+      <div class="item item-text-wrap" ng-bind-html="event.sHtml.__cdata" ng-show="event.s != ''"></div>
+      <div class="spacer" ng-hide="event.s != ''"></div>
+    </span>
   </ion-content>
 </ion-view>

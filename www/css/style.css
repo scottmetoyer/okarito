@@ -183,8 +183,12 @@ h5.subdued {
   color: #909090;
 }
 
-.tropic {
+.bar-positive.tropic {
   background-color: #00A8C6 !important;
+}
+
+.icon.tropic {
+  color: #00A8C6 !important;
 }
 
 .teal {

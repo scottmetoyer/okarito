@@ -195,7 +195,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 })
 
-.controller('CaseCtrl', function($q, $scope, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService, userService, caseModalService) {
+.controller('CaseCtrl', function($q, $scope, $sce, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService, userService, caseModalService) {
   var x2js = new X2JS();
   var backup = {};
   $scope.working = false;
@@ -327,6 +327,12 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.tags = x2js.asArray($scope.case.tags.tag);
     $scope.tags = $scope.tags[0] == undefined ? [] : $scope.tags;
     $scope.date = $filter('date')(new Date(), 'medium');
+
+    // Set the event HTML as trusted
+    for (var i = 0; i < $scope.case.events.event.length; i++) {
+      $scope.case.events.event[i].sHtml.__cdata = $sce.trustAsHtml($scope.case.events.event[i].sHtml.__cdata);
+    }
+
     $scope.$watch('case.sCategory', function(newValue, oldValue) {
       var category = $filter('filter')($rootScope.categories, {
         text: $scope.case.sCategory.__cdata
