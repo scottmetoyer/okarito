@@ -230,3 +230,10 @@ h5.subdued {
 .case-number.priority7 {
   background-color: #778899;
 }
+.button-tropic {
+  color: #00A8C6 !important;
+  border: solid 1px #00A8C6 !important;
+  font-size: .7em !important;
+  min-height: 2.5em !important;
+  line-height: 2.5em !important;
+}
