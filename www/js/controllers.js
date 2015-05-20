@@ -334,9 +334,11 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.tags = $scope.tags[0] == undefined ? [] : $scope.tags;
     $scope.date = $filter('date')(new Date(), 'medium');
 
-    // Set the event HTML as trusted
+    // Set the event HTML as trusted and linkify links if format is plain text
     for (var i = 0; i < $scope.case.events.event.length; i++) {
-      $scope.case.events.event[i].sHtml.__cdata = $sce.trustAsHtml($scope.case.events.event[i].sHtml.__cdata);
+      if ($scope.case.events.event[i].sFormat != 'html') {
+        $scope.case.events.event[i].sHtml.__cdata = $filter('linky')($scope.case.events.event[i].sHtml.__cdata, '_system');
+      }
     }
 
     $scope.$watch('case.sCategory', function(newValue, oldValue) {

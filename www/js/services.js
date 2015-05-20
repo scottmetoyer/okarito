@@ -205,7 +205,7 @@ angular.module('okarito.services', ['angular-storage'])
       });
     },
     getCases: function(filter, cacheResponse) {
-      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,fOpen,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
+      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,fOpen,sFormat,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
         transformResponse: transform,
         cache: cacheResponse
       }).then(function(response) {
@@ -475,7 +475,7 @@ angular.module('okarito.services', ['angular-storage'])
 .filter('hrefToJS', function($sce, $sanitize) {
   return function(text) {
     var regex = /href="([\S]+)"/g;
-    var newString = $sanitize(text).replace(regex, "onClick=\"window.open('$1', '_blank', 'location=yes')\"");
+    var newString = $sanitize(text).replace(regex, "onClick=\"window.open('$1', '_system', 'location=yes')\"");
     return $sce.trustAsHtml(newString);
   }
 })
