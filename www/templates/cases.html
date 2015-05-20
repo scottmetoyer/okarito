@@ -6,6 +6,9 @@
     <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()">
     </ion-refresher>
     <div class="list">
+      <div class="item bare" ng-show="cases.length == 0">
+        <p>Nothing was found that matched.</p>
+      </div>
       <a class="item" style="padding: .4em;" ng-repeat="bug in cases" href="#/app/cases/{{bug.ixBug}}">
         <div class="row">
           <div class="col">

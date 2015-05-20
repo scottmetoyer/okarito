@@ -99,7 +99,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   }
 })
 
-.controller('CasesCtrl', function($q, $filter, $rootScope, $scope, $ionicLoading, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService, userService, caseModalService) {
+.controller('CasesCtrl', function($q, $filter, $rootScope, $state, $scope, $ionicLoading, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService, userService, caseModalService) {
   $scope.filter = '';
   $scope.filterDescription = '';
   $scope.ready = false;
@@ -185,8 +185,14 @@ angular.module('okarito.controllers', ['okarito.services'])
         $rootScope.categories = responses[3];
         $scope.cases = responses[4].cases;
         $scope.filterDescription = responses[4].description;
+
         $ionicLoading.hide();
         $scope.ready = true;
+
+        // If there is only one case in the cases list, just open it
+        if ($scope.cases.length == 1) {
+          $state.go('app.single', { caseId: $scope.cases[0].ixBug });
+        }
       });
   }
 
