@@ -43,7 +43,7 @@
         <h4 class="subdued">{{ event.dt | date:'MM/dd/yyyy h:mma'}}</h4>
         <h4 style="white-space: pre-wrap; font-weight: normal;">{{ event.sChanges.__cdata }}</h4>
       </div>
-      <div class="item item-text-wrap" ng-bind-html="event.sHtml.__cdata" ng-show="event.s != ''"></div>
+      <div class="item item-text-wrap" ng-bind-html="event.sHtml.__cdata | linky | hrefToJS" ng-show="event.s != ''"></div>
       <div class="spacer" ng-hide="event.s != ''"></div>
     </span>
   </ion-content>

@@ -211,7 +211,10 @@ angular.module('okarito.services', ['angular-storage'])
       }).then(function(response) {
         var description = response.data.description != undefined ? response.data.description.__cdata : 'Search: ' + filter;
         cases = normalizeArray(response.data.cases.case);
-        return { cases: cases, description: description };
+        return {
+          cases: cases,
+          description: description
+        };
       });
     },
     setFilter: function(filterId) {
@@ -282,8 +285,7 @@ angular.module('okarito.services', ['angular-storage'])
         return response;
       });
     },
-    resolveCase: function(bug) {
-    },
+    resolveCase: function(bug) {},
     saveCase: function(bug) {
       return $http({
         method: 'POST',
@@ -467,6 +469,14 @@ angular.module('okarito.services', ['angular-storage'])
 
       return icon;
     }
+  }
+})
+
+.filter('hrefToJS', function($sce, $sanitize) {
+  return function(text) {
+    var regex = /href="([\S]+)"/g;
+    var newString = $sanitize(text).replace(regex, "onClick=\"window.open('$1', '_blank', 'location=yes')\"");
+    return $sce.trustAsHtml(newString);
   }
 })
 
