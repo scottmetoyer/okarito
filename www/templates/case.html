@@ -12,6 +12,7 @@
     <div class="item item-divider item-icon-right">
       <span ng-show="ready">
         <strong>{{case.ixBug}}</strong>
+        <img class="loader" ng-show="working" src="img/ajax-loader.gif"/>
         <i class="icon ion-ios-star star" ng-click="starCase()"></i>
       </span>
     </div>

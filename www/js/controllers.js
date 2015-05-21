@@ -128,8 +128,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.doRefresh = function() {
-    $scope.$broadcast('scroll.refreshComplete');
-    $scope.$apply();
+    loadCases();
   };
 
   $scope.cancel = function() {
@@ -145,6 +144,10 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   $rootScope.$on('set-filter', function(event, args) {
+    $ionicLoading.show({
+      template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
+    });
+
     dataService
       .setFilter(args.filter)
       .then(function(response) {
@@ -159,6 +162,10 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   $scope.$on('search-cases', function(event, args) {
+    $ionicLoading.show({
+      template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
+    });
+
     $ionicScrollDelegate.scrollTop();
     $scope.filter = args.search;
     loadCases();
@@ -166,10 +173,6 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   var loadCases = function() {
-    $ionicLoading.show({
-      template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
-    });
-
     // Load the related entity lists
     $q.all([
         dataService.getProjects(false),
@@ -186,7 +189,10 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.cases = responses[4].cases;
         $scope.filterDescription = responses[4].description;
 
+        // Hide loaders
         $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
+        $scope.$apply()
         $scope.ready = true;
 
         // If there is only one case in the cases list, just open it
@@ -230,16 +236,15 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.save = function() {
-    // TODO: Show save indicator in the case header area
-
+    $scope.working = true;
+    $scope.closeModal();
+    
     dataService.saveCase($scope.case)
       .then(function(result) {
         dataService.refreshEvents($scope.case).then(function(){
-          // TODO: Hide save indicator
+          $scope.working = false;
         });
       });
-
-    $scope.closeModal();
   };
 
   $scope.cancel = function() {
@@ -252,7 +257,15 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.showItems(e);
   };
 
-  $scope.refresh = function() {
+  $scope.refreshCase = function() {
+    $scope.working = true;
+    $scope.closePopover();
+
+    dataService.refreshCase($scope.case.ixBug)
+      .then(function(result) {
+        $scope.case = result;
+        $scope.working = false;
+      });
   };
 
   $scope.emailCase = function() {
@@ -262,9 +275,9 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.assignCase = function(val, text) {
+    $scope.working = true;
     $scope.case.ixPersonAssignedTo = val;
     $scope.case.sPersonAssignedTo.__cdata = text;
-    $scope.working = true;
 
     dataService.assignCase($scope.case)
       .then(function(result) {

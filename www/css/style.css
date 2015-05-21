@@ -240,3 +240,6 @@ h5.subdued {
 .bare {
   border-bottom: none !important;
 }
+.loader {
+  margin-left: 4px;
+}
