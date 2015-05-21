@@ -238,7 +238,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.save = function() {
     $scope.working = true;
     $scope.closeModal();
-    
+
     dataService.saveCase($scope.case)
       .then(function(result) {
         dataService.refreshEvents($scope.case).then(function(){
@@ -269,9 +269,6 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.emailCase = function() {
-  };
-
-  $scope.starCase = function() {
   };
 
   $scope.assignCase = function(val, text) {
