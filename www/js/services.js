@@ -109,7 +109,13 @@ angular.module('okarito.services', ['angular-storage'])
       });
     },
     getStatuses: function(categoryId, cacheResponse) {
-      return $http.get('cmd=listStatuses&ixCategory=' + categoryId, {
+      var query = 'cmd=listStatuses';
+
+      if (categoryId != null) {
+          query += '&ixCategory=' + categoryId;
+      }
+
+      return $http.get(query, {
         transformResponse: transform,
         cache: cacheResponse
       }).then(function(response) {
@@ -121,7 +127,8 @@ angular.module('okarito.services', ['angular-storage'])
             id: statuses[i].ixStatus,
             text: statuses[i].sStatus.__cdata,
             checked: false,
-            icon: null
+            icon: null,
+            resolved: statuses[i].fResolved
           });
         };
         return list;

@@ -179,7 +179,8 @@ angular.module('okarito.controllers', ['okarito.services'])
         dataService.getPriorities(false),
         dataService.getPeople(false),
         dataService.getCategories(false),
-        dataService.getCases($scope.filter, false)
+        dataService.getCases($scope.filter, false),
+        dataService.getStatuses(null, false)
       ])
       .then(function(responses) {
         $rootScope.projects = responses[0];
@@ -187,6 +188,7 @@ angular.module('okarito.controllers', ['okarito.services'])
         $rootScope.people = responses[2];
         $rootScope.categories = responses[3];
         $scope.cases = responses[4].cases;
+        $rootScope.allStatuses = responses[5];
         $scope.filterDescription = responses[4].description;
 
         // Hide loaders
@@ -211,6 +213,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   var x2js = new X2JS();
   var backup = {};
   $scope.working = false;
+  $scope.caseResolved = false;
 
   // Action popover
   $ionicPopover.fromTemplateUrl('templates/more-actions.html', {
@@ -350,6 +353,14 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.case.events.event[i].sHtml.__cdata = $filter('linky')($scope.case.events.event[i].sHtml.__cdata, '_system');
       }
     }
+
+    $scope.$watch('case.ixStatus', function(newValue, oldValue) {
+      var status = $filter('filter')($rootScope.allStatuses, {
+        id: $scope.case.ixStatus
+      }, true)[0];
+
+      $scope.caseResolved = status.resolved;
+    });
 
     $scope.$watch('case.sCategory', function(newValue, oldValue) {
       var category = $filter('filter')($rootScope.categories, {
