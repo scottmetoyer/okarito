@@ -52,23 +52,11 @@ angular.module('okarito.services', ['angular-storage'])
       for (var i = 0; i < cases.length; i++) {
         if (cases[i].ixBug == id) {
           bug = cases[i];
+          bug.newEvent = '';
         }
       }
 
       return bug;
-    },
-    refreshEvents: function(bug) {
-      return $http.get('cmd=search&q=' + bug.ixBug + '&cols=events', {
-        transformResponse: transform
-      }).then(function(response) {
-        var refreshedCase = normalizeArray(response.data.cases.case);
-
-        if (refreshedCase.length > 0) {
-          bug.events = refreshedCase[0].events;
-        }
-
-        return;
-      });
     },
     getProjects: function(cacheResponse) {
       return $http.get('cmd=listProjects', {
@@ -108,11 +96,15 @@ angular.module('okarito.services', ['angular-storage'])
         return list;
       });
     },
-    getStatuses: function(categoryId, cacheResponse) {
+    getStatuses: function(categoryId, resolved, cacheResponse) {
       var query = 'cmd=listStatuses';
 
       if (categoryId != null) {
           query += '&ixCategory=' + categoryId;
+      }
+
+      if (resolved != null && resolved == true) {
+        query += '&fResolved=1'
       }
 
       return $http.get(query, {
@@ -216,7 +208,14 @@ angular.module('okarito.services', ['angular-storage'])
         transformResponse: transform
       }).then(function(response) {
         var bug = normalizeArray(response.data.cases.case)[0];
-        return bug;
+        bug.newEvent = '';
+
+        for (var i = 0; i < cases.length; i++)
+        {
+          if (cases[i].ixBug == caseId) {
+            angular.copy(bug, cases[i]);
+          }
+        }
       });
     },
     getCases: function(filter, cacheResponse) {
@@ -260,7 +259,8 @@ angular.module('okarito.services', ['angular-storage'])
         },
         sPriority: {
           __cdata: ''
-        }
+        },
+        newEvent: ''
       };
     },
     newCase: function(bug) {
@@ -275,7 +275,8 @@ angular.module('okarito.services', ['angular-storage'])
           "&ixPriority=" + bug.ixPriority +
           "&ixCategory=" + bug.ixCategory +
           "&ixFixFor=" + bug.ixFixFor +
-          "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo,
+          "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo +
+          "&sEvent=" + bug.newEvent,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
@@ -300,7 +301,25 @@ angular.module('okarito.services', ['angular-storage'])
         return response;
       });
     },
-    resolveCase: function(bug) {},
+    resolveCase: function(bug) {
+      return $http({
+        method: 'POST',
+        url: '',
+        data: "cmd=resolve&ixBug=" + bug.ixBug +
+          "&sTitle=" + bug.sTitle.__cdata +
+          "&ixStatus=" + bug.ixStatus +
+          "&ixPriority=" + bug.ixPriority +
+          "&ixCategory=" + bug.ixCategory +
+          "&ixFixFor=" + bug.ixFixFor +
+          "&sEvent=" + bug.newEvent,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        transformResponse: transform
+      }).then(function(response) {
+        return response;
+      });
+    },
     closeCase: function(bug){
       return $http({
         method: 'POST',
@@ -322,7 +341,6 @@ angular.module('okarito.services', ['angular-storage'])
         data: "cmd=edit&ixBug=" + bug.ixBug +
           "&sTitle=" + bug.sTitle.__cdata +
           "&ixArea=" + bug.ixArea +
-          "&ixStatus=" + bug.ixStatus +
           "&ixProject=" + bug.ixProject +
           "&ixPriority=" + bug.ixPriority +
           "&ixCategory=" + bug.ixCategory +

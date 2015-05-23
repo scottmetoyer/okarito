@@ -75,7 +75,6 @@ fancy-select .list {
   white-space: nowrap;
   font-size: 14px;
   cursor: pointer;
-  direction: rtl;
 }
 .item-input.activated {
   background: none !important;
@@ -251,4 +250,7 @@ ion-popover-view.fit ion-content {
 }
 .platform-android ion-popover-view.fit {
   margin-top: 10px !important;
+}
+.col.text {
+  font-size: 14px !important;
 }

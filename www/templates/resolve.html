@@ -5,7 +5,7 @@
     </div>
     <h1 class="title">&nbsp;</h1>
     <div class="buttons">
-      <button type="button" class="button button-clear">Resolve</button>
+      <button type="button" class="button button-clear" ng-click="save('resolve')">Resolve</button>
     </div>
   </ion-header-bar>
   <ion-content scroll="true">
@@ -24,17 +24,12 @@
         <label class="item item-input">
           <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a resolution note..."></textarea>
         </label>
-        <label class="item tabs tabs-secondary tabs-icon-left">
-          <a class="tab-item" href="#">
-            <i class="icon ion-location tropic"></i>
-          </a>
-          <a class="tab-item" href="#">
-            <i class="icon ion-mic-a tropic"></i>
-          </a>
+        <label class="item tabs tabs-secondary tabs-icon-right">
           <a class="tab-item" href="#">
             <i class="icon ion-camera tropic"></i>
           </a>
         </label>
+        <fancy-select header-text="Choose a Status" label="Status" allow-empty="true" value="case.ixStatus" text="case.sStatus.__cdata" items="statuses"></fancy-select>
         <label class="item item-input">
           <div class="input-label subdued">Project</div>
           <div class="select subdued">

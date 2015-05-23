@@ -180,7 +180,7 @@ angular.module('okarito.controllers', ['okarito.services'])
         dataService.getPeople(false),
         dataService.getCategories(false),
         dataService.getCases($scope.filter, false),
-        dataService.getStatuses(null, false)
+        dataService.getStatuses(null, false, false)
       ])
       .then(function(responses) {
         $rootScope.projects = responses[0];
@@ -260,12 +260,21 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.working = true;
     $scope.closeModal();
 
+    if (command == 'resolve') {
+      dataService.resolveCase($scope.case)
+        .then(function(result) {
+          dataService.refreshCase($scope.case.ixBug)
+            .then(function() {
+                $scope.working = false;
+          });
+        });
+    }
+
     if (command == 'close') {
       dataService.closeCase($scope.case)
         .then(function(result) {
           dataService.refreshCase($scope.case.ixBug)
-            .then(function(result) {
-                $scope.case = result;
+            .then(function() {
                 $scope.working = false;
           });
         });
@@ -274,8 +283,9 @@ angular.module('okarito.controllers', ['okarito.services'])
     if (command == 'edit') {
       dataService.saveCase($scope.case)
         .then(function(result) {
-          dataService.refreshEvents($scope.case).then(function() {
-            $scope.working = false;
+          dataService.refreshCase($scope.case.ixBug)
+            .then(function() {
+                $scope.working = false;
           });
         });
     }
@@ -296,8 +306,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.closePopover();
 
     dataService.refreshCase($scope.case.ixBug)
-      .then(function(result) {
-        $scope.case = result;
+      .then(function() {
         $scope.working = false;
       });
   };
@@ -311,18 +320,37 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     dataService.assignCase($scope.case)
       .then(function(result) {
-        dataService.refreshEvents($scope.case).then(function() {});
-        $scope.working = false;
+        dataService.refreshEvents($scope.case)
+          .then(function() {
+            $scope.working = false;
+          });
       });
   };
 
   $scope.resolveCase = function() {
+    $ionicLoading.show({template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'});
     $scope.label = 'Resolve Case ' + $scope.case.ixBug;
     $scope.touched = 'Resolved by ' + userService.getCurrentUser().full_name;
 
     angular.copy($scope.case, backup);
     $scope.closePopover();
     $scope.resolveModal();
+
+    // Load related entities for dropdown lists
+    $q.all([
+        dataService.getMilestones($scope.case.ixProject, false),
+        dataService.getAreas($scope.case.ixProject, false),
+        dataService.getStatuses($scope.case.ixCategory, true, false)
+      ])
+      .then(function(responses) {
+        $scope.milestones = responses[0];
+        $scope.areas = responses[1];
+        $scope.statuses = responses[2];
+        $scope.case.ixStatus = $scope.statuses[0].id;
+        $scope.case.sStatus.__cdata = $scope.statuses[0].text;
+
+        $ionicLoading.hide();
+      });
   };
 
   $scope.resolveAndCloseCase = function() {
@@ -353,11 +381,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.editCase = function() {
-
-    $ionicLoading.show({
-      template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
-    });
-
+    $ionicLoading.show({template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'});
     $scope.label = 'Edit Case ' + $scope.case.ixBug + ' (' + $scope.case.sStatus.__cdata + ')';
     $scope.touched = 'Edited by ' + userService.getCurrentUser().full_name;
 
@@ -370,14 +394,11 @@ angular.module('okarito.controllers', ['okarito.services'])
     // Load related entities for dropdown lists
     $q.all([
         dataService.getMilestones($scope.case.ixProject, false),
-        dataService.getAreas($scope.case.ixProject, false),
-        dataService.getStatuses($scope.case.ixCategory, false)
+        dataService.getAreas($scope.case.ixProject, false)
       ])
       .then(function(responses) {
         $scope.milestones = responses[0];
         $scope.areas = responses[1];
-        $scope.statuses = responses[2];
-
         $ionicLoading.hide();
       });
   };
@@ -403,13 +424,6 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.tags = x2js.asArray($scope.case.tags.tag);
     $scope.tags = $scope.tags[0] == undefined ? [] : $scope.tags;
     $scope.date = $filter('date')(new Date(), 'medium');
-
-    // Set the event HTML as trusted and linkify links if format is plain text
-    for (var i = 0; i < $scope.case.events.event.length; i++) {
-      if ($scope.case.events.event[i].sFormat != 'html') {
-        $scope.case.events.event[i].sHtml.__cdata = $filter('linky')($scope.case.events.event[i].sHtml.__cdata, '_system');
-      }
-    }
 
     $scope.$watch('case.ixStatus', function(newValue, oldValue) {
       var status = $filter('filter')($rootScope.allStatuses, {
