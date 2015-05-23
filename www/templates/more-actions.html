@@ -1,28 +1,39 @@
-<ion-popover-view>
-  <ion-content>
-    <div class="list" ng-show="case.fOpen == 'true'">
+<ion-popover-view class="fit">
+  <ion-content scroll="false" ng-show="case.fOpen == 'false'">
+    <div class="list" >
       <a class="item" target="_blank" ng-click="refreshCase()">
         <i class="icon ion-refresh"></i> Refresh
+      </a>
+      <a class="item" target="_blank" ng-click="refreshCase()">
+        <i class="icon ion-edit"></i> Edit
+      </a>
+      <a class="item" target="_blank" ng-click="reopenCase()">
+        <i class="icon ion-loop"></i> Reopen
+      </a>
+    </div>
+  </ion-content>
+  <ion-content scroll="false" ng-show="case.fOpen == 'true'">
+    <div class="list">
+      <a class="item" target="_blank" ng-click="refreshCase()">
+        <i class="icon ion-refresh"></i> Refresh
+      </a>
+      <a class="item" target="_blank" ng-click="refreshCase()">
+        <i class="icon ion-edit"></i> Edit
       </a>
       <a class="item" target="_blank" ng-click="emailCase()">
         <i class="icon ion-email"></i> Email
       </a>
-      <a ng-show="caseResolved == 'true'" class="item" target="_blank" ng-click="reactivateCase()">
-        <i class="icon ion-email"></i> Reactivate
+      <a class="item" target="_blank" ng-click="resolveCase()">
+        <i class="icon ion-checkmark"></i> Resolve
       </a>
       <a class="item" target="_blank" ng-click="resolveAndCloseCase()">
-        <i class="icon ion-email"></i> Resolve and Close
+        <i class="icon ion-checkmark-circled"></i> Resolve and Close
+      </a>
+      <a ng-show="caseResolved == 'true'" class="item" target="_blank" ng-click="reactivateCase()">
+        <i class="icon ion-lightbulb"></i> Reactivate
       </a>
       <a ng-show="caseResolved == 'true'" class="item" target="_blank" ng-click="closeCase()">
-        <i class="icon ion-email"></i> Close
-      </a>
-    </div>
-    <div class="list" ng-show="case.fOpen == 'false'">
-      <a class="item" target="_blank" ng-click="refreshCase()">
-        <i class="icon ion-refresh"></i> Refresh
-      </a>
-      <a class="item" target="_blank" ng-click="reopenCase()">
-        <i class="icon ion-email"></i> Reopen
+        <i class="icon ion-eject"></i> Close
       </a>
     </div>
   </ion-content>

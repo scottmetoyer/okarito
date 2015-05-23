@@ -243,3 +243,15 @@ h5.subdued {
 .loader {
   margin-left: 4px;
 }
+ion-popover-view.fit {
+  height: auto !important;
+}
+ion-popover-view.fit ion-content {
+  position: relative !important;
+}
+.platform-android ion-popover-view.fit {
+  margin-top: 10px !important;
+}
+.popover {
+  border-radius: 0 !important;
+}
