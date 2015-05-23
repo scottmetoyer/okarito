@@ -301,6 +301,20 @@ angular.module('okarito.services', ['angular-storage'])
       });
     },
     resolveCase: function(bug) {},
+    closeCase: function(bug){
+      return $http({
+        method: 'POST',
+        url: '',
+        data: "cmd=close&ixBug=" + bug.ixBug +
+          "&sEvent=" + bug.newEvent,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        transformResponse: transform
+      }).then(function(response) {
+        return response;
+      });
+    },
     saveCase: function(bug) {
       return $http({
         method: 'POST',
@@ -313,13 +327,13 @@ angular.module('okarito.services', ['angular-storage'])
           "&ixPriority=" + bug.ixPriority +
           "&ixCategory=" + bug.ixCategory +
           "&ixFixFor=" + bug.ixFixFor +
-          "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo,
+          "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo +
+          "&sEvent=" + bug.newEvent,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         transformResponse: transform
       }).then(function(response) {
-        // Save success
         return response;
       });
     }

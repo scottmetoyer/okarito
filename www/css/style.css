@@ -252,6 +252,3 @@ ion-popover-view.fit ion-content {
 .platform-android ion-popover-view.fit {
   margin-top: 10px !important;
 }
-.popover {
-  border-radius: 0 !important;
-}

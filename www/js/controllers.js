@@ -199,7 +199,9 @@ angular.module('okarito.controllers', ['okarito.services'])
 
         // If there is only one case in the cases list, just open it
         if ($scope.cases.length == 1) {
-          $state.go('app.single', { caseId: $scope.cases[0].ixBug });
+          $state.go('app.single', {
+            caseId: $scope.cases[0].ixBug
+          });
         }
       });
   }
@@ -238,16 +240,45 @@ angular.module('okarito.controllers', ['okarito.services'])
       });
   };
 
-  $scope.save = function() {
+  $scope.reactivateModal = function() {
+    caseModalService
+      .init('templates/reactivate.html', $scope)
+      .then(function(modal) {
+        modal.show();
+      });
+  };
+
+  $scope.closeCaseModal = function() {
+    caseModalService
+      .init('templates/close.html', $scope)
+      .then(function(modal) {
+        modal.show();
+      });
+  };
+
+  $scope.save = function(command) {
     $scope.working = true;
     $scope.closeModal();
 
-    dataService.saveCase($scope.case)
-      .then(function(result) {
-        dataService.refreshEvents($scope.case).then(function(){
-          $scope.working = false;
+    if (command == 'close') {
+      dataService.closeCase($scope.case)
+        .then(function(result) {
+          dataService.refreshCase($scope.case.ixBug)
+            .then(function(result) {
+                $scope.case = result;
+                $scope.working = false;
+          });
         });
-      });
+    }
+
+    if (command == 'edit') {
+      dataService.saveCase($scope.case)
+        .then(function(result) {
+          dataService.refreshEvents($scope.case).then(function() {
+            $scope.working = false;
+          });
+        });
+    }
   };
 
   $scope.cancel = function() {
@@ -271,8 +302,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       });
   };
 
-  $scope.emailCase = function() {
-  };
+  $scope.emailCase = function() {};
 
   $scope.assignCase = function(val, text) {
     $scope.working = true;
@@ -281,9 +311,9 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     dataService.assignCase($scope.case)
       .then(function(result) {
-        dataService.refreshEvents($scope.case).then(function(){ });
+        dataService.refreshEvents($scope.case).then(function() {});
         $scope.working = false;
-    });
+      });
   };
 
   $scope.resolveCase = function() {
@@ -293,6 +323,33 @@ angular.module('okarito.controllers', ['okarito.services'])
     angular.copy($scope.case, backup);
     $scope.closePopover();
     $scope.resolveModal();
+  };
+
+  $scope.resolveAndCloseCase = function() {
+    $scope.label = 'Resolve and Close Case ' + $scope.case.ixBug;
+    $scope.touched = 'Resolved and closed by ' + userService.getCurrentUser().full_name;
+
+    angular.copy($scope.case, backup);
+    $scope.closePopover();
+    $scope.resolveModal();
+  };
+
+  $scope.reactivateCase = function() {
+    $scope.label = 'Reactivate Case ' + $scope.case.ixBug;
+    $scope.touched = 'Reactivated by ' + userService.getCurrentUser().full_name;
+
+    angular.copy($scope.case, backup);
+    $scope.closePopover();
+    $scope.reactivateModal();
+  };
+
+  $scope.closeCase = function() {
+    $scope.label = 'Close Case ' + $scope.case.ixBug;
+    $scope.touched = 'Closed by ' + userService.getCurrentUser().full_name;
+
+    angular.copy($scope.case, backup);
+    $scope.closePopover();
+    $scope.closeCaseModal();
   };
 
   $scope.editCase = function() {
