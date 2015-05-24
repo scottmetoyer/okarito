@@ -100,7 +100,7 @@ angular.module('okarito.services', ['angular-storage'])
       var query = 'cmd=listStatuses';
 
       if (categoryId != null) {
-          query += '&ixCategory=' + categoryId;
+        query += '&ixCategory=' + categoryId;
       }
 
       if (resolved != null && resolved == true) {
@@ -210,8 +210,7 @@ angular.module('okarito.services', ['angular-storage'])
         var bug = normalizeArray(response.data.cases.case)[0];
         bug.newEvent = '';
 
-        for (var i = 0; i < cases.length; i++)
-        {
+        for (var i = 0; i < cases.length; i++) {
           if (cases[i].ixBug == caseId) {
             angular.copy(bug, cases[i]);
           }
@@ -320,7 +319,7 @@ angular.module('okarito.services', ['angular-storage'])
         return response;
       });
     },
-    closeCase: function(bug){
+    closeCase: function(bug) {
       return $http({
         method: 'POST',
         url: '',
@@ -339,6 +338,27 @@ angular.module('okarito.services', ['angular-storage'])
         method: 'POST',
         url: '',
         data: "cmd=edit&ixBug=" + bug.ixBug +
+          "&sTitle=" + bug.sTitle.__cdata +
+          "&ixArea=" + bug.ixArea +
+          "&ixProject=" + bug.ixProject +
+          "&ixPriority=" + bug.ixPriority +
+          "&ixCategory=" + bug.ixCategory +
+          "&ixFixFor=" + bug.ixFixFor +
+          "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo +
+          "&sEvent=" + bug.newEvent,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        transformResponse: transform
+      }).then(function(response) {
+        return response;
+      });
+    },
+    reactivateCase: function(bug) {
+      return $http({
+        method: 'POST',
+        url: '',
+        data: "cmd=reactivate&ixBug=" + bug.ixBug +
           "&sTitle=" + bug.sTitle.__cdata +
           "&ixArea=" + bug.ixArea +
           "&ixProject=" + bug.ixProject +
@@ -396,10 +416,9 @@ angular.module('okarito.services', ['angular-storage'])
         });
     }
 
-    $scope.categoryUpdated = function(val) {
+    $scope.categoryUpdated = function(val, resolved) {
       $scope.case.ixCategory = val;
-
-      dataService.getStatuses(val, false)
+      dataService.getStatuses(val, resolved, false)
         .then(function(response) {
           $scope.statuses = response;
           $scope.case.sStatus.__cdata = $scope.statuses[0].text;

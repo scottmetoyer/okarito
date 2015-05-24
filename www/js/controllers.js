@@ -353,15 +353,6 @@ angular.module('okarito.controllers', ['okarito.services'])
       });
   };
 
-  $scope.resolveAndCloseCase = function() {
-    $scope.label = 'Resolve and Close Case ' + $scope.case.ixBug;
-    $scope.touched = 'Resolved and closed by ' + userService.getCurrentUser().full_name;
-
-    angular.copy($scope.case, backup);
-    $scope.closePopover();
-    $scope.resolveModal();
-  };
-
   $scope.reactivateCase = function() {
     $scope.label = 'Reactivate Case ' + $scope.case.ixBug;
     $scope.touched = 'Reactivated by ' + userService.getCurrentUser().full_name;

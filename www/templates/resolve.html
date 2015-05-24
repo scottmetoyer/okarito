@@ -43,7 +43,7 @@
           </div>
         </label>
         <fancy-select header-text="Choose a Milestone" label="Milestone" allow-empty="true" value="case.ixFixFor" text="case.sFixFor.__cdata" items="milestones"></fancy-select>
-        <fancy-select header-text="Choose a Category" label="Category" allow-empty="true" value="case.ixCategory" text="case.sCategory.__cdata" items="categories"></fancy-select>
+        <fancy-select header-text="Choose a Category" label="Category" allow-empty="true" value="case.ixCategory" text="case.sCategory.__cdata" items="categories" callback="categoryUpdated(val, true)"></fancy-select>
         <label class="item item-input">
           <div class="input-label subdued">Assigned To</div>
           <div class="select subdued">
