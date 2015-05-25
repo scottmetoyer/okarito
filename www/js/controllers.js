@@ -142,7 +142,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $ionicLoading.show({
       template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
     });
-    
+
     $scope.max = 99999;
     loadCases();
   };
@@ -187,6 +187,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   var loadCases = function() {
+    console.log('loading cases');
     // Load the related entity lists
     $q.all([
         dataService.getProjects(false),
@@ -221,7 +222,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   }
 
   var init = function() {
-    $scope.ready = false;
+    loadCases();
   };
 })
 
