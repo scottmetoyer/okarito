@@ -39,6 +39,9 @@
         <div class="col text">{{ case.sStatus.__cdata }}</div>
       </div>
     </div>
+    <div ng-show="working" class="item item-divider">
+      <img class="loader" src="img/ajax-loader.gif"/>
+    </div>
     <span ng-repeat="event in case.events.event">
       <div class="item item-divider">
         <h3 ng-bind-html="event.evtDescription.__cdata"</h3>

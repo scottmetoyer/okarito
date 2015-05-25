@@ -217,16 +217,19 @@ angular.module('okarito.services', ['angular-storage'])
         }
       });
     },
-    getCases: function(filter, cacheResponse) {
+    getCases: function(filter, cacheResponse, max) {
       return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,fOpen,sFormat,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
         transformResponse: transform,
         cache: cacheResponse
       }).then(function(response) {
         var description = response.data.description != undefined ? response.data.description.__cdata : 'Search: ' + filter;
-        cases = normalizeArray(response.data.cases.case);
+        cases = normalizeArray(response.data.cases.case).splice(0, max);
+        count = response.data.cases._count;
+
         return {
           cases: cases,
-          description: description
+          description: description,
+          count: count
         };
       });
     },
@@ -259,31 +262,11 @@ angular.module('okarito.services', ['angular-storage'])
         sPriority: {
           __cdata: ''
         },
+        sTitle: {
+          __cdata: ''
+        },
         newEvent: ''
       };
-    },
-    newCase: function(bug) {
-      return $http({
-        method: 'POST',
-        url: '',
-        data: "cmd=new" +
-          "&sTitle=" + bug.sTitle.__cdata +
-          "&ixArea=" + bug.ixArea +
-          "&ixStatus=" + bug.ixStatus +
-          "&ixProject=" + bug.ixProject +
-          "&ixPriority=" + bug.ixPriority +
-          "&ixCategory=" + bug.ixCategory +
-          "&ixFixFor=" + bug.ixFixFor +
-          "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo +
-          "&sEvent=" + bug.newEvent,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        transformResponse: transform
-      }).then(function(response) {
-        // Save success
-        return response;
-      });
     },
     assignCase: function(bug) {
       return $http({
@@ -297,25 +280,6 @@ angular.module('okarito.services', ['angular-storage'])
         transformResponse: transform
       }).then(function(response) {
         // Save success
-        return response;
-      });
-    },
-    resolveCase: function(bug) {
-      return $http({
-        method: 'POST',
-        url: '',
-        data: "cmd=resolve&ixBug=" + bug.ixBug +
-          "&sTitle=" + bug.sTitle.__cdata +
-          "&ixStatus=" + bug.ixStatus +
-          "&ixPriority=" + bug.ixPriority +
-          "&ixCategory=" + bug.ixCategory +
-          "&ixFixFor=" + bug.ixFixFor +
-          "&sEvent=" + bug.newEvent,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        transformResponse: transform
-      }).then(function(response) {
         return response;
       });
     },
@@ -333,11 +297,16 @@ angular.module('okarito.services', ['angular-storage'])
         return response;
       });
     },
-    saveCase: function(bug) {
+    saveCase: function(bug, cmd) {
+      var status = '';
+      if (cmd == 'resolve') {
+        status = "&ixStatus=" + bug.ixStatus;
+      }
+
       return $http({
         method: 'POST',
         url: '',
-        data: "cmd=edit&ixBug=" + bug.ixBug +
+        data: "cmd=" + cmd + "&ixBug=" + bug.ixBug +
           "&sTitle=" + bug.sTitle.__cdata +
           "&ixArea=" + bug.ixArea +
           "&ixProject=" + bug.ixProject +
@@ -345,28 +314,8 @@ angular.module('okarito.services', ['angular-storage'])
           "&ixCategory=" + bug.ixCategory +
           "&ixFixFor=" + bug.ixFixFor +
           "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo +
-          "&sEvent=" + bug.newEvent,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        transformResponse: transform
-      }).then(function(response) {
-        return response;
-      });
-    },
-    reactivateCase: function(bug) {
-      return $http({
-        method: 'POST',
-        url: '',
-        data: "cmd=reactivate&ixBug=" + bug.ixBug +
-          "&sTitle=" + bug.sTitle.__cdata +
-          "&ixArea=" + bug.ixArea +
-          "&ixProject=" + bug.ixProject +
-          "&ixPriority=" + bug.ixPriority +
-          "&ixCategory=" + bug.ixCategory +
-          "&ixFixFor=" + bug.ixFixFor +
-          "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo +
-          "&sEvent=" + bug.newEvent,
+          "&sEvent=" + bug.newEvent +
+          status,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },

@@ -21,6 +21,11 @@
           </div>
         </div>
       </a>
+      <div class="list-footer">
+        <button class="button button-clear" ng-click="showAll()" ng-show="count > 50 && cases.length < count">
+          50 of {{ count }} (tap for all)
+        </button>
+      </div>
     </div>
   </ion-content>
   <button ng-click="newCase()" class="round-overlay-button bottom-right assertive button button-icon icon ion-ios7-search-strong light">
