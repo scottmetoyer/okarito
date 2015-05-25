@@ -263,3 +263,9 @@ ion-popover-view.fit ion-content {
   text-decoration: none;
   color: #909090;
 }
+.short {
+  height: 32px !important;
+  min-height: 32px !important;
+  line-height: 32px !important;
+  font-size: 14px !important;
+}

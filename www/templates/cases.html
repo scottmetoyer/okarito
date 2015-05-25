@@ -21,9 +21,12 @@
           </div>
         </div>
       </a>
-      <div class="list-footer">
-        <button class="button button-clear" ng-click="showAll()" ng-show="count > 50 && cases.length < count">
-          50 of {{ count }} (tap for all)
+      <div class="list-footer" ng-show="cases.length > 0">
+        <div class="short" ng-hide="count > 50 && cases.length < count">
+          {{ cases.length }} of {{ count }}
+        </div>
+        <button class="button button-clear short" ng-click="showAll()" ng-show="count > 50 && cases.length < count">
+          {{ cases.length }} of {{ count }} (tap for all)
         </button>
       </div>
     </div>
