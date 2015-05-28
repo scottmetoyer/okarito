@@ -3,7 +3,7 @@
     <span ng-show="case.fOpen == 'true'">
       <fancy-select mode="icon" header-text="Choose a Person" allow-empty="true" value="case.ixPersonAssignedTo" items="people" callback="assignCase(val, text)"></fancy-select>
       <button class="button button-icon icon ion-checkmark" ng-click="resolveCase()">
-    </button>
+      </button>
     </span>
     <button class="button button-icon icon ion-edit" ng-click="editCase()">
     </button>
@@ -14,7 +14,7 @@
     <div class="item item-divider item-icon-right">
       <span ng-show="ready">
         <strong>{{case.ixBug}}</strong>
-        <img class="loader" ng-show="working" src="img/ajax-loader.gif"/>
+        <img class="loader" ng-show="working" src="img/ajax-loader.gif" />
       </span>
     </div>
     <div class="item item-text-wrap" ng-show="ready">
@@ -38,18 +38,28 @@
         <div class="col col-33 subdued">Status</div>
         <div class="col text">{{ case.sStatus.__cdata }}</div>
       </div>
+      <div class="row">
+        <div class="col col-33 subdued">Tags</div>
+        <div class="col text item-text-wrap">
+          <span class="tag">testtag</span>
+          <span class="tag">whatever</span>
+          <span class="tag">test</span>
+          <span class="tag">a really long one</span>
+          <span class="tag">stuff</span>
+        </div>
+      </div>
     </div>
     <span ng-repeat="event in case.events.event">
       <div class="item item-divider">
-        <h3 ng-bind-html="event.evtDescription.__cdata"</h3>
-        <h4 class="subdued">{{ event.dt | date:'MM/dd/yyyy h:mma'}}</h4>
-        <h4 style="white-space: pre-wrap; font-weight: normal;">{{ event.sChanges.__cdata }}</h4>
+        <h3 ng-bind-html="event.evtDescription.__cdata" </h3>
+          <h4 class="subdued">{{ event.dt | date:'MM/dd/yyyy h:mma'}}</h4>
+          <h4 style="white-space: pre-wrap; font-weight: normal;">{{ event.sChanges.__cdata }}</h4>
       </div>
       <div class="item item-text-wrap" ng-bind-html="event.sHtml.__cdata | hrefToJS" ng-show="event.s != ''"></div>
       <div class="spacer" ng-hide="event.s != ''"></div>
     </span>
     <div ng-show="working" class="item item-divider">
-      <img class="loader" src="img/ajax-loader.gif"/>
+      <img class="loader" src="img/ajax-loader.gif" />
     </div>
   </ion-content>
 </ion-view>
