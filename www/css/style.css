@@ -262,7 +262,7 @@ ion-popover-view.fit ion-content {
 .list-footer a {
   text-decoration: none;
   color: #909090;
-}
+}``
 .short {
   height: 32px !important;
   min-height: 32px !important;
@@ -270,8 +270,8 @@ ion-popover-view.fit ion-content {
   font-size: 14px !important;
 }
 .tag {
-  background: #8FBE00 url('../img/tag.png') no-repeat left center !important;
-  padding-left: 14px;
+  background: #8FBE00;
+  padding-left: 8px;
   padding-right: 8px;
   height: 26px;
   line-height: 26px;

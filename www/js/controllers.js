@@ -187,7 +187,6 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   var loadCases = function() {
-    console.log('loading cases');
     // Load the related entity lists
     $q.all([
         dataService.getProjects(false),
