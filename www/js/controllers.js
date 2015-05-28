@@ -414,8 +414,6 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   var init = function() {
     $scope.case = dataService.getCase($stateParams.caseId);
-    $scope.tags = x2js.asArray($scope.case.tags.tag);
-    $scope.tags = $scope.tags[0] == undefined ? [] : $scope.tags;
     $scope.date = $filter('date')(new Date(), 'medium');
 
     $scope.$watch('case.ixStatus', function(newValue, oldValue) {

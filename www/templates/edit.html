@@ -33,7 +33,7 @@
         <fancy-select header-text="Choose a Priority" label="Priority" allow-empty="true" value="case.ixPriority" text="case.sPriority.__cdata" items="priorities"></fancy-select>
         <label class="item item-input item-input">
           <div class="input-label">Tags</div>
-          <input name="tags" ng-model="tags" type="text">
+          <tags-input class="tags-input" ng-model="case.tags" placeholder="Add tags..."></tags-input>
         </label>
       </div>
     </div>

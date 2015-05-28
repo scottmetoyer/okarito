@@ -53,9 +53,10 @@ angular.module('okarito.services', ['angular-storage'])
         if (cases[i].ixBug == id) {
           bug = cases[i];
           bug.newEvent = '';
+          bug.tags = normalizeArray(bug.tags.tag);
         }
       }
-
+      console.log(bug);
       return bug;
     },
     getProjects: function(cacheResponse) {
