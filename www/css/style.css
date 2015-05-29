@@ -262,7 +262,7 @@ ion-popover-view.fit ion-content {
 .list-footer a {
   text-decoration: none;
   color: #909090;
-}``
+}
 .short {
   height: 32px !important;
   min-height: 32px !important;
@@ -281,29 +281,9 @@ ion-popover-view.fit ion-content {
   font-size: 12px !important;
   border-radius: 2px;
 }
-.tags-input .tags {
-  background-color: #fff;
-  border: 0px;
+.tags {
+  width: 65% !important;
+  padding-top: 6px !important;
   text-align: right;
-}
-.tags-input .tags.focused {
-  border-color: #66afe9;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6);
-}
-.tags-input .tags .tag-item {
-  background: #428bca;
-  border: 1px solid #357ebd;
-  border-radius: 4px;
-  color: #fff;
-}
-.tags-input .tags .tag-item.selected {
-  background: #d9534f;
-  border: 1px solid #d43f3a;
-  border-radius: 4px;
-  color: #fff;
-}
-.tags-input .tags .tag-item button {
-  background: transparent;
-  color: #000;
-  opacity: .4;
+  padding-right: 12px;
 }

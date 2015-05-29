@@ -53,10 +53,12 @@ angular.module('okarito.services', ['angular-storage'])
         if (cases[i].ixBug == id) {
           bug = cases[i];
           bug.newEvent = '';
+
+          // Build comma separated list of tags
           bug.tags = normalizeArray(bug.tags.tag);
+          bug.sTags = bug.tags.join(',');
         }
       }
-      console.log(bug);
       return bug;
     },
     getProjects: function(cacheResponse) {

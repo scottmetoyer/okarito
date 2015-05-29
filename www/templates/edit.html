@@ -10,8 +10,8 @@
         <label class="item item-divider">
           {{ label }}
         </label>
-        <label class="item item-input">
-          <input type="text" name="title" ng-model="case.sTitle.__cdata" class="title" placeholder="Case title...">
+        <label class="item item-input item-text-wrap">
+          <textarea msd-elastic="\n\n" name="title" ng-model="case.sTitle.__cdata" class="title" placeholder="Case title..."></textarea>
         </label>
         <label class="item item-divider">
           <h3>{{ touched }}</h3>
@@ -31,9 +31,9 @@
         <fancy-select header-text="Choose a Category" label="Category" allow-empty="true" value="case.ixCategory" text="case.sCategory.__cdata" items="categories" callback="categoryUpdated(val, false)"></fancy-select>
         <fancy-select header-text="Choose a Person" label="Assigned To" allow-empty="true" value="case.ixPersonAssignedTo" text="case.sPersonAssignedTo.__cdata" items="people"></fancy-select>
         <fancy-select header-text="Choose a Priority" label="Priority" allow-empty="true" value="case.ixPriority" text="case.sPriority.__cdata" items="priorities"></fancy-select>
-        <label class="item item-input item-input">
-          <div class="input-label">Tags</div>
-          <tags-input class="tags-input" ng-model="case.tags" placeholder="Add tags..."></tags-input>
+        <label class="item item-input item-text-wrap">
+          <div class="input-label subdued">Tags<br/><span style="font-size: 11px">(Comma separated)</span></div>
+          <textarea msd-elastic="\n\n" name="tags" class="tags" ng-model="case.sTags"></textarea>
         </label>
       </div>
     </div>

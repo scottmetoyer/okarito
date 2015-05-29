@@ -1,4 +1,4 @@
-angular.module('okarito', ['ionic', 'okarito.controllers', 'okarito.directives', 'monospaced.elastic', 'ngTagsInput'])
+angular.module('okarito', ['ionic', 'okarito.controllers', 'okarito.directives', 'monospaced.elastic'])
 
 .run(function($ionicPlatform, $rootScope) {
   $ionicPlatform.ready(function() {
