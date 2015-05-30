@@ -282,12 +282,36 @@ ion-popover-view.fit ion-content {
   border-radius: 2px;
   margin-right: 4px;
 }
-.tags {
-  width: 65% !important;
-  padding-top: 6px !important;
-  text-align: right;
-  padding-right: 12px;
-}
 span.avoidwrap {
   display: inline-block;
+}
+span.subdued {
+  color: #909090;
+}
+.tag-box {
+  padding: 6px 0 5px 16px !important;
+}
+.tags {
+  border: 0 !important;
+  padding: 0 !important;
+}
+.tag-item {
+  background: #8FBE00 !important;
+  border-radius: 2px !important;
+  border: 0 !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  height: 26px !important;
+  line-height: 26px !important;
+  margin-right: 6px !important;
+}
+.tag-item:nth-of-type(1) {
+  margin-left: 0 !important;
+}
+tags-input .tags .input {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+.remove-button {
+  color: #666 !important;
 }

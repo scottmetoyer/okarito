@@ -38,10 +38,10 @@
         <div class="col col-33 subdued">Status</div>
         <div class="col text">{{ case.sStatus.__cdata }}</div>
       </div>
-      <div class="row">
+      <div class="row" ng-show="case.tags.length > 0">
         <div class="col col-33 subdued">Tags</div>
         <div class="col text item-text-wrap">
-          <span class="tag" ng-repeat="tag in case.tags">{{ tag.__cdata }}</span>
+          <span class="tag" ng-repeat="tag in case.tags">{{ tag.__cdata}}</span>
         </div>
       </div>
     </div>

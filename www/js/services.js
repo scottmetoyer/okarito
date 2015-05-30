@@ -53,14 +53,7 @@ angular.module('okarito.services', ['angular-storage'])
         if (cases[i].ixBug == id) {
           bug = cases[i];
           bug.newEvent = '';
-          bug.sTags = '';
-
-          // Build comma separated list of tags
           bug.tags = normalizeArray(bug.tags.tag);
-          for (var j = 0; j < bug.tags.length; j++) {
-            bug.sTags += ',' + bug.tags[j].__cdata;
-          }
-          bug.sTags = bug.sTags.substring(1)
         }
       }
       return bug;
@@ -216,14 +209,7 @@ angular.module('okarito.services', ['angular-storage'])
       }).then(function(response) {
         var bug = normalizeArray(response.data.cases.case)[0];
         bug.newEvent = '';
-        bug.sTags = '';
-
-        // Build comma separated list of tags
         bug.tags = normalizeArray(bug.tags.tag);
-        for (var j = 0; j < bug.tags.length; j++) {
-          bug.sTags += ',' + bug.tags[j].__cdata;
-        }
-        bug.sTags = bug.sTags.substring(1);
 
         // Copy refreshed case back in to the case list
         for (var i = 0; i < cases.length; i++) {
@@ -319,12 +305,15 @@ angular.module('okarito.services', ['angular-storage'])
         status = "&ixStatus=" + bug.ixStatus;
       }
 
-      // Wrap tags in quotes
-      var tags = bug.sTags.split(',');
-      for(var i = 0; i < tags.length; i++) {
-        tags[i] = '"' + tags[i] + '"';
+      // Create comma separated list of tags
+      var tags = '';
+      for (var i = 0; i < bug.tags.length; i++) {
+        tags += ',"' + bug.tags[i].__cdata + '"';
       }
-      bug.sTags = tags.join(',');
+      tags = tags.substring(1);
+      if (tags == '') {
+        tags = ",";
+      }
 
       return $http({
         method: 'POST',
@@ -338,7 +327,7 @@ angular.module('okarito.services', ['angular-storage'])
           "&ixFixFor=" + bug.ixFixFor +
           "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo +
           "&sEvent=" + bug.newEvent +
-          "&sTags=" + bug.sTags +
+          "&sTags=" + tags +
           status,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
