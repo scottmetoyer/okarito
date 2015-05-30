@@ -53,10 +53,14 @@ angular.module('okarito.services', ['angular-storage'])
         if (cases[i].ixBug == id) {
           bug = cases[i];
           bug.newEvent = '';
+          bug.sTags = '';
 
           // Build comma separated list of tags
           bug.tags = normalizeArray(bug.tags.tag);
-          bug.sTags = bug.tags.join(',');
+          for (var j = 0; j < bug.tags.length; j++) {
+            bug.sTags += ',' + bug.tags[j].__cdata;
+          }
+          bug.sTags = bug.sTags.substring(1)
         }
       }
       return bug;
@@ -212,7 +216,16 @@ angular.module('okarito.services', ['angular-storage'])
       }).then(function(response) {
         var bug = normalizeArray(response.data.cases.case)[0];
         bug.newEvent = '';
+        bug.sTags = '';
 
+        // Build comma separated list of tags
+        bug.tags = normalizeArray(bug.tags.tag);
+        for (var j = 0; j < bug.tags.length; j++) {
+          bug.sTags += ',' + bug.tags[j].__cdata;
+        }
+        bug.sTags = bug.sTags.substring(1);
+
+        // Copy refreshed case back in to the case list
         for (var i = 0; i < cases.length; i++) {
           if (cases[i].ixBug == caseId) {
             angular.copy(bug, cases[i]);
@@ -306,6 +319,13 @@ angular.module('okarito.services', ['angular-storage'])
         status = "&ixStatus=" + bug.ixStatus;
       }
 
+      // Wrap tags in quotes
+      var tags = bug.sTags.split(',');
+      for(var i = 0; i < tags.length; i++) {
+        tags[i] = '"' + tags[i] + '"';
+      }
+      bug.sTags = tags.join(',');
+
       return $http({
         method: 'POST',
         url: '',
@@ -318,6 +338,7 @@ angular.module('okarito.services', ['angular-storage'])
           "&ixFixFor=" + bug.ixFixFor +
           "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo +
           "&sEvent=" + bug.newEvent +
+          "&sTags=" + bug.sTags +
           status,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
