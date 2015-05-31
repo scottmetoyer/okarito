@@ -28,35 +28,20 @@ span.case-number {
 fancy-select .list {
   margin: -1px 0;
 }
-
-/* Items */
-
-
-/* line 13, ../scss/modules/_fancy-select.scss */
-
 .fancy-select-items {
   position: fixed;
   left: 0;
   width: 100%;
   height: 100%;
 }
-
-/* line 19, ../scss/modules/_fancy-select.scss */
-
 .fancy-select-items .item {
   overflow: hidden;
   /* Clearfix */
 }
-
-/* line 24, ../scss/modules/_fancy-select.scss */
-
 .fancy-select-items label p {
   height: 32px;
   line-height: 32px;
 }
-
-/* line 29, ../scss/modules/_fancy-select.scss */
-
 .fancy-select-icon {
   float: left;
   margin-right: 10px;
@@ -303,9 +288,7 @@ span.subdued {
   font-size: 12px !important;
   height: 26px !important;
   line-height: 26px !important;
-  margin-right: 6px !important;
-}
-.tag-item:nth-of-type(1) {
+  margin-right: 4px !important;
   margin-left: 0 !important;
 }
 tags-input .tags .input {
