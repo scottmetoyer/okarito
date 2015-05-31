@@ -225,7 +225,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 })
 
-.controller('CaseCtrl', function($q, $scope, $sce, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService, userService, caseModalService) {
+.controller('CaseCtrl', function($q, $scope, $sce, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService, userService, caseModalService, cameraService) {
   var x2js = new X2JS();
   var backup = {};
   $scope.working = false;
@@ -304,6 +304,14 @@ angular.module('okarito.controllers', ['okarito.services'])
       .then(function() {
         $scope.working = false;
       });
+  };
+
+  $scope.camera = function() {
+    cameraService.getPicture().then(function(imageURI) {
+      console.log(imageURI);
+    }, function(err) {
+      console.log(err);
+    });
   };
 
   $scope.emailCase = function() {};

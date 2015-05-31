@@ -298,3 +298,6 @@ tags-input .tags .input {
 .remove-button {
   color: #666 !important;
 }
+.tabs>.button-full {
+  margin: 4px !important;
+}
