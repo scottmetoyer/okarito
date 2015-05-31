@@ -1,6 +1,6 @@
 angular.module('okarito.controllers', ['okarito.services'])
 
-.controller('AppCtrl', function($scope, $rootScope, $state, $filter, $ionicLoading, $ionicModal, $timeout, loginService, userService, dataService) {
+.controller('AppCtrl', function($scope, $rootScope, $state, $filter, $ionicLoading, $ionicPopup, $ionicModal, $timeout, loginService, userService, dataService) {
   var app = this;
   $scope.s = {
     searchString: ''
@@ -8,13 +8,37 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   $rootScope.$on('unauthorized', function(event, args) {
     $ionicLoading.hide();
+    $scope.ready = true;
+    $scope.working = false;
+
+    var alertPopup = $ionicPopup.alert({
+      title: 'Authentication Error',
+      template: args.message
+    });
+
     $state.go('login');
   });
 
   $rootScope.$on('http-error', function(event, args) {
-    // TODO: Handle fundamental HTTP errors here
-    // $state.go('login');
     $ionicLoading.hide();
+    $scope.ready = true;
+    $scope.working = false;
+
+    var alertPopup = $ionicPopup.alert({
+      title: 'HTTP Error',
+      template: args.message
+    });
+  });
+
+  $rootScope.$on('error', function(event, args) {
+    $ionicLoading.hide();
+    $scope.ready = true;
+    $scope.working = false;
+
+    var alertPopup = $ionicPopup.alert({
+      title: 'FogBugz Error',
+      template: args.message
+    });
   });
 
   $rootScope.$on('authorized', function() {
