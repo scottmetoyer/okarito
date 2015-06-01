@@ -166,7 +166,9 @@ h5.subdued {
   color: #A8A8A8;
 }
 .tall {
-  height: auto !important;
+  height: 150px !important;
+  background: url('../img/menu-background.png');
+  text-align: center;
 }
 .small {
   font-size: .8em !important;
@@ -300,4 +302,10 @@ tags-input .tags .input {
 }
 .tabs>.button-full {
   margin: 4px !important;
+}
+.user-title {
+  color: #fff;
+  padding-top: 100px !important;
+  font-size: 16px;
+  text-shadow: 1px 1px #666;
 }

@@ -568,8 +568,8 @@ angular.module('okarito.services', ['angular-storage'])
   service.response = function(response) {
     if (response.data && response.data.error) {
       console.log(response.data.error);
-
       var code = response.data.error._code;
+
       switch (code) {
         case '0':
           $rootScope.$broadcast('error', {
@@ -583,12 +583,12 @@ angular.module('okarito.services', ['angular-storage'])
           break;
         case '2':
           $rootScope.$broadcast('unauthorized', {
-            message: 'Log On problem – multiple matches for username.'
+            message: 'Log on problem. Multiple matches for username.'
           });
           break;
         case '3':
           $rootScope.$broadcast('unauthorized', {
-            message: 'You are not logged on.'
+            message: ''
           });
           break;
         case '4':

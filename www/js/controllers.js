@@ -11,10 +11,12 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.ready = true;
     $scope.working = false;
 
-    var alertPopup = $ionicPopup.alert({
-      title: 'Authentication Error',
-      template: args.message
-    });
+    if (args.message != '') {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Authentication Error',
+        template: args.message
+      });
+    }
 
     $state.go('login');
   });
