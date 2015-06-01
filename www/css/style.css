@@ -303,9 +303,15 @@ tags-input .tags .input {
 .tabs>.button-full {
   margin: 4px !important;
 }
+img.logo {
+  margin-top: 22px;
+  margin-bottom: 4px;
+}
+.shadow {
+    -webkit-filter: drop-shadow( 0px 2px 3px #808080 );
+            filter: drop-shadow( 0px 2px 3px #808080 );
+}
 .user-title {
-  color: #fff;
-  padding-top: 100px !important;
+  color: #666;
   font-size: 16px;
-  text-shadow: 1px 1px #666;
 }
