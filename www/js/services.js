@@ -429,9 +429,6 @@ angular.module('okarito.services', ['angular-storage'])
           user.access_token = response.data.token.__cdata;
           deferred.resolve(user);
         })
-        .catch(function(error) {
-          deferred.reject('Unable to connect to FogBugz. Please check your entries and try again.');
-        });
 
       promise.success = function(fn) {
         promise.then(fn);
@@ -541,9 +538,7 @@ angular.module('okarito.services', ['angular-storage'])
         if (access_token && api_url) {
           config.url = api_url + config.url + '&token=' + access_token;
         } else {
-          $rootScope.$broadcast('unauthorized', {
-            message: 'Please log in to FogBugz to continue'
-          });
+          $rootScope.$broadcast('not-logged-in');
         }
       }
     }
@@ -555,9 +550,7 @@ angular.module('okarito.services', ['angular-storage'])
           config.url = api_url + config.url;
           config.data = config.data + "&token=" + access_token;
         } else {
-          $rootScope.$broadcast('unauthorized', {
-            message: 'Please log in to FogBugz to continue'
-          });
+          $rootScope.$broadcast('not-logged-in');
         }
       }
     }
@@ -567,159 +560,46 @@ angular.module('okarito.services', ['angular-storage'])
 
   service.response = function(response) {
     if (response.data && response.data.error) {
-      console.log(response.data.error);
       var code = response.data.error._code;
+      console.log (response.data.error);
 
       switch (code) {
-        case '0':
-          $rootScope.$broadcast('error', {
-            message: 'FogBugz not initialized. Database may be down or needs to be upgraded.'
-          });
-          break;
         case '1':
           $rootScope.$broadcast('unauthorized', {
-            message: 'Log on problem. Incorrect username or password.'
+            message: response.data.error.__cdata
           });
           break;
         case '2':
-          $rootScope.$broadcast('unauthorized', {
-            message: 'Log on problem. Multiple matches for username.'
+          var peopleList = response.data.people.person;
+          $rootScope.$broadcast('ambiguous-login', {
+            people: peopleList
           });
           break;
         case '3':
-          $rootScope.$broadcast('unauthorized', {
-            message: ''
-          });
-          break;
-        case '4':
-          $rootScope.$broadcast('error', {
-            message: 'Argument is missing from query.'
-          });
-          break
-        case '5':
-          $rootScope.$broadcast('error', {
-            message: 'Edit problem – the case you are trying to edit could not be found.'
-          });
-          break;
-        case '6':
-          $rootScope.$broadcast('error', {
-            message: 'Edit problem – the action you are trying to perform on this case is not permitted.'
-          });
-          break;
-        case '7':
-          $rootScope.$broadcast('error', {
-            message: 'Time tracking problem – you can’t add a time interval to this case because the case can’t be found, is closed, has no estimate, or you don’t have permission'
-          });
-          break;
-        case '8':
-          $rootScope.$broadcast('error', {
-            message: 'New case problem – you can’t write to any project.'
-          });
-          break;
-        case '9':
-          $rootScope.$broadcast('error', {
-            message: 'Case has changed since last view.'
-          });
-          break;
-        case '10':
-          $rootScope.$broadcast('error', {
-            message: 'Search problem – an error occurred in search.'
-          });
-          break;
-        case '12':
-          $rootScope.$broadcast('error', {
-            message: 'Wiki creation problem.'
-          });
-          break;
-        case '13':
-          $rootScope.$broadcast('error', {
-            message: 'Wiki permission problem.'
-          });
-          break;
-        case '14':
-          $rootScope.$broadcast('error', {
-            message: 'Wiki load error.'
-          });
-          break;
-        case '15':
-          $rootScope.$broadcast('error', {
-            message: 'Wiki template error.'
-          });
-          break;
-        case '16':
-          $rootScope.$broadcast('error', {
-            message: 'Wiki commit error.'
-          });
-          break;
-        case '17':
-          $rootScope.$broadcast('error', {
-            message: 'No such project.'
-          });
-          break;
-        case '18':
-          $rootScope.$broadcast('error', {
-            message: 'No such user.'
-          });
-          break;
-        case '19':
-          $rootScope.$broadcast('error', {
-            message: 'Area creation problem.'
-          });
-          break;
-        case '20':
-          $rootScope.$broadcast('error', {
-            message: 'Milestone creation problem.'
-          });
-          break;
-        case '21':
-          $rootScope.$broadcast('error', {
-            message: 'Project creation problem.'
-          });
-          break;
-        case '22':
-          $rootScope.$broadcast('error', {
-            message: 'User creation problem.'
-          });
-          break;
-        case '23':
-          $rootScope.$broadcast('error', {
-            message: 'Project percent time problem.'
-          });
-          break;
-        case '24':
-          $rootScope.$broadcast('error', {
-            message: 'No such milestone.'
-          });
-          break;
-        case '25':
-          $rootScope.$broadcast('error', {
-            message: 'Violates milestone execution order.'
-          });
-          break;
-        case '27':
-          $rootScope.$broadcast('error', {
-            message: 'No such API command.'
-          });
-          break;
-        case '28':
-          $rootScope.$broadcast('error', {
-            message: 'Account in Maintenance Mode.'
-          });
+          $rootScope.$broadcast('not-logged-in');
           break;
         default:
           $rootScope.$broadcast('error', {
-            message: 'Unspecified error.'
+            message: response.data.error.__cdata
           });
           break;
       };
+
+      return $q.reject(response);
     }
     return response;
   };
 
   service.responseError = function(rejection) {
-    $rootScope.$broadcast('http-error', {
-      message: 'Check your network connection and try again'
-    });
+    console.log(rejection);
+
+    // TODO: Check for valid error codes (401, 402, etc.) and respond accordingly
+    /*
+    if (rejection.status != 0) {
+      $rootScope.$broadcast('request-error', {
+        message: 'Error connecting to the requested resource. Please check your entries and try again.'
+      });
+    }*/
     return $q.reject(rejection);
   };
 });

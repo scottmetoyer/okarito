@@ -6,28 +6,61 @@ angular.module('okarito.controllers', ['okarito.services'])
     searchString: ''
   };
 
+  $rootScope.$on('ambiguous-login', function(event, args) {
+    /*
+    $scope.items = [
+      { id: 1, text: 'Test One'},
+      { id:2, text: 'Test Two'}];
+
+    $ionicModal.fromTemplateUrl(
+      'templates/fancy-select-items.html', {
+        'scope': scope
+      }
+    ).then(function(modal) {
+      scope.modal = modal;
+      scope.modal.show();
+    });
+
+    scope.hideItems = function() {
+      scope.modal.hide();
+    }
+
+    scope.$on('$destroy', function() {
+      scope.modal.remove();
+    });
+
+    scope.validateSingle = function(item) {
+      alert('Item selected');
+    };*/
+  });
+
+  $rootScope.$on('not-logged-in', function(event) {
+    $ionicLoading.hide();
+    $scope.ready = true;
+    $scope.working = false;
+    $state.go('login');
+  });
+
   $rootScope.$on('unauthorized', function(event, args) {
     $ionicLoading.hide();
     $scope.ready = true;
     $scope.working = false;
 
-    if (args.message != '') {
-      var alertPopup = $ionicPopup.alert({
-        title: 'Authentication Error',
-        template: args.message
-      });
-    }
+    var alertPopup = $ionicPopup.alert({
+      title: 'Authentication error',
+      template: args.message
+    });
 
     $state.go('login');
   });
 
-  $rootScope.$on('http-error', function(event, args) {
+  $rootScope.$on('request-error', function(event, args) {
     $ionicLoading.hide();
     $scope.ready = true;
     $scope.working = false;
 
     var alertPopup = $ionicPopup.alert({
-      title: 'HTTP Error',
+      title: 'Request error',
       template: args.message
     });
   });
@@ -118,12 +151,6 @@ angular.module('okarito.controllers', ['okarito.services'])
 
         $rootScope.$broadcast('authorized');
         $state.go('app.cases');
-      })
-      .error(function(data) {
-        var alertPopup = $ionicPopup.alert({
-          title: 'Unable to connect to FogBugz',
-          template: 'Please check your entries and try again'
-        });
       });
   }
 })
