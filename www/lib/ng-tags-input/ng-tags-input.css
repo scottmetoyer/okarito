@@ -17,22 +17,22 @@ tags-input .host:active {
 }
 
 tags-input .tags {
-  -moz-appearance: textfield;
-  -webkit-appearance: textfield;
+  /*-moz-appearance: textfield;
+  -webkit-appearance: textfield;*/
   padding: 1px;
   overflow: hidden;
   word-wrap: break-word;
   cursor: text;
   background-color: white;
-  border: 1px solid darkgray;
-  box-shadow: 1px 1px 1px 0 lightgray inset;
+  /*border: 1px solid darkgray;
+  box-shadow: 1px 1px 1px 0 lightgray inset;*/
   height: 100%;
 }
 tags-input .tags.focused {
-  outline: none;
+  /*outline: none;
   -webkit-box-shadow: 0 0 3px 1px rgba(5, 139, 242, 0.6);
   -moz-box-shadow: 0 0 3px 1px rgba(5, 139, 242, 0.6);
-  box-shadow: 0 0 3px 1px rgba(5, 139, 242, 0.6);
+  box-shadow: 0 0 3px 1px rgba(5, 139, 242, 0.6);*/
 }
 tags-input .tags .tag-list {
   margin: 0;
@@ -46,15 +46,15 @@ tags-input .tags .tag-item {
   float: left;
   font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
   height: 26px;
-  line-height: 25px;
+  line-height: 25px;/*
   border: 1px solid #acacac;
   border-radius: 3px;
   background: -webkit-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
-  background: linear-gradient(to bottom, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
+  background: linear-gradient(to bottom, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);*/
 }
 tags-input .tags .tag-item.selected {
-  background: -webkit-linear-gradient(top, #febbbb 0%, #fe9090 45%, #ff5c5c 100%);
-  background: linear-gradient(to bottom, #febbbb 0%, #fe9090 45%, #ff5c5c 100%);
+  /*background: -webkit-linear-gradient(top, #febbbb 0%, #fe9090 45%, #ff5c5c 100%);
+  background: linear-gradient(to bottom, #febbbb 0%, #fe9090 45%, #ff5c5c 100%);*/
 }
 tags-input .tags .tag-item .remove-button {
   margin: 0 0 0 5px;
@@ -86,9 +86,10 @@ tags-input .tags .input::-ms-clear {
   display: none;
 }
 tags-input.ng-invalid .tags {
+  /*
   -webkit-box-shadow: 0 0 3px 1px rgba(255, 0, 0, 0.6);
   -moz-box-shadow: 0 0 3px 1px rgba(255, 0, 0, 0.6);
-  box-shadow: 0 0 3px 1px rgba(255, 0, 0, 0.6);
+  box-shadow: 0 0 3px 1px rgba(255, 0, 0, 0.6);*/
 }
 tags-input[disabled] .host:focus {
   outline: none;
@@ -99,8 +100,8 @@ tags-input[disabled] .tags {
 }
 tags-input[disabled] .tags .tag-item {
   opacity: 0.65;
-  background: -webkit-linear-gradient(top, #f0f9ff 0%, rgba(203, 235, 255, 0.75) 47%, rgba(161, 219, 255, 0.62) 100%);
-  background: linear-gradient(to bottom, #f0f9ff 0%, rgba(203, 235, 255, 0.75) 47%, rgba(161, 219, 255, 0.62) 100%);
+  /*background: -webkit-linear-gradient(top, #f0f9ff 0%, rgba(203, 235, 255, 0.75) 47%, rgba(161, 219, 255, 0.62) 100%);
+  background: linear-gradient(to bottom, #f0f9ff 0%, rgba(203, 235, 255, 0.75) 47%, rgba(161, 219, 255, 0.62) 100%);*/
 }
 tags-input[disabled] .tags .tag-item .remove-button {
   cursor: default;
@@ -120,10 +121,11 @@ tags-input .autocomplete {
   z-index: 999;
   width: 100%;
   background-color: white;
+  /*
   border: 1px solid rgba(0, 0, 0, 0.2);
   -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);*/
 }
 tags-input .autocomplete .suggestion-list {
   margin: 0;

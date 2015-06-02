@@ -85,7 +85,9 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.sharedFilters = $filter('filter')(response, {
           _type: 'shared'
         }, true);
-      })
+      });
+
+      $scope.currentUser = userService.getCurrentUser();
   };
 })
 
