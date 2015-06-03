@@ -7,18 +7,25 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $rootScope.$on('ambiguous-login', function(event, args) {
-    /*
-    $scope.items = [
-      { id: 1, text: 'Test One'},
-      { id:2, text: 'Test Two'}];
+    var people = args.people;
+    var scope = $rootScope.$new(true);
+    scope.items = [];
+    scope.headerText = "Choose person";
+
+    for (var i = 0; i < people.length; i++) {
+      scope.items.push({
+        id: people[i].__cdata,
+        text: people[i].__cdata
+      });
+    }
 
     $ionicModal.fromTemplateUrl(
-      'templates/fancy-select-items.html', {
+      'templates/ambiguous-login.html', {
         'scope': scope
-      }
-    ).then(function(modal) {
-      scope.modal = modal;
-      scope.modal.show();
+      })
+      .then(function(modal) {
+        scope.modal = modal;
+        scope.modal.show();
     });
 
     scope.hideItems = function() {
@@ -30,21 +37,17 @@ angular.module('okarito.controllers', ['okarito.services'])
     });
 
     scope.validateSingle = function(item) {
-      alert('Item selected');
-    };*/
+      scope.modal.hide();
+    };
   });
 
   $rootScope.$on('not-logged-in', function(event) {
     $ionicLoading.hide();
-    $scope.ready = true;
-    $scope.working = false;
     $state.go('login');
   });
 
   $rootScope.$on('unauthorized', function(event, args) {
     $ionicLoading.hide();
-    $scope.ready = true;
-    $scope.working = false;
 
     var alertPopup = $ionicPopup.alert({
       title: 'Authentication error',
@@ -56,8 +59,6 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   $rootScope.$on('request-error', function(event, args) {
     $ionicLoading.hide();
-    $scope.ready = true;
-    $scope.working = false;
 
     var alertPopup = $ionicPopup.alert({
       title: 'Request error',
@@ -67,8 +68,6 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   $rootScope.$on('error', function(event, args) {
     $ionicLoading.hide();
-    $scope.ready = true;
-    $scope.working = false;
 
     var alertPopup = $ionicPopup.alert({
       title: 'FogBugz Error',

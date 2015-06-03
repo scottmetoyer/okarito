@@ -561,7 +561,7 @@ angular.module('okarito.services', ['angular-storage'])
   service.response = function(response) {
     if (response.data && response.data.error) {
       var code = response.data.error._code;
-      console.log (response.data.error);
+      console.log(response.data);
 
       switch (code) {
         case '1':
@@ -570,7 +570,7 @@ angular.module('okarito.services', ['angular-storage'])
           });
           break;
         case '2':
-          var peopleList = response.data.people.person;
+          var peopleList = normalizeArray(response.data.people.person);
           $rootScope.$broadcast('ambiguous-login', {
             people: peopleList
           });
@@ -592,14 +592,6 @@ angular.module('okarito.services', ['angular-storage'])
 
   service.responseError = function(rejection) {
     console.log(rejection);
-
-    // TODO: Check for valid error codes (401, 402, etc.) and respond accordingly
-    /*
-    if (rejection.status != 0) {
-      $rootScope.$broadcast('request-error', {
-        message: 'Error connecting to the requested resource. Please check your entries and try again.'
-      });
-    }*/
     return $q.reject(rejection);
   };
 });

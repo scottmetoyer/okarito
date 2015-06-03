@@ -1,10 +1,13 @@
 <ion-view class="fancy-select-items modal">
   <ion-header-bar class="bar-positive tropic">
     <button ng-click="hideItems()" class="button button-positive button-icon ion-chevron-left"></button>
-    <h1 class="title">{{ headerText }}</h1>
+    <h1 class="title">Choose person</h1>
   </ion-header-bar>
   <ion-content>
     <div class="list">
+      <div class="padding">
+        <p>There were multiple matches for that email address. Please choose the specific user you would like to log in as.</p>
+      </div>
       <label ng-repeat="item in items" class="item item-text-wrap" ng-click='validateSingle(item)'>
         <div class="fancy-select-icon" ng-if="item.icon != null">
           <i class="icon-{{item.text}}" style="background-image: url({{item.icon}})"></i>
