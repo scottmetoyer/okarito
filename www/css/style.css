@@ -180,6 +180,12 @@ h5.subdued {
 .icon.tropic {
   color: #00A8C6 !important;
 }
+.login-button {
+  background-color: #00A8C6 !important;
+  border: 0 !important;
+  border-bottom: solid 1px #006172 !important;
+  color: #fff;
+}
 .teal {
   background-color: #40C0CB !important;
 }
@@ -314,4 +320,23 @@ img.logo {
 .user-title {
   color: #666;
   font-size: 16px;
+}
+#form{
+  margin-top: 20px;
+}
+.login-form {
+  background-color: #F9F2E7;
+  border-bottom: solid 4px #00A8C6;
+
+  background: -webkit-linear-gradient(#F9F2E7, #DBD5CB); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#F9F2E7, #DBD5CB); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#F9F2E7, #DBD5CB); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#F9F2E7, #DBD5CB); /* Standard syntax */
+}
+.center {
+  text-align: center;
+}
+#form h1 {
+  margin-top: 0;
+  padding-top: 0;
 }
