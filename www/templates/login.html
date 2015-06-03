@@ -1,12 +1,11 @@
 <ion-view view-title="Login" name="login-view">
-  <ion-content class="padding login-form" has-bouncing="false">
+  <ion-content class="login-form" has-bouncing="false">
     <div id="form">
-        <div class="center">
-        <img src="img/logo.svg" class="logo shadow" height="100"/>
-        <h1>OKARITO</h1>
-        <p>Please log in to your FogBugz account to continue.</p>
-        <p>No account? <a href="">Get one here.</a></p>
-        <br/>
+      <div class="center">
+          <img src="img/logo.svg" class="logo shadow" height="100"/>
+          <h1>Okarito7</h1>
+          <p>Please log in to your FogBugz account to continue.</p>
+          <p>No account? <a href="">Get one here.</a></p>
       </div>
       <div class="list">
           <label class="item item-input">
@@ -21,8 +20,8 @@
                 <i class="icon ion-help"></i>
               </button>
           </label>
+          <button class="button button-block button-outline button-white" ng-click="login()">Login</button>
       </div>
-      <button class="button button-block" ng-click="login()">Login</button>
     </div>
   </ion-content>
 </ion-view>
