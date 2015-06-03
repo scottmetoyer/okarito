@@ -259,11 +259,20 @@ angular.module('okarito.services', ['angular-storage'])
       return $http.get('cmd=search&q=' + caseId + '&cols=sTitle,ixBug,fOpen,sFormat,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
         transformResponse: transform
       }).then(function(response) {
-        // TODO: Fetch the category icon for this case
-                
         var bug = normalizeArray(response.data.cases.case)[0];
         bug.newEvent = '';
         bug.tags = normalizeArray(bug.tags.tag);
+
+        // Fetch the category icon for this case
+        $http.get('cmd=listCategories', {
+          transformResponse: transform
+        }).then(function(response) {
+          var categories = normalizeArray(response.data.categories.category);
+          var category = $filter('filter')(categories, {
+            id: bug.ixStatus
+          }, true)[0];
+          bug.icon = getCategoryIcon(category.nIconType);
+        });
 
         // Copy refreshed case back in to the case list
         for (var i = 0; i < cases.length; i++) {
