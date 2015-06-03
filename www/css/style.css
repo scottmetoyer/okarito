@@ -177,6 +177,9 @@ h5.subdued {
 .bar-positive.tropic {
   background-color: #00A8C6 !important;
 }
+.bar-positive.green {
+  background-color: #759900 !important;
+}
 .icon.tropic {
   color: #00A8C6 !important;
 }
@@ -321,26 +324,24 @@ img.logo {
   color: #666;
   font-size: 16px;
 }
-
 #form .center {
   text-align: center;
   background-color: #F9F2E7;
   padding: 20px;
 }
-
 @font-face {
         font-family: 'krinkes';
         src: url('../fonts/KrinkesDecor.ttf');
         font-weight: normal;
         font-style: normal;
     }
-
 #form h1 {
   margin-top: 0;
   padding-top: 0;
   font-family: Krinkes !important;
   font-size: 44px;
   padding-bottom: 20px;
+  color: 303030 !important;
 }
 .button-white {
   border: solid 1px #fff !important;
@@ -354,7 +355,6 @@ img.logo {
 .login-form {
   background-color: #759900;
 }
-
 #form .item {
   border-left: 0;
   border-right: 0;

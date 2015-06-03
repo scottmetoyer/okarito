@@ -16,7 +16,14 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     var alertPopup = $ionicPopup.alert({
       title: 'Authentication error',
-      template: args.message
+      template: args.message,
+      buttons: [{
+        text: 'OK',
+        type: 'button-stable',
+        onTap: function(e) {
+          return;
+        }
+      }]
     });
 
     $state.go('login');
@@ -27,16 +34,14 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     var alertPopup = $ionicPopup.alert({
       title: 'Request error',
-      template: args.message
-    });
-  });
-
-  $rootScope.$on('error', function(event, args) {
-    $ionicLoading.hide();
-
-    var alertPopup = $ionicPopup.alert({
-      title: 'FogBugz Error',
-      template: args.message
+      template: args.message,
+      buttons: [{
+        text: 'OK',
+        type: 'button-stable',
+        onTap: function(e) {
+          return;
+        }
+      }]
     });
   });
 
@@ -252,18 +257,41 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.max = 25;
     $ionicScrollDelegate.scrollTop();
     $scope.filter = args.search;
-    loadCases();
+    loadCases().then(function(){
+      // If there is only one case in the cases list, just open it
+      if ($scope.cases.length == 1) {
+        $state.go('app.single', {
+          caseId: $scope.cases[0].ixBug
+        });
+      }
+    });
     $ionicSideMenuDelegate.toggleLeft(false);
+  });
+
+  $scope.$on('error', function(event, args) {
+    $ionicLoading.hide();
+    $scope.ready = true;
+
+    var alertPopup = $ionicPopup.alert({
+      title: 'FogBugz Error',
+      template: args.message,
+      buttons: [{
+        text: 'OK',
+        type: 'button-stable',
+        onTap: function(e) {
+          return;
+        }
+      }]
+    });
   });
 
   var loadCases = function() {
     // Load the related entity lists
-    $q.all([
+    return $q.all([
         dataService.getProjects(false),
         dataService.getPriorities(false),
         dataService.getPeople(false),
         dataService.getCategories(false),
-        dataService.getCases($scope.filter, false, $scope.max),
         dataService.getStatuses(null, false, false)
       ])
       .then(function(responses) {
@@ -271,22 +299,28 @@ angular.module('okarito.controllers', ['okarito.services'])
         $rootScope.priorities = responses[1];
         $rootScope.people = responses[2];
         $rootScope.categories = responses[3];
-        $scope.cases = responses[4].cases;
-        $rootScope.allStatuses = responses[5];
-        $scope.filterDescription = responses[4].description;
-        $scope.count = responses[4].count;
+        $rootScope.allStatuses = responses[4];
+
+        return dataService.getCases($scope.filter, false, $scope.max);
+      })
+      .then(function(response) {
+        $scope.cases = response.cases;
+        $scope.filterDescription = response.description;
+        $scope.count = response.count;
+
+        // Lookup icons for the cases - this is an area that can be optimized I think
+        for (var i = 0; i < $scope.cases.length; i++) {
+          var category = $filter('filter')($rootScope.categories, {
+            text: $scope.cases[i].sCategory.__cdata
+          }, true)[0];
+
+          $scope.cases[i].icon = category.icon;
+        }
 
         // Hide loaders
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
         $scope.ready = true;
-
-        // If there is only one case in the cases list, just open it
-        if ($scope.cases.length == 1) {
-          $state.go('app.single', {
-            caseId: $scope.cases[0].ixBug
-          });
-        }
       });
   }
 
@@ -295,13 +329,34 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 })
 
-.controller('CaseCtrl', function($q, $scope, $sce, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $filter, $ionicLoading, dataService, utilityService, userService, caseModalService, cameraService) {
+.controller('CaseCtrl', function($q, $scope, $sce, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $ionicPopup, $filter, $ionicLoading, dataService, userService, caseModalService, cameraService) {
   var x2js = new X2JS();
   var backup = {};
   $scope.working = false;
   $scope.caseResolved = false;
 
-  // Action popover
+  $scope.$on('error', function(event, args) {
+    $ionicLoading.hide();
+    $scope.working = false;
+    $scope.ready = true;
+
+    var alertPopup = $ionicPopup.alert({
+      title: 'FogBugz Error',
+      template: args.message,
+      buttons: [{
+        text: 'OK',
+        type: 'button-stable',
+        onTap: function(e) {
+          return;
+        }
+      }]
+    });
+
+    if (backup != {}) {
+      angular.copy(backup, $scope.case);
+    }
+  });
+
   $ionicPopover.fromTemplateUrl('templates/more-actions.html', {
     scope: $scope,
   }).then(function(popover) {
@@ -500,16 +555,6 @@ angular.module('okarito.controllers', ['okarito.services'])
       }, true)[0];
 
       $scope.caseResolved = status.resolved;
-    });
-
-    $scope.$watch('case.sCategory', function(newValue, oldValue) {
-      var category = $filter('filter')($rootScope.categories, {
-        text: $scope.case.sCategory.__cdata
-      }, true)[0];
-
-      var icon = utilityService.categoryIcon(category.icon);
-      $scope.iconImage = 'img/' + icon + '.png';
-      $scope.icon = 'ion-' + icon;
     });
 
     $scope.ready = true;

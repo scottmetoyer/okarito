@@ -15,6 +15,54 @@ function normalizeArray(data) {
   }
 }
 
+function getCategoryIcon(categoryId) {
+  var icon = '';
+
+  switch (categoryId) {
+    case '1':
+      icon = 'bug'
+      break;
+
+    case '2':
+      icon = 'lightbulb'
+      break;
+
+    case '3':
+      icon = 'email'
+      break;
+
+    case '4':
+      icon = 'clock'
+      break;
+
+    case '5':
+      icon = 'alert'
+      break;
+
+    case '6':
+      icon = 'wrench'
+      break;
+
+    case '7':
+      icon = 'search'
+      break;
+
+    case '8':
+      icon = 'key'
+      break;
+
+    case '9':
+      icon = 'alert-circled'
+      break;
+
+    default:
+      icon = 'document-text'
+      break;
+  }
+
+  return icon;
+}
+
 angular.module('okarito.services', ['angular-storage'])
 
 .factory('userService', function(store) {
@@ -155,11 +203,15 @@ angular.module('okarito.services', ['angular-storage'])
         var list = [];
 
         for (var i = 0; i < categories.length; i++) {
+          var icon = getCategoryIcon(categories[i].nIconType);
+          iconImage = 'ion-' + icon;
+
           list.push({
             id: categories[i].ixCategory,
             text: categories[i].sCategory.__cdata,
             checked: false,
-            icon: categories[i].nIconType
+            iconType: categories[i].nIconType,
+            icon: iconImage
           });
         };
         return list;
@@ -207,6 +259,8 @@ angular.module('okarito.services', ['angular-storage'])
       return $http.get('cmd=search&q=' + caseId + '&cols=sTitle,ixBug,fOpen,sFormat,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
         transformResponse: transform
       }).then(function(response) {
+        // TODO: Fetch the category icon for this case
+                
         var bug = normalizeArray(response.data.cases.case)[0];
         bug.newEvent = '';
         bug.tags = normalizeArray(bug.tags.tag);
@@ -314,6 +368,8 @@ angular.module('okarito.services', ['angular-storage'])
       if (tags == '') {
         tags = ",";
       }
+
+      cmd = "hurka";
 
       return $http({
         method: 'POST',
@@ -441,58 +497,6 @@ angular.module('okarito.services', ['angular-storage'])
       }
 
       return promise;
-    }
-  }
-})
-
-.factory("utilityService", function() {
-  return {
-    categoryIcon: function(categoryId) {
-      var icon = '';
-
-      switch (categoryId) {
-        case '1':
-          icon = 'bug'
-          break;
-
-        case '2':
-          icon = 'lightbulb'
-          break;
-
-        case '3':
-          icon = 'email'
-          break;
-
-        case '4':
-          icon = 'clock'
-          break;
-
-        case '5':
-          icon = 'alert'
-          break;
-
-        case '6':
-          icon = 'wrench'
-          break;
-
-        case '7':
-          icon = 'search'
-          break;
-
-        case '8':
-          icon = 'key'
-          break;
-
-        case '9':
-          icon = 'alert-circled'
-          break;
-
-        default:
-          icon = 'document-text'
-          break;
-      }
-
-      return icon;
     }
   }
 })
