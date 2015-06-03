@@ -393,7 +393,7 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     dataService.assignCase($scope.case)
       .then(function(result) {
-        dataService.refreshEvents($scope.case)
+        dataService.refreshCase($scope.case.ixBug)
           .then(function() {
             $scope.working = false;
           });

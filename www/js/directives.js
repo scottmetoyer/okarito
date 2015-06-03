@@ -16,10 +16,10 @@ angular.module('okarito.directives', ['ionic'])
         }
       },
       scope: {
-        'items': '=',
+        'items': '=?',
         'label': '@label',
-        'text': '=',
-        'value': '=',
+        'text': '=?',
+        'value': '=?',
         'callback': '&'
       },
 
