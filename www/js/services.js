@@ -555,13 +555,12 @@ angular.module('okarito.services', ['angular-storage'])
       }
     }
 
-    return config;
+    return config || $q.when(config);
   };
 
   service.response = function(response) {
     if (response.data && response.data.error) {
       var code = response.data.error._code;
-      console.log(response.data);
 
       switch (code) {
         case '1':

@@ -6,41 +6,6 @@ angular.module('okarito.controllers', ['okarito.services'])
     searchString: ''
   };
 
-  $rootScope.$on('ambiguous-login', function(event, args) {
-    var people = args.people;
-    var scope = $rootScope.$new(true);
-    scope.items = [];
-    scope.headerText = "Choose person";
-
-    for (var i = 0; i < people.length; i++) {
-      scope.items.push({
-        id: people[i].__cdata,
-        text: people[i].__cdata
-      });
-    }
-
-    $ionicModal.fromTemplateUrl(
-      'templates/ambiguous-login.html', {
-        'scope': scope
-      })
-      .then(function(modal) {
-        scope.modal = modal;
-        scope.modal.show();
-    });
-
-    scope.hideItems = function() {
-      scope.modal.hide();
-    }
-
-    scope.$on('$destroy', function() {
-      scope.modal.remove();
-    });
-
-    scope.validateSingle = function(item) {
-      scope.modal.hide();
-    };
-  });
-
   $rootScope.$on('not-logged-in', function(event) {
     $ionicLoading.hide();
     $state.go('login');
@@ -123,33 +88,84 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 })
 
-.controller('LoginCtrl', function($scope, $rootScope, $state, $filter, $ionicPopup, loginService, userService, dataService) {
+.controller('LoginCtrl', function($scope, $rootScope, $state, $filter, $ionicPopup, $ionicModal, loginService, userService, dataService) {
   $scope.data = {
     email: 'scott.metoyer@gmail.com',
     url: 'https://scottmetoyer.fogbugz.com',
     password: ''
   };
 
+  $scope.$on('ambiguous-login', function(event, args) {
+    var people = args.people;
+    $scope.items = [];
+    $scope.headerText = "Choose person";
+
+    for (var i = 0; i < people.length; i++) {
+      $scope.items.push({
+        id: people[i].__cdata,
+        text: people[i].__cdata
+      });
+    }
+
+    $ionicModal.fromTemplateUrl(
+      'templates/ambiguous-login.html', {
+        'scope': $scope
+      })
+      .then(function(modal) {
+        $scope.modal = modal;
+        $scope.modal.show();
+    });
+
+    $scope.hideItems = function() {
+      $scope.modal.hide();
+    }
+
+    $scope.$on('$destroy', function() {
+      $scope.modal.remove();
+    });
+
+    $scope.validateSingle = function(item) {
+      // Resend the login request, passing in the appropriate name
+      loginUser(item.text, $scope.data.password, $scope.data.url, true);
+      $scope.modal.hide();
+    };
+  });
+
   $scope.login = function() {
+    loginUser($scope.data.email, $scope.data.password, $scope.data.url, false);
+  };
+
+  function loginUser(id, password, url, multipleEmails) {
     loginService
-      .loginUser($scope.data.email, $scope.data.password, $scope.data.url)
+      .loginUser(id, password, url)
       .success(function(data) {
         userService.setCurrentUser(data);
 
         // Fetch the users details
         dataService.getPeople(true)
           .then(function(response) {
-            var user = $filter('filter')(response, {
-              email: $scope.data.email
-            }, true)[0];
+            // Filter on email or username
+            var user = {};
+
+            if (multipleEmails == false) {
+              user = $filter('filter')(response, {
+                email: $scope.data.email
+              }, true)[0];
+            } else {
+              user = $filter('filter')(response, {
+                text: id
+              }, true)[0];
+            }
 
             data.full_name = user.text;
             data.user_id = user.id;
             userService.setCurrentUser(data);
           });
 
-        $rootScope.$broadcast('authorized');
-        $state.go('app.cases');
+          // TODO: Clear out scope data on successful login
+          // $scope.data = {};
+          $rootScope.$broadcast('authorized');
+          $state.go('app.cases');
       });
   }
 })
@@ -158,7 +174,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.filter = '';
   $scope.filterDescription = '';
   $scope.ready = false;
-  $scope.max = 50;
+  $scope.max = 25;
 
   $scope.newModal = function() {
     caseModalService
@@ -214,7 +230,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
     });
 
-    $scope.max = 50;
+    $scope.max = 25;
     dataService
       .setFilter(args.filter)
       .then(function(response) {
@@ -233,7 +249,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
     });
 
-    $scope.max = 50;
+    $scope.max = 25;
     $ionicScrollDelegate.scrollTop();
     $scope.filter = args.search;
     loadCases();
