@@ -20,10 +20,13 @@
         <label class="item item-input">
           <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a case note..."></textarea>
         </label>
-        <label class="item tabs tabs-secondary tabs-icon-right">
-          <a class="tab-item" href="#">
+        <label class="item tabs tabs-secondary tabs-icon-left">
+          <button class="tab-item button button-clear" ng-click="gallery()">
+            <i class="icon ion-images tropic"></i>
+          </button>
+          <button class="tab-item button button-clear" ng-click="camera()">
             <i class="icon ion-camera tropic"></i>
-          </a>
+          </button>
         </label>
         <fancy-select header-text="Choose a Project" label="Project" allow-empty="true" value="case.ixProject" text="case.sProject.__cdata" items="projects" callback="projectUpdated(val)"></fancy-select>
         <fancy-select header-text="Choose an Area" label="Area" allow-empty="true" value="case.ixArea" text="case.sArea.__cdata" items="areas"></fancy-select>

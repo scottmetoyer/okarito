@@ -20,8 +20,11 @@
         <label class="item item-input">
           <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a case note..."></textarea>
         </label>
-        <label class="item tabs">
-          <button class="button button-full button-clear" ng-click="camera()">
+        <label class="item tabs tabs-secondary tabs-icon-left">
+          <button class="tab-item button button-clear" ng-click="gallery()">
+            <i class="icon ion-images tropic"></i>
+          </button>
+          <button class="tab-item button button-clear" ng-click="camera()">
             <i class="icon ion-camera tropic"></i>
           </button>
         </label>

@@ -5,7 +5,7 @@
     </div>
     <h1 class="title">&nbsp;</h1>
     <div class="buttons">
-      <button type="button" class="button button-clear" ng-click="save('close')">Close Case</button>
+      <button type="button" class="button button-clear" ng-click="save('close')">Email Case</button>
     </div>
   </ion-header-bar>
   <ion-content scroll="true">
@@ -22,7 +22,7 @@
           <h4 class="subdued">{{ date }}</h4>
         </label>
         <label class="item item-input">
-          <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a close note..."></textarea>
+          <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add an email message (required)..."></textarea>
         </label>
         <label class="item tabs tabs-secondary tabs-icon-left">
           <button class="tab-item button button-clear" ng-click="gallery()">

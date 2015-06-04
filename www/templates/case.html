@@ -11,15 +11,21 @@
     </button>
   </ion-nav-buttons>
   <ion-content>
-    <div class="item item-divider item-icon-right">
+    <div class="item item-divider">
       <span ng-show="ready">
-        <strong>{{case.ixBug}}</strong>
+        <strong>{{case.ixBug}}&nbsp;</strong>
+        <i class="icon {{ case.icon }}"></i>&nbsp;
+        <i class="icon ion-record priority{{case.ixPriority}}"></i>&nbsp;
+        <i ng-show="caseResolved == 'false' && case.fOpen == 'true'" class="ion-ios-circle-outline"></i>
+        <i ng-show="caseResolved == 'true' && case.fOpen == 'true'" class="ion-ios-checkmark-outline"></i>
+        <i ng-hide="case.fOpen == 'true'" class="ion-ios-circle-filled"></i>
+
         <img class="loader" ng-show="working" src="img/ajax-loader.gif" />
       </span>
     </div>
     <div class="item item-text-wrap" ng-show="ready">
       <h2>{{ case.sTitle.__cdata }}</h2>
-      <p><a href="#">{{ case.sProject.__cdata }}</a>: <a href="#">{{ case.sArea.__cdata }}</a> (Milestone: <a href="#">{{ case.sFixFor.__cdata }}</a>)</p>
+      <p><a href="#" ng-click="quickSearch('project:&quot;' + case.sProject.__cdata + '&quot;')">{{ case.sProject.__cdata }}</a>: <a href="#" ng-click="quickSearch('area:&quot;' + case.sArea.__cdata + '&quot;')">{{ case.sArea.__cdata }}</a> (Milestone: <a href="#" ng-click="quickSearch('milestone:&quot;' + case.sFixFor.__cdata + '&quot;')">{{ case.sFixFor.__cdata }}</a>)</p>
     </div>
     <div class="item">
       <div class="row">
@@ -41,7 +47,7 @@
       <div class="row" ng-show="case.tags.length > 0">
         <div class="col col-33 subdued">Tags</div>
         <div class="col text item-text-wrap">
-          <span class="tag" ng-repeat="tag in case.tags">{{ tag.__cdata}}</span>
+          <span class="tag" ng-repeat="tag in case.tags" ng-click="quickSearch('tag:&quot;' + tag.__cdata+ '&quot;')">{{ tag.__cdata }}</span>
         </div>
       </div>
     </div>

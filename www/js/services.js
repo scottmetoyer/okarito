@@ -282,6 +282,7 @@ angular.module('okarito.services', ['angular-storage'])
         transformResponse: transform,
         cache: cacheResponse
       }).then(function(response) {
+        console.log(response);
         var description = response.data.description != undefined ? response.data.description.__cdata : 'Search: ' + filter;
         cases = normalizeArray(response.data.cases.case).splice(0, max);
         count = response.data.cases._count;

@@ -244,6 +244,11 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   $scope.showAll = function() {
     $scope.max = 99999;
+
+    $ionicLoading.show({
+      template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
+    });
+
     loadCases();
   };
 
@@ -339,7 +344,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   }
 })
 
-.controller('CaseCtrl', function($q, $scope, $sce, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $ionicPopup, $filter, $ionicLoading, dataService, userService, caseModalService, cameraService) {
+.controller('CaseCtrl', function($q, $scope, $state, $sce, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $ionicPopup, $filter, $ionicLoading, dataService, userService, caseModalService, cameraService) {
   var x2js = new X2JS();
   var backup = {};
   $scope.working = false;
@@ -373,6 +378,12 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.popover = popover;
   });
 
+  $scope.quickSearch = function(searchString) {
+    $state.go('app.cases').then(function(){
+      $rootScope.$broadcast('search-cases', { search: searchString });
+    });
+  };
+
   $scope.editModal = function() {
     caseModalService.init('templates/edit.html', $scope)
       .then(function(modal) {
@@ -403,6 +414,13 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   $scope.closeCaseModal = function() {
     caseModalService.init('templates/close.html', $scope)
+      .then(function(modal) {
+        modal.show();
+      });
+  };
+
+  $scope.emailCaseModal = function() {
+    caseModalService.init('templates/email.html', $scope)
       .then(function(modal) {
         modal.show();
       });
@@ -449,7 +467,14 @@ angular.module('okarito.controllers', ['okarito.services'])
     });
   };
 
-  $scope.emailCase = function() {};
+  $scope.emailCase = function() {
+    $scope.label = 'Email Case ' + $scope.case.ixBug;
+    $scope.touched = 'Emailed by ' + userService.getCurrentUser().full_name;
+
+    angular.copy($scope.case, backup);
+    $scope.closePopover();
+    $scope.emailCaseModal();
+  };
 
   $scope.assignCase = function(val, text) {
     $scope.working = true;

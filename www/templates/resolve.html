@@ -24,10 +24,13 @@
         <label class="item item-input">
           <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a resolution note..."></textarea>
         </label>
-        <label class="item tabs tabs-secondary tabs-icon-right">
-          <a class="tab-item" href="#">
+        <label class="item tabs tabs-secondary tabs-icon-left">
+          <button class="tab-item button button-clear" ng-click="gallery()">
+            <i class="icon ion-images tropic"></i>
+          </button>
+          <button class="tab-item button button-clear" ng-click="camera()">
             <i class="icon ion-camera tropic"></i>
-          </a>
+          </button>
         </label>
         <fancy-select header-text="Choose a Status" label="Status" allow-empty="true" value="case.ixStatus" text="case.sStatus.__cdata" items="statuses"></fancy-select>
         <label class="item item-input">

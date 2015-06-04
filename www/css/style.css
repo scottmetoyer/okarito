@@ -375,3 +375,30 @@ img.logo {
   -ms-flex: 1 0;
   flex: 1 0;
 }
+.item a {
+  color: blue;
+}
+.item a:visited {
+  color: blue;
+}
+i.priority1 {
+  color: #FF6347;
+}
+i.priority2 {
+  color: #FF8C00;
+}
+i.priority3 {
+  color: #66CDAA;
+}
+i.priority4 {
+  color: #48D1CC;
+}
+i.priority5 {
+  color: #00BFFF;
+}
+i.priority6 {
+  color: #4169E1;
+}
+i.priority7 {
+  color: #778899;
+}
