@@ -81,9 +81,10 @@ angular.module('okarito.services', ['angular-storage'])
   }
 })
 
-.factory('dataService', function($http, userService) {;
+.factory('dataService', function($http, $filter, userService) {;
   var data = this;
   var cases = [];
+  var categories = [];
 
   return {
     getFilters: function() {
@@ -199,22 +200,22 @@ angular.module('okarito.services', ['angular-storage'])
         transformResponse: transform,
         cache: cacheResponse
       }).then(function(response) {
-        var categories = normalizeArray(response.data.categories.category);
-        var list = [];
+        var categoryList = normalizeArray(response.data.categories.category);
+        categories = [];
 
-        for (var i = 0; i < categories.length; i++) {
-          var icon = getCategoryIcon(categories[i].nIconType);
-          iconImage = 'ion-' + icon;
+        for (var i = 0; i < categoryList.length; i++) {
+          var icon = getCategoryIcon(categoryList[i].nIconType);
+          var iconImage = 'ion-' + icon;
 
-          list.push({
-            id: categories[i].ixCategory,
-            text: categories[i].sCategory.__cdata,
+          categories.push({
+            id: categoryList[i].ixCategory,
+            text: categoryList[i].sCategory.__cdata,
             checked: false,
-            iconType: categories[i].nIconType,
+            iconType: categoryList[i].nIconType,
             icon: iconImage
           });
         };
-        return list;
+        return categories;
       });
     },
     getAreas: function(projectId, cacheResponse) {
@@ -263,16 +264,10 @@ angular.module('okarito.services', ['angular-storage'])
         bug.newEvent = '';
         bug.tags = normalizeArray(bug.tags.tag);
 
-        // Fetch the category icon for this case
-        $http.get('cmd=listCategories', {
-          transformResponse: transform
-        }).then(function(response) {
-          var categories = normalizeArray(response.data.categories.category);
-          var category = $filter('filter')(categories, {
-            id: bug.ixStatus
-          }, true)[0];
-          bug.icon = getCategoryIcon(category.nIconType);
-        });
+        var category = $filter('filter')(categories, {
+          id: bug.ixCategory
+        }, true)[0];
+        bug.icon = category.icon;
 
         // Copy refreshed case back in to the case list
         for (var i = 0; i < cases.length; i++) {
@@ -290,6 +285,14 @@ angular.module('okarito.services', ['angular-storage'])
         var description = response.data.description != undefined ? response.data.description.__cdata : 'Search: ' + filter;
         cases = normalizeArray(response.data.cases.case).splice(0, max);
         count = response.data.cases._count;
+
+        // Loop through the cases and set the case icon
+        for (var i = 0; i < cases.length; i++) {
+          var category = $filter('filter')(categories, {
+            id: cases[i].ixCategory
+          }, true)[0];
+          cases[i].icon = category.icon;
+        }
 
         return {
           cases: cases,
@@ -377,8 +380,6 @@ angular.module('okarito.services', ['angular-storage'])
       if (tags == '') {
         tags = ",";
       }
-
-      cmd = "hurka";
 
       return $http({
         method: 'POST',

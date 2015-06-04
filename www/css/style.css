@@ -317,8 +317,8 @@ img.logo {
   margin-bottom: 4px;
 }
 .shadow {
-    -webkit-filter: drop-shadow( 0px 2px 3px #808080 );
-            filter: drop-shadow( 0px 2px 3px #808080 );
+  -webkit-filter: drop-shadow( 0px 2px 3px #808080);
+  filter: drop-shadow( 0px 2px 3px #808080);
 }
 .user-title {
   color: #666;
@@ -330,11 +330,11 @@ img.logo {
   padding: 20px;
 }
 @font-face {
-        font-family: 'krinkes';
-        src: url('../fonts/KrinkesDecor.ttf');
-        font-weight: normal;
-        font-style: normal;
-    }
+  font-family: 'krinkes';
+  src: url('../fonts/KrinkesDecor.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
 #form h1 {
   margin-top: 0;
   padding-top: 0;
@@ -360,4 +360,18 @@ img.logo {
   border-right: 0;
   border-bottom: 0;
   border-top: solid 1px #759900;
+}
+.flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0;
+  -moz-box-flex: 1;
+  -moz-flex: 1 0;
+  -ms-flex: 1 0;
+  flex: 1 0;
 }

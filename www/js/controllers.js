@@ -140,6 +140,20 @@ angular.module('okarito.controllers', ['okarito.services'])
     loginUser($scope.data.email, $scope.data.password, $scope.data.url, false);
   };
 
+  $scope.showUrlHelp = function() {
+    var alertPopup = $ionicPopup.alert({
+      title: 'What is my FogBugz URL?',
+      template: '<p>Your FogBug URL is the root web address of your FogBugz installation.</p><p>For On-Demand accounts, it will look something like this:</p><p><strong>http://yourusername.fogbugz.com</strong></p><p>Browse to your FogBugz installation and check the address bar to find your FogBugz URL.</p>',
+      buttons: [{
+        text: 'OK',
+        type: 'button-stable',
+        onTap: function(e) {
+          return;
+        }
+      }]
+    });
+  };
+
   function loginUser(id, password, url, multipleEmails) {
     loginService
       .loginUser(id, password, url)
@@ -214,19 +228,19 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.showAll = function() {
-    $ionicLoading.show({
-      template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
-    });
-
     $scope.max = 99999;
     loadCases();
   };
 
   $scope.$on('$ionicView.enter', function() {
-    init();
+    //init();
   });
 
   $scope.$on('$ionicView.loaded', function() {
+    $ionicLoading.show({
+      template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
+    });
+
     loadCases();
   });
 
@@ -307,15 +321,6 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.cases = response.cases;
         $scope.filterDescription = response.description;
         $scope.count = response.count;
-
-        // Lookup icons for the cases - this is an area that can be optimized I think
-        for (var i = 0; i < $scope.cases.length; i++) {
-          var category = $filter('filter')($rootScope.categories, {
-            text: $scope.cases[i].sCategory.__cdata
-          }, true)[0];
-
-          $scope.cases[i].icon = category.icon;
-        }
 
         // Hide loaders
         $ionicLoading.hide();
@@ -548,6 +553,14 @@ angular.module('okarito.controllers', ['okarito.services'])
   var init = function() {
     $scope.case = dataService.getCase($stateParams.caseId);
     $scope.date = $filter('date')(new Date(), 'medium');
+
+    $scope.$watch('case.ixCategory', function(newValue, oldValue) {
+      var category = $filter('filter')($rootScope.categories, {
+        id: $scope.case.ixCategory
+      }, true)[0];
+
+      $scope.case.icon = category.icon;
+    });
 
     $scope.$watch('case.ixStatus', function(newValue, oldValue) {
       var status = $filter('filter')($rootScope.allStatuses, {

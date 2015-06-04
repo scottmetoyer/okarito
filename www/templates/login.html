@@ -2,25 +2,27 @@
   <ion-content class="login-form" has-bouncing="false">
     <div id="form">
       <div class="center">
-          <img src="img/logo.svg" class="logo shadow" height="100"/>
-          <h1>Okarito7</h1>
-          <p>Please log in to your FogBugz account to continue.</p>
-          <p>No account? <a href="">Get one here.</a></p>
+        <img src="img/logo.svg" class="logo shadow" height="100" />
+        <h1>Okarito7</h1>
+        <p>Please log in to your FogBugz account to continue.</p>
+        <p>No account? <a href="#" onclick="window.open('http://www.fogcreek.com/fogbugz/', '_system');">Get one here.</a></p>
       </div>
       <div class="list">
-          <label class="item item-input">
-              <input type="text" placeholder="Email" ng-model="data.email">
+        <label class="item item-input">
+          <input type="text" placeholder="Email" ng-model="data.email">
+        </label>
+        <label class="item item-input">
+          <input type="password" placeholder="Password" ng-model="data.password">
+        </label>
+        <div class="item item-input item-input-inset" style="padding: 0;">
+          <label class="item-input flex">
+            <input type="text" placeholder="FogBugz URL" ng-model="data.url">
           </label>
-          <label class="item item-input">
-              <input type="password" placeholder="Password" ng-model="data.password">
-          </label>
-          <label class="item item-input item-button-right">
-              <input type="text" placeholder="FogBugz Url" ng-model="data.url">
-              <button class="button button-clear">
-                <i class="icon ion-help"></i>
-              </button>
-          </label>
-          <button class="button button-block button-outline button-white" ng-click="login()">Login</button>
+          <button class="button button-small" ng-click="showUrlHelp()" style="margin-right: 10px;">
+            <i class="icon ion-help"></i>
+          </button>
+        </div>
+        <button class="button button-block button-outline button-white" ng-click="login()">Login</button>
       </div>
     </div>
   </ion-content>
