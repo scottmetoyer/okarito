@@ -402,3 +402,7 @@ i.priority6 {
 i.priority7 {
   color: #778899;
 }
+input[readonly] {
+  background-color: transparent !important;
+  cursor: not-allowed;
+}

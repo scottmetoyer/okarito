@@ -349,6 +349,13 @@ angular.module('okarito.controllers', ['okarito.services'])
   var backup = {};
   $scope.working = false;
   $scope.caseResolved = false;
+  $scope.mailMessage = {
+      from: '',
+      to: '',
+      cc: '',
+      bcc: '',
+      subject: ''
+  };
 
   $scope.$on('error', function(event, args) {
     $ionicLoading.hide();
@@ -382,6 +389,33 @@ angular.module('okarito.controllers', ['okarito.services'])
     $state.go('app.cases').then(function(){
       $rootScope.$broadcast('search-cases', { search: searchString });
     });
+  };
+
+  $scope.chooseEmail = function() {
+    $scope.items = $scope.mailboxes;
+
+    $ionicModal.fromTemplateUrl(
+      'templates/mailboxes.html', {
+        'scope': $scope
+      })
+      .then(function(modal) {
+        $scope.modal = modal;
+        $scope.modal.show();
+    });
+
+    $scope.hideItems = function() {
+      $scope.modal.hide();
+    }
+
+    $scope.$on('$destroy', function() {
+      $scope.modal.remove();
+    });
+
+    $scope.validateSingle = function(item) {
+      // Resend the login request, passing in the appropriate user full name
+      // loginUser(item.text, $scope.data.password, $scope.data.url, true);
+      // $scope.modal.hide();
+    };
   };
 
   $scope.editModal = function() {
@@ -471,9 +505,13 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.label = 'Email Case ' + $scope.case.ixBug;
     $scope.touched = 'Emailed by ' + userService.getCurrentUser().full_name;
 
-    angular.copy($scope.case, backup);
     $scope.closePopover();
     $scope.emailCaseModal();
+
+    prepareModal().then(function() {
+      $scope.case.ixMailbox = $scope.mailboxes[0].id;
+      $scope.mailMessage.from = $scope.mailboxes[0].text;
+    });
   };
 
   $scope.assignCase = function(val, text) {

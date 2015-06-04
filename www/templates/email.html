@@ -21,13 +21,9 @@
           <h3>{{ touched }}</h3>
           <h4 class="subdued">{{ date }}</h4>
         </label>
-        <label class="item item-input item-stacked-label item-select">
+        <label class="item item-input item-stacked-label" ng-click="chooseEmail()">
           <span class="input-label">From</span>
-          <select>
-            <option>Blue</option>
-            <option selected>Green</option>
-            <option>Red</option>
-          </select>
+          <input type="text" placeholder="To" readonly="readonly" ng-model="mailMessage.from">
         </label>
         <label class="item item-input item-stacked-label">
           <span class="input-label">To</span>

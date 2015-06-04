@@ -1,0 +1,14 @@
+<ion-view class="fancy-select-items modal">
+  <ion-header-bar class="bar-positive tropic">
+    <button ng-click="hideItems()" class="button button-positive button-icon ion-chevron-left"></button>
+    <h1 class="title">Choose an email</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list">
+      <label ng-repeat="item in items" class="item item-text-wrap item-icon-left" ng-click='validateSingle(item)'>
+        <i class="icon ion-email"></i>
+        {{item.text}}
+      </label>
+    </div>
+  </ion-content>
+</ion-view>
