@@ -14,15 +14,39 @@
         <label class="item item-divider">
           {{ label }}
         </label>
-        <label class="item item-input">
+        <label class="item item-input item-text-wrap">
           {{ case.sTitle.__cdata }}
         </label>
         <label class="item item-divider">
           <h3>{{ touched }}</h3>
           <h4 class="subdued">{{ date }}</h4>
         </label>
+        <label class="item item-input item-stacked-label item-select">
+          <span class="input-label">From</span>
+          <select>
+            <option>Blue</option>
+            <option selected>Green</option>
+            <option>Red</option>
+          </select>
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">To</span>
+          <input type="text" placeholder="To">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">CC</span>
+          <input type="text" placeholder="CC">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">BCC</span>
+          <input type="text" placeholder="BCC">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Subject</span>
+          <input type="text" placeholder="Subject">
+        </label>
         <label class="item item-input">
-          <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add an email message (required)..."></textarea>
+          <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a message body..."></textarea>
         </label>
         <label class="item tabs tabs-secondary tabs-icon-left">
           <button class="tab-item button button-clear" ng-click="gallery()">

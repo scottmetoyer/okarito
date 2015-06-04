@@ -519,7 +519,6 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.closePopover();
     $scope.reopenModal();
     prepareModal().then(function() {
-      console.log(userService.getCurrentUser());
       $scope.case.ixPersonAssignedTo = userService.getCurrentUser().user_id;
       $scope.case.sPersonAssignedTo.__cdata = userService.getCurrentUser().full_name;
     });
@@ -570,12 +569,14 @@ angular.module('okarito.controllers', ['okarito.services'])
     return $q.all([
         dataService.getMilestones($scope.case.ixProject, false),
         dataService.getAreas($scope.case.ixProject, false),
-        dataService.getStatuses($scope.case.ixCategory, true, false)
+        dataService.getStatuses($scope.case.ixCategory, true, false),
+        dataService.getMailboxes()
       ])
       .then(function(responses) {
         $scope.milestones = responses[0];
         $scope.areas = responses[1];
         $scope.statuses = responses[2];
+        $scope.mailboxes = responses[3];
         $ionicLoading.hide();
       });
   }

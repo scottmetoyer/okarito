@@ -126,6 +126,24 @@ angular.module('okarito.services', ['angular-storage'])
         return list;
       });
     },
+    getMailboxes: function() {
+      return $http.get('cmd=listMailboxes', {
+        transformResponse: transform
+      }).then(function(response){
+        var mailboxes = normalizeArray(response.data.mailboxes.mailbox);
+        var list = []
+
+        for (var i = 0; i < mailboxes.length; i++) {
+          list.push({
+            id: mailboxes[i].ixMailbox,
+            text: mailboxes[i].sEmail.__cdata,
+            checked: false,
+            icon: null
+          });
+        };
+        return list;
+      });
+    },
     getPriorities: function(cacheResponse) {
       return $http.get('cmd=listPriorities', {
         transformResponse: transform,
