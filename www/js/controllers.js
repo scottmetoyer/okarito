@@ -130,7 +130,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     });
 
     $scope.validateSingle = function(item) {
-      // Resend the login request, passing in the appropriate name
+      // Resend the login request, passing in the appropriate user full name
       loginUser(item.text, $scope.data.password, $scope.data.url, true);
       $scope.modal.hide();
     };
@@ -143,7 +143,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.showUrlHelp = function() {
     var alertPopup = $ionicPopup.alert({
       title: 'What is my FogBugz URL?',
-      template: '<p>Your FogBug URL is the root web address of your FogBugz installation.</p><p>For On-Demand accounts, it will look something like this:</p><p><strong>http://yourusername.fogbugz.com</strong></p><p>Browse to your FogBugz installation and check the address bar to find your FogBugz URL.</p>',
+      template: '<p>Your FogBug URL is the root web address of your FogBugz installation.</p><p>For On-Demand accounts, it will look something like this:</p><p><strong>https://yourusername.fogbugz.com</strong></p><p>Browse to your FogBugz installation and check the address bar to find your FogBugz URL.</p>',
       buttons: [{
         text: 'OK',
         type: 'button-stable',
@@ -184,9 +184,24 @@ angular.module('okarito.controllers', ['okarito.services'])
           // TODO: Clear out scope data on successful login
           // $scope.data = {};
           $rootScope.$broadcast('authorized');
-          $state.go('app.cases');
+          $state.go('app.cases').then(function(){
+            $rootScope.$broadcast('search-cases', { search: '' });
+          });
+      })
+      .error(function(data) {
+        var alertPopup = $ionicPopup.alert({
+          title: 'Error connecting to FogBugz',
+          template: 'Please check your FogBugz URL and try again',
+          buttons: [{
+            text: 'OK',
+            type: 'button-stable',
+            onTap: function(e) {
+              return;
+            }
+          }]
+        });
       });
-  }
+    }
 })
 
 .controller('CasesCtrl', function($q, $filter, $rootScope, $state, $scope, $ionicLoading, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService, userService, caseModalService) {
@@ -232,10 +247,6 @@ angular.module('okarito.controllers', ['okarito.services'])
     loadCases();
   };
 
-  $scope.$on('$ionicView.enter', function() {
-    //init();
-  });
-
   $scope.$on('$ionicView.loaded', function() {
     $ionicLoading.show({
       template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
@@ -244,7 +255,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     loadCases();
   });
 
-  $rootScope.$on('set-filter', function(event, args) {
+  $scope.$on('set-filter', function(event, args) {
     $ionicLoading.show({
       template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
     });
@@ -253,10 +264,8 @@ angular.module('okarito.controllers', ['okarito.services'])
     dataService
       .setFilter(args.filter)
       .then(function(response) {
-        // Clear custom search
+        // Clear custom search and refresh the case list
         $scope.filter = '';
-
-        // Refresh case list
         loadCases();
       });
 
@@ -328,10 +337,6 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.ready = true;
       });
   }
-
-  var init = function() {
-    loadCases();
-  };
 })
 
 .controller('CaseCtrl', function($q, $scope, $sce, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $ionicPopup, $filter, $ionicLoading, dataService, userService, caseModalService, cameraService) {

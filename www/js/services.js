@@ -400,7 +400,7 @@ angular.module('okarito.services', ['angular-storage'])
         },
         transformResponse: transform
       }).then(function(response) {
-        return response;
+          return response;
       });
     }
   }
@@ -478,7 +478,15 @@ angular.module('okarito.services', ['angular-storage'])
         full_name: ''
       };
 
+      // Fix up the FogBugz root URL input - add a trailing slash if not present
       root = root.replace(/\/?$/, '/');
+
+      // Prepend with https if the user did not specify a protocol
+      /*
+      if (!/^https?:\/\//i.test(root)) {
+          root = 'https://' + root;
+      }
+      */
 
       $http
         .get(root + 'api.xml', {
@@ -487,13 +495,19 @@ angular.module('okarito.services', ['angular-storage'])
         .then(function(response) {
           // Retrive the FogBugz API url
           user.api_url = root + response.data.url;
+
           return $http.get(user.api_url + 'cmd=logon&email=' + userEmail + '&password=' + password, {
             transformResponse: transform
+          })
+          .then(function(response) {
+            user.access_token = response.data.token.__cdata;
+            deferred.resolve(user);
           });
         })
-        .then(function(response) {
-          user.access_token = response.data.token.__cdata;
-          deferred.resolve(user);
+        .catch(function(reject) {
+          if (reject.status != 200) {
+            deferred.reject(reject);
+          }
         })
 
       promise.success = function(fn) {
