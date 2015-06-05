@@ -469,7 +469,7 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     if (command == 'email') {
       dataService.emailCase($scope.case, $scope.mailMessage)
-        .then(function(result) {            
+        .then(function(result) {
           dataService.refreshCase($scope.case.ixBug)
             .then(function() {
               $scope.working = false;
@@ -524,6 +524,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     prepareModal().then(function() {
       $scope.case.ixMailbox = $scope.mailboxes[0].id;
       $scope.mailMessage.from = $scope.mailboxes[0].text;
+      $scope.mailMessage.subject = "(Case " + $scope.case.ixBug + ") " + $scope.case.sTitle.__cdata;
     });
   };
 
@@ -635,6 +636,8 @@ angular.module('okarito.controllers', ['okarito.services'])
   var init = function() {
     $scope.case = dataService.getCase($stateParams.caseId);
     $scope.date = $filter('date')(new Date(), 'medium');
+
+    console.log($scope.case);
 
     $scope.$watch('case.ixCategory', function(newValue, oldValue) {
       var category = $filter('filter')($rootScope.categories, {

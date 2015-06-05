@@ -406,3 +406,6 @@ input[readonly] {
   background-color: transparent !important;
   cursor: not-allowed;
 }
+div.html {
+  font-size: 14px !important;
+}

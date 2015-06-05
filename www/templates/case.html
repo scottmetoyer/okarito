@@ -57,7 +57,10 @@
           <h4 class="subdued">{{ event.dt | date:'MM/dd/yyyy h:mma'}}</h4>
           <h4 style="white-space: pre-wrap; font-weight: normal;">{{ event.sChanges.__cdata }}</h4>
       </div>
-      <div class="item item-text-wrap" ng-bind-html="event.sHtml.__cdata | hrefToJS" ng-show="event.s != ''"></div>
+      <span ng-show="event.s != ''">
+        <div ng-show="event.fEmail == 'false'" class="item item-text-wrap html" ng-bind-html="event.sHtml.__cdata | hrefToJS"></div>
+        <div ng-show="event.fEmail == 'true'" class="item item-text-wrap html" ng-bind-html="event.sBodyHTML.__cdata | hrefToJS"></div>
+      </span>
       <div class="spacer" ng-hide="event.s != ''"></div>
     </span>
     <div ng-show="working" class="item item-divider">
