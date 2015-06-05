@@ -409,3 +409,6 @@ input[readonly] {
 div.html {
   font-size: 14px !important;
 }
+label.item.has-error {
+  border-bottom: 2px solid red !important;
+}

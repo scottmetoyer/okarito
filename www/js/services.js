@@ -570,7 +570,6 @@ angular.module('okarito.services', ['angular-storage'])
       var q = $q.defer();
 
       navigator.camera.getPicture(function(result) {
-        // Do any magic you need
         q.resolve(result);
       }, function(err) {
         q.reject(err);
@@ -627,6 +626,7 @@ angular.module('okarito.services', ['angular-storage'])
   service.response = function(response) {
     if (response.data && response.data.error) {
       var code = response.data.error._code;
+      console.log(response);
 
       switch (code) {
         case '1':

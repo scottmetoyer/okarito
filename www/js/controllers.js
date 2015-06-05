@@ -231,8 +231,16 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.save = function() {
     dataService.saveCase($scope.case, 'new')
       .then(function(result) {
+        // Get the created case number and open it up
+        caseNumber = result.data.case._ixBug;
+
+        if (caseNumber != undefined) {
+          $rootScope.$broadcast('search-cases', {
+            search: caseNumber
+          });
+        }
+
         $scope.closeModal();
-        loadCases();
       });
   };
 
@@ -507,11 +515,13 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.camera = function() {
+    /*
     cameraService.getPicture().then(function(imageURI) {
       console.log(imageURI);
     }, function(err) {
       console.log(err);
-    });
+    });*/
+    alert('Take a picture bitch');
   };
 
   $scope.emailCase = function() {
