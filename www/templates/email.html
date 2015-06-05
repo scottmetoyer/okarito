@@ -5,7 +5,7 @@
     </div>
     <h1 class="title">&nbsp;</h1>
     <div class="buttons">
-      <button type="button" class="button button-clear" ng-click="save('close')">Email Case</button>
+      <button type="button" class="button button-clear" ng-click="save('email')">Email Case</button>
     </div>
   </ion-header-bar>
   <ion-content scroll="true">
@@ -27,19 +27,19 @@
         </label>
         <label class="item item-input item-stacked-label">
           <span class="input-label">To</span>
-          <input type="text" placeholder="To">
+          <input type="text" placeholder="To" ng-model="mailMessage.to">
         </label>
         <label class="item item-input item-stacked-label">
           <span class="input-label">CC</span>
-          <input type="text" placeholder="CC">
+          <input type="text" placeholder="CC" ng-model="mailMessage.cc">
         </label>
         <label class="item item-input item-stacked-label">
           <span class="input-label">BCC</span>
-          <input type="text" placeholder="BCC">
+          <input type="text" placeholder="BCC" ng-model="mailMessage.bcc">
         </label>
         <label class="item item-input item-stacked-label">
           <span class="input-label">Subject</span>
-          <input type="text" placeholder="Subject">
+          <input type="text" placeholder="Subject" ng-model="mailMessage.subject">
         </label>
         <label class="item item-input">
           <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a message body..."></textarea>

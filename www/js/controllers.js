@@ -89,7 +89,7 @@ angular.module('okarito.controllers', ['okarito.services'])
         }, true);
       });
 
-      $scope.currentUser = userService.getCurrentUser();
+    $scope.currentUser = userService.getCurrentUser();
   };
 })
 
@@ -113,13 +113,13 @@ angular.module('okarito.controllers', ['okarito.services'])
     }
 
     $ionicModal.fromTemplateUrl(
-      'templates/ambiguous-login.html', {
-        'scope': $scope
-      })
+        'templates/ambiguous-login.html', {
+          'scope': $scope
+        })
       .then(function(modal) {
         $scope.modal = modal;
         $scope.modal.show();
-    });
+      });
 
     $scope.hideItems = function() {
       $scope.modal.hide();
@@ -181,12 +181,14 @@ angular.module('okarito.controllers', ['okarito.services'])
             userService.setCurrentUser(data);
           });
 
-          // TODO: Clear out scope data on successful login
-          // $scope.data = {};
-          $rootScope.$broadcast('authorized');
-          $state.go('app.cases').then(function(){
-            $rootScope.$broadcast('search-cases', { search: '' });
+        // TODO: Clear out scope data on successful login
+        // $scope.data = {};
+        $rootScope.$broadcast('authorized');
+        $state.go('app.cases').then(function() {
+          $rootScope.$broadcast('search-cases', {
+            search: ''
           });
+        });
       })
       .error(function(data) {
         var alertPopup = $ionicPopup.alert({
@@ -201,7 +203,7 @@ angular.module('okarito.controllers', ['okarito.services'])
           }]
         });
       });
-    }
+  }
 })
 
 .controller('CasesCtrl', function($q, $filter, $rootScope, $state, $scope, $ionicLoading, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService, userService, caseModalService) {
@@ -285,7 +287,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.max = 25;
     $ionicScrollDelegate.scrollTop();
     $scope.filter = args.search;
-    loadCases().then(function(){
+    loadCases().then(function() {
       // If there is only one case in the cases list, just open it
       if ($scope.cases.length == 1) {
         $state.go('app.single', {
@@ -350,11 +352,11 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.working = false;
   $scope.caseResolved = false;
   $scope.mailMessage = {
-      from: '',
-      to: '',
-      cc: '',
-      bcc: '',
-      subject: ''
+    from: '',
+    to: '',
+    cc: '',
+    bcc: '',
+    subject: ''
   };
 
   $scope.$on('error', function(event, args) {
@@ -386,8 +388,10 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   $scope.quickSearch = function(searchString) {
-    $state.go('app.cases').then(function(){
-      $rootScope.$broadcast('search-cases', { search: searchString });
+    $state.go('app.cases').then(function() {
+      $rootScope.$broadcast('search-cases', {
+        search: searchString
+      });
     });
   };
 
@@ -395,13 +399,13 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.items = $scope.mailboxes;
 
     $ionicModal.fromTemplateUrl(
-      'templates/mailboxes.html', {
-        'scope': $scope
-      })
+        'templates/mailboxes.html', {
+          'scope': $scope
+        })
       .then(function(modal) {
         $scope.modal = modal;
         $scope.modal.show();
-    });
+      });
 
     $scope.hideItems = function() {
       $scope.modal.hide();
@@ -412,9 +416,8 @@ angular.module('okarito.controllers', ['okarito.services'])
     });
 
     $scope.validateSingle = function(item) {
-      // Resend the login request, passing in the appropriate user full name
-      // loginUser(item.text, $scope.data.password, $scope.data.url, true);
-      // $scope.modal.hide();
+      $scope.case.ixMailbox = item.id;
+      $scope.mailMessage.to = item.text;
     };
   };
 
@@ -464,13 +467,23 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.working = true;
     $scope.closeModal();
 
-    dataService.saveCase($scope.case, command)
-      .then(function(result) {
-        dataService.refreshCase($scope.case.ixBug)
-          .then(function() {
-            $scope.working = false;
-          });
-      });
+    if (command == 'email') {
+      dataService.emailCase($scope.case, $scope.mailMessage)
+        .then(function(result) {            
+          dataService.refreshCase($scope.case.ixBug)
+            .then(function() {
+              $scope.working = false;
+            });
+        })
+    } else {
+      dataService.saveCase($scope.case, command)
+        .then(function(result) {
+          dataService.refreshCase($scope.case.ixBug)
+            .then(function() {
+              $scope.working = false;
+            });
+        });
+    }
   };
 
   $scope.cancel = function() {

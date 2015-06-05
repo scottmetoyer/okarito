@@ -384,6 +384,25 @@ angular.module('okarito.services', ['angular-storage'])
         return response;
       });
     },
+    emailCase: function(bug, mail) {
+      return $http({
+        method: 'POST',
+        url: '',
+        data: "cmd=email&ixBug=" + bug.ixBug +
+          "&sFrom=" + mail.from +
+          "&sTo=" + mail.to +
+          "&sSubject=" + mail.subject +
+          "&sCC=" + mail.cc +
+          "&sBCC=" + mail.bcc +
+          "&sEvent=" + bug.newEvent,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        transformResponse: transform
+      }).then(function(response) {
+          return response;
+      });
+    },
     saveCase: function(bug, cmd) {
       var status = '';
       if (cmd == 'resolve') {
