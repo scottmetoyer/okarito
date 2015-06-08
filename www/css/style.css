@@ -187,7 +187,7 @@ h5.subdued {
   color: #8FBE00 !important;
 }
 .icon.dark {
-  color: #333333 !important;
+  color: #6C7A89 !important;
 }
 .login-button {
   background-color: #00A8C6 !important;
@@ -422,7 +422,7 @@ div.attachments {
 
 div.attachment {
   font-size: 12px;
-  background-color: #91A3B7;
+  background-color: #BDC3C7;
   padding: 5px;
   border-radius: 2px;
   border: 0;
@@ -436,4 +436,5 @@ div.attachment i
 {
   display: inline !important;
   margin-left: 5px;
+  width: 50px;
 }

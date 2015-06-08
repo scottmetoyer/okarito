@@ -409,6 +409,10 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.popover = popover;
   });
 
+  $scope.deleteAttachment = function(idx) {
+    $scope.attachments.splice(idx, 1);
+  }
+
   $scope.quickSearch = function(searchString) {
     $state.go('app.cases').then(function() {
       $rootScope.$broadcast('search-cases', {
