@@ -183,6 +183,12 @@ h5.subdued {
 .icon.tropic {
   color: #00A8C6 !important;
 }
+.icon.feeble {
+  color: #8FBE00 !important;
+}
+.icon.dark {
+  color: #333333 !important;
+}
 .login-button {
   background-color: #00A8C6 !important;
   border: 0 !important;
@@ -197,9 +203,6 @@ h5.subdued {
 }
 .atomic {
   background-color: #AEE239 !important;
-}
-.feeble {
-  background-color: #8FBE00 !important;
 }
 .case-number.closed {
   background-color: black;
@@ -266,7 +269,7 @@ ion-popover-view.fit ion-content {
   font-size: 14px !important;
 }
 .tag {
-  background: #8FBE00;
+  background: #00A8C6;
   padding-left: 8px;
   padding-right: 8px;
   height: 26px;
@@ -411,4 +414,26 @@ div.html {
 }
 label.item.has-error {
   border-bottom: 2px solid red !important;
+}
+div.attachments {
+  padding: 10px;
+  padding-top: 0;
+}
+
+div.attachment {
+  font-size: 12px;
+  background-color: #91A3B7;
+  padding: 5px;
+  border-radius: 2px;
+  border: 0;
+  height: 26px;
+  display: inline-block;
+  margin: 2px;
+  width: auto;
+  color: #fff;
+}
+div.attachment i
+{
+  display: inline !important;
+  margin-left: 5px;
 }

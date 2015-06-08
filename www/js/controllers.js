@@ -366,6 +366,20 @@ angular.module('okarito.controllers', ['okarito.services'])
     bcc: '',
     subject: ''
   };
+  $scope.attachments = [
+    {
+      filename: 'somepicture.jpg',
+      url: 'asdfas'
+    },
+    {
+      filename: 'a_big_nice_picture.PNG',
+      url: 'asdfas'
+    },
+    {
+      filename: 'DSC01093873.jpg',
+      url: 'asdfas'
+    },
+  ];
 
   $scope.$on('error', function(event, args) {
     $ionicLoading.hide();
