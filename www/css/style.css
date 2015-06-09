@@ -269,7 +269,7 @@ ion-popover-view.fit ion-content {
   font-size: 14px !important;
 }
 .tag {
-  background: #00A8C6;
+  background: #8FBE00;
   padding-left: 8px;
   padding-right: 8px;
   height: 26px;
@@ -421,7 +421,7 @@ div.attachments {
 }
 div.attachment {
   font-size: 12px;
-  background-color: #BDC3C7;
+  background-color: #59ABE3;
   padding: 4px;
   border-radius: 2px;
   border: 0;

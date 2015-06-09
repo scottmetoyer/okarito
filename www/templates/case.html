@@ -64,6 +64,11 @@
         <div ng-show="event.fEmail == 'false'" class="item item-text-wrap html" ng-bind-html="event.sHtml.__cdata | hrefToJS"></div>
         <div ng-show="event.fEmail == 'true'" class="item item-text-wrap html" ng-bind-html="event.sBodyHTML.__cdata | hrefToJS"></div>
       </span>
+      <div class="item" ng-show="event.attachments.length > 0">
+        <div class="attachment" ng-repeat="attachment in event.attachments">
+          <span ng-click="viewAttachment(attachment.sURL.__cdata)"><i class="icon ion-document"></i>{{ attachment.sFileName.__cdata }}</span>
+        </div>
+      </div>
       <div class="spacer" ng-hide="event.s != ''"></div>
     </span>
     <div ng-show="working" class="item item-divider">

@@ -410,6 +410,15 @@ angular.module('okarito.controllers', ['okarito.services'])
     });
   };
 
+  $scope.viewAttachment = function(url) {
+    var root = userService.getCurrentUser().root;
+    var token = userService.getCurrentUser().access_token;
+    var url = angular.element('<textarea />').html(url).text();
+
+    var link = root + url + '&token=' + token;
+    window.open(link, '_blank', 'location=no,EnableViewPortScale=yes');
+  };
+
   $scope.showAttachment = function(imageSrc) {
     var scope = $scope.$new(true);
     scope.imageSrc = imageSrc;

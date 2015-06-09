@@ -102,6 +102,12 @@ angular.module('okarito.services', ['angular-storage'])
       if (bug != null) {
         bug.newEvent = '';
         bug.tags = normalizeArray(bug.tags.tag);
+
+        console.log(bug.events.event.length);
+
+        for(var i = 0; i < bug.events.event.length; i++) {
+          bug.events.event[i].attachments = normalizeArray(bug.events.event[i].rgAttachments.attachment);
+        }
       }
 
       return bug;
@@ -512,7 +518,8 @@ angular.module('okarito.services', ['angular-storage'])
         email: userEmail,
         api_url: '',
         access_token: '',
-        full_name: ''
+        full_name: '',
+        root: ''
       };
 
       // Fix up the FogBugz root URL input - add a trailing slash if not present
@@ -532,6 +539,7 @@ angular.module('okarito.services', ['angular-storage'])
         .then(function(response) {
           // Retrive the FogBugz API url
           user.api_url = root + response.data.url;
+          user.root = root;
 
           return $http.get(user.api_url + 'cmd=logon&email=' + userEmail + '&password=' + password, {
             transformResponse: transform
