@@ -9,7 +9,7 @@
       <div class="item bare" ng-show="cases.length == 0">
         <p>Nothing was found that matched.</p>
       </div>
-      <a class="item" style="padding: .4em;" ng-repeat="bug in cases" href="#/app/cases/{{bug.ixBug}}">
+      <a class="item" style="padding: .4em;" ng-repeat="bug in cases" href="#/app/cases/{{$index}}">
         <div class="row">
           <div class="col">
             <span class="case-number priority{{bug.ixPriority}}">{{bug.ixBug}}</span>

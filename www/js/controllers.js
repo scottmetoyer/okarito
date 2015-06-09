@@ -299,7 +299,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       // If there is only one case in the cases list, just open it
       if ($scope.cases.length == 1) {
         $state.go('app.single', {
-          caseId: $scope.cases[0].ixBug
+          id: 0
         });
       }
     });
@@ -359,7 +359,6 @@ angular.module('okarito.controllers', ['okarito.services'])
   var backup = {};
   $scope.working = false;
   $scope.caseResolved = false;
-  $scope.attachments = [];
   $scope.mailMessage = {
     from: '',
     to: '',
@@ -367,20 +366,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     bcc: '',
     subject: ''
   };
-  $scope.attachments = [
-    {
-      filename: 'somepicture.jpg',
-      url: 'asdfas'
-    },
-    {
-      filename: 'a_big_nice_picture.PNG',
-      url: 'asdfas'
-    },
-    {
-      filename: 'DSC01093873.jpg',
-      url: 'asdfas'
-    },
-  ];
+  $scope.attachments = [];
 
   $scope.$on('error', function(event, args) {
     $ionicLoading.hide();
@@ -420,6 +406,28 @@ angular.module('okarito.controllers', ['okarito.services'])
         search: searchString
       });
     });
+  };
+
+  $scope.showAttachment = function(imageSrc) {
+    alert('well hello there');
+    /*
+    $scope.imageSrc = imageSrc;
+
+    $ionicModal.fromTemplateUrl('templates/image-modal.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal = modal;
+      $scope.modal.show();
+    });
+
+    $scope.hideItems = function() {
+      $scope.modal.hide();
+    }
+
+    $scope.$on('$destroy', function() {
+      $scope.modal.remove();
+    });*/
   };
 
   $scope.chooseEmail = function() {
@@ -514,6 +522,15 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.cancel = function() {
+    ``
+    $scope.mailMessage = {
+      from: '',
+      to: '',
+      cc: '',
+      bcc: '',
+      subject: ''
+    };
+    $scope.attachments = [];
     angular.copy(backup, $scope.case);
     $scope.closeModal();
   };
@@ -535,15 +552,14 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   $scope.camera = function() {
     var options = {
-      quality : 75,
-      destinationType : Camera.DestinationType.FILE_URI,
-      sourceType : Camera.PictureSourceType.CAMERA,
-      allowEdit : true,
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: true,
       encodingType: Camera.EncodingType.JPEG
     };
 
     cameraService.getPicture(options).then(function(imageURI) {
-
       console.log(imageURI);
     }, function(err) {
       console.log(err);
@@ -552,15 +568,15 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   $scope.gallery = function() {
     var options = {
-      quality : 75,
-      destinationType : Camera.DestinationType.FILE_URI,
-      sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
-      allowEdit : true,
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: true,
       encodingType: Camera.EncodingType.JPEG
     };
 
     cameraService.getPicture(options).then(function(imageURI) {
-      var filename = imageURI.substr(imageURI.lastIndexOf("/")+1);
+      var filename = imageURI.substr(imageURI.lastIndexOf("/") + 1);
       var attachment = {
         name: filename,
         url: imageURI
@@ -693,10 +709,8 @@ angular.module('okarito.controllers', ['okarito.services'])
   }
 
   var init = function() {
-    $scope.case = dataService.getCase($stateParams.caseId);
+    $scope.case = dataService.getCase($stateParams.id);
     $scope.date = $filter('date')(new Date(), 'medium');
-
-    console.log($scope.case);
 
     $scope.$watch('case.ixCategory', function(newValue, oldValue) {
       var category = $filter('filter')($rootScope.categories, {

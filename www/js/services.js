@@ -97,14 +97,13 @@ angular.module('okarito.services', ['angular-storage'])
     },
     getCase: function(id, refresh) {
       var bug = null;
+      bug = cases[id];
 
-      for (var i = 0; i < cases.length; i++) {
-        if (cases[i].ixBug == id) {
-          bug = cases[i];
-          bug.newEvent = '';
-          bug.tags = normalizeArray(bug.tags.tag);
-        }
+      if (bug != null) {
+        bug.newEvent = '';
+        bug.tags = normalizeArray(bug.tags.tag);
       }
+
       return bug;
     },
     getProjects: function(cacheResponse) {

@@ -1,14 +1,16 @@
 <ion-view view-title="">
   <ion-nav-buttons side="right">
-    <span ng-show="case.fOpen == 'true'">
-      <fancy-select mode="icon" header-text="Choose a Person" allow-empty="true" value="case.ixPersonAssignedTo" items="people" callback="assignCase(val, text)"></fancy-select>
-      <button class="button button-icon icon ion-checkmark" ng-click="resolveCase()">
+    <span ng-show="ready">
+      <span ng-show="case.fOpen == 'true'">
+        <fancy-select mode="icon" header-text="Choose a Person" allow-empty="true" value="case.ixPersonAssignedTo" items="people" callback="assignCase(val, text)"></fancy-select>
+        <button class="button button-icon icon ion-checkmark" ng-click="resolveCase()">
+        </button>
+      </span>
+      <button class="button button-icon icon ion-edit" ng-click="editCase()">
+      </button>
+      <button class="button button-icon icon ion-more" ng-click="openPopover($event)">
       </button>
     </span>
-    <button class="button button-icon icon ion-edit" ng-click="editCase()">
-    </button>
-    <button class="button button-icon icon ion-more" ng-click="openPopover($event)">
-    </button>
   </ion-nav-buttons>
   <ion-content>
     <div class="item item-divider">
@@ -22,11 +24,13 @@
         <img class="loader" ng-show="working" src="img/ajax-loader.gif" />
       </span>
     </div>
-    <div class="item item-text-wrap" ng-show="ready">
+    <div class="item item-text-wrap">
       <h2>{{ case.sTitle.__cdata }}</h2>
-      <p><a href="#" ng-click="quickSearch('project:&quot;' + case.sProject.__cdata + '&quot;')">{{ case.sProject.__cdata }}</a>: <a href="#" ng-click="quickSearch('area:&quot;' + case.sArea.__cdata + '&quot;')">{{ case.sArea.__cdata }}</a> (Milestone: <a href="#" ng-click="quickSearch('milestone:&quot;' + case.sFixFor.__cdata + '&quot;')">{{ case.sFixFor.__cdata }}</a>)</p>
+      <p ng-show="ready"><a href="#" ng-click="quickSearch('project:&quot;' + case.sProject.__cdata + '&quot;')">{{ case.sProject.__cdata }}</a>: <a href="#" ng-click="quickSearch('area:&quot;' + case.sArea.__cdata + '&quot;')">{{ case.sArea.__cdata }}</a> (Milestone:
+        <a
+        href="#" ng-click="quickSearch('milestone:&quot;' + case.sFixFor.__cdata + '&quot;')">{{ case.sFixFor.__cdata }}</a>)</p>
     </div>
-    <div class="item">
+    <div class="item" ng-show="ready">
       <div class="row">
         <div class="col col-33 subdued">Category</div>
         <div class="col text"><i class="icon {{ case.icon }}"></i>&nbsp;{{ case.sCategory.__cdata }}</div>
