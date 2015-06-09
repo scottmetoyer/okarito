@@ -422,7 +422,7 @@ div.attachments {
 div.attachment {
   font-size: 12px;
   background-color: #BDC3C7;
-  padding: 5px;
+  padding: 4px;
   border-radius: 2px;
   border: 0;
   height: 26px;
@@ -430,11 +430,19 @@ div.attachment {
   margin: 2px;
   width: auto;
   color: #fff;
+  padding-left: 0;
+  padding-right: 0;
 }
 div.attachment i {
   display: inline !important;
-  margin-left: 5px;
+  margin-left: 2px;
   width: 50px;
+  padding: 5px;
+  padding-left: 0;
+  padding-right: 4px;
+}
+div.attachment span {
+  padding: 5px;
 }
 .transparent {
   background: transparent !important;
@@ -456,9 +464,7 @@ div.attachment i {
   right: 0;
   top: 0;
 }
-
 /* Fix modal backdrop for smaller devices */
-
 @media (max-width: 679px) {
   .active .modal-backdrop-bg {
     opacity: .5;

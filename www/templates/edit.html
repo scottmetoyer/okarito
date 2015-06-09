@@ -40,7 +40,7 @@
         </div>
         <div class="attachments" ng-show="attachments.length > 0">
           <div class="attachment" ng-repeat="attachment in attachments">
-            <i class="icon ion-image"></i> <span ng-click="showAttachment()">{{ attachment.name }}</span> <i ng-click="deleteAttachment($index)" class="icon ion-close dark"></i>
+            <span ng-click="showAttachment(attachment.url)"><i class="icon ion-image"></i>{{ attachment.name }}</span><i ng-click="deleteAttachment($index)" class="icon ion-close dark"></i>
           </div>
         </div>
         <fancy-select header-text="Choose a Project" label="Project" allow-empty="true" value="case.ixProject" text="case.sProject.__cdata" items="projects" callback="projectUpdated(val)"></fancy-select>

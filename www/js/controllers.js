@@ -211,6 +211,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.filterDescription = '';
   $scope.ready = false;
   $scope.max = 25;
+  $scope.attachments = [];
 
   $scope.newModal = function() {
     caseModalService
@@ -249,6 +250,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.cancel = function() {
+    $scope.attachments = [];
     $scope.closeModal();
   };
 
@@ -409,25 +411,24 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.showAttachment = function(imageSrc) {
-    alert('well hello there');
-    /*
-    $scope.imageSrc = imageSrc;
+    var scope = $scope.$new(true);
+    scope.imageSrc = imageSrc;
 
     $ionicModal.fromTemplateUrl('templates/image-modal.html', {
-      scope: $scope,
+      scope: scope,
       animation: 'slide-in-up'
     }).then(function(modal) {
-      $scope.modal = modal;
-      $scope.modal.show();
+      scope.modal = modal;
+      scope.modal.show();
     });
 
-    $scope.hideItems = function() {
-      $scope.modal.hide();
+    scope.hideAttachments = function() {
+      scope.modal.hide();
     }
 
-    $scope.$on('$destroy', function() {
-      $scope.modal.remove();
-    });*/
+    scope.$on('$destroy', function() {
+      scope.modal.remove();
+    });
   };
 
   $scope.chooseEmail = function() {
@@ -522,7 +523,6 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.cancel = function() {
-    ``
     $scope.mailMessage = {
       from: '',
       to: '',
@@ -555,7 +555,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       quality: 75,
       destinationType: Camera.DestinationType.FILE_URI,
       sourceType: Camera.PictureSourceType.CAMERA,
-      allowEdit: true,
+      allowEdit: false,
       encodingType: Camera.EncodingType.JPEG
     };
 
@@ -571,7 +571,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       quality: 75,
       destinationType: Camera.DestinationType.FILE_URI,
       sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-      allowEdit: true,
+      allowEdit: false,
       encodingType: Camera.EncodingType.JPEG
     };
 
