@@ -359,6 +359,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   var backup = {};
   $scope.working = false;
   $scope.caseResolved = false;
+  $scope.attachments = [];
   $scope.mailMessage = {
     from: '',
     to: '',
@@ -533,13 +534,43 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.camera = function() {
-    /*
-    cameraService.getPicture().then(function(imageURI) {
+    var options = {
+      quality : 75,
+      destinationType : Camera.DestinationType.FILE_URI,
+      sourceType : Camera.PictureSourceType.CAMERA,
+      allowEdit : true,
+      encodingType: Camera.EncodingType.JPEG
+    };
+
+    cameraService.getPicture(options).then(function(imageURI) {
+
       console.log(imageURI);
     }, function(err) {
       console.log(err);
-    });*/
-    alert('Take a picture bitch');
+    });
+  };
+
+  $scope.gallery = function() {
+    var options = {
+      quality : 75,
+      destinationType : Camera.DestinationType.FILE_URI,
+      sourceType : Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit : true,
+      encodingType: Camera.EncodingType.JPEG
+    };
+
+    cameraService.getPicture(options).then(function(imageURI) {
+      var filename = imageURI.substr(imageURI.lastIndexOf("/")+1);
+      var attachment = {
+        name: filename,
+        url: imageURI
+      };
+      $scope.attachments.push(attachment);
+    }, function(err) {
+      console.log(err);
+
+      // TODO: Show an Ionic popup error
+    });
   };
 
   $scope.emailCase = function() {
