@@ -15,6 +15,31 @@ function normalizeArray(data) {
   }
 }
 
+function convertImageToData(url) {
+  var dataUri = '';
+  var img = angular.element('<img/>');
+  img.attr('src', url);
+  img.css({position: 'absolute', left: '0px', top: '-999999em', maxWidth: 'none', width: 'auto', height: 'auto'});
+
+  img.bind('load', function() {
+    var canvas = document.createElement("canvas");
+    canvas.width = $img.width();
+    canvas.height = $img.height();
+
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage($img[0], 0, 0);
+
+    dataUri = canvas.toDataURL('image/png');
+  });
+
+  img.bind('error', function() {
+    // TODO: Broadcast an error event here
+    console.log('Couldnt convert photo to data URI');
+  });
+
+  return dataUri;
+}
+
 function getCategoryIcon(categoryId) {
   var icon = '';
 
@@ -408,7 +433,7 @@ angular.module('okarito.services', ['angular-storage'])
           return response;
       });
     },
-    saveCase: function(bug, cmd) {
+    saveCase: function(bug, cmd, attachments) {
       var status = '';
       if (cmd == 'resolve') {
         status = "&ixStatus=" + bug.ixStatus;
@@ -422,6 +447,17 @@ angular.module('okarito.services', ['angular-storage'])
       tags = tags.substring(1);
       if (tags == '') {
         tags = ",";
+      }
+
+      // Add attachments
+      var attach = '';
+
+      if (attachments.length > 0) {
+        attach = '&nFileCount=' + attachments.length;
+      }
+
+      for (var i = 0; i < attachments.length; i++) {
+        attach += '&File' + (i + 1) + '=' + convertImageToData(attachments[i].url);
       }
 
       return $http({
@@ -439,7 +475,8 @@ angular.module('okarito.services', ['angular-storage'])
           "&sTags=" + tags +
           status,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'enctype': 'multipart/form-data'
         },
         transformResponse: transform
       }).then(function(response) {

@@ -521,7 +521,7 @@ angular.module('okarito.controllers', ['okarito.services'])
             });
         })
     } else {
-      dataService.saveCase($scope.case, command)
+      dataService.saveCase($scope.case, command, $scope.attachments)
         .then(function(result) {
           dataService.refreshCase($scope.case.ixBug)
             .then(function() {
