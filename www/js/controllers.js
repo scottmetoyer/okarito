@@ -230,7 +230,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   }
 
   $scope.save = function() {
-    dataService.saveCase($scope.case, 'new')
+    dataService.saveCase($scope.case, 'new', $scope.attachments)
       .then(function(result) {
         // Get the created case number and open it up
         caseNumber = result.data.case._ixBug;
@@ -513,7 +513,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.closeModal();
 
     if (command == 'email') {
-      dataService.emailCase($scope.case, $scope.mailMessage)
+      dataService.emailCase($scope.case, $scope.mailMessage, $scope.attachments)
         .then(function(result) {
           dataService.refreshCase($scope.case.ixBug)
             .then(function() {

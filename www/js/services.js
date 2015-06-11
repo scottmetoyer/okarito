@@ -15,36 +15,28 @@ function normalizeArray(data) {
   }
 }
 
-function convertImageToData(url) {
-  var dataUri = '';
-  var img = angular.element('<img/>');
-  img.attr('src', url);
-  img.css({
-    position: 'absolute',
-    left: '0px',
-    top: '-999999em',
-    maxWidth: 'none',
-    width: 'auto',
-    height: 'auto'
-  });
-
-  img.bind('load', function() {
-    var canvas = document.createElement("canvas");
-    canvas.width = $img.width();
-    canvas.height = $img.height();
-
-    var ctx = canvas.getContext('2d');
-    ctx.drawImage($img[0], 0, 0);
-
-    dataUri = canvas.toDataURL('image/png');
-  });
-
-  img.bind('error', function() {
-    // TODO: Broadcast an error event here
-    console.log('Couldnt convert photo to data URI');
-  });
-
-  return dataUri;
+function getImageData(imgUrl) {
+  window.resolveLocalFileSystemURL(
+    imgUrl,
+    function(fileEntry) {
+      fileEntry.file(function(file) {
+          var reader = new FileReader();
+          reader.onloadend = function(e) {
+            var imgBlob = new Blob([this.result], {
+              type: "image/jpeg"
+            });
+            
+            return imgBlob;
+          };
+          reader.readAsArrayBuffer(file);
+        },
+        function(e) {
+          // $scope.errorHandler(e)
+        });
+    },
+    function(e) {
+      // $scope.errorHandler(e)
+    });
 }
 
 function getCategoryIcon(categoryId) {
@@ -412,7 +404,7 @@ angular.module('okarito.services', ['angular-storage'])
         return response;
       });
     },
-    closeCase: function(bug) {
+    closeCase: function(bug, attachments) {
       var fd = new FormData();
       fd.append('cmd', 'close');
       fd.append('ixBug', bug.ixBug);
@@ -431,7 +423,7 @@ angular.module('okarito.services', ['angular-storage'])
         return response;
       });
     },
-    emailCase: function(bug, mail) {
+    emailCase: function(bug, mail, attachments) {
       var fd = new FormData();
       fd.append('cmd', 'email');
       fd.append('ixBug', bug.ixBug);
@@ -476,6 +468,13 @@ angular.module('okarito.services', ['angular-storage'])
 
       if (attachments.length > 0) {
         fd.append('nFileCount', attachments.length);
+
+        for (var i = 0; i < attachments.length; i++) {
+          var blob = getImageData(attachments[i].url);
+          fd.append('File' + i, blob);
+
+          console.log(blob);
+        }
       }
 
       fd.append('ixBug', bug.ixBug);
