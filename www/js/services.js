@@ -15,30 +15,6 @@ function normalizeArray(data) {
   }
 }
 
-function getImageData(imgUrl) {
-  window.resolveLocalFileSystemURL(
-    imgUrl,
-    function(fileEntry) {
-      fileEntry.file(function(file) {
-          var reader = new FileReader();
-          reader.onloadend = function(e) {
-            var imgBlob = new Blob([this.result], {
-              type: "image/jpeg"
-            });
-            
-            return imgBlob;
-          };
-          reader.readAsArrayBuffer(file);
-        },
-        function(e) {
-          // $scope.errorHandler(e)
-        });
-    },
-    function(e) {
-      // $scope.errorHandler(e)
-    });
-}
-
 function getCategoryIcon(categoryId) {
   var icon = '';
 
@@ -105,10 +81,62 @@ angular.module('okarito.services', ['angular-storage'])
   }
 })
 
-.factory('dataService', function($http, $filter, userService) {;
+.factory('dataService', function($q, $http, $filter, userService) {;
   var data = this;
   var cases = [];
   var categories = [];
+
+  function getImageData(imgUrl) {
+    var deferred = $q.defer();
+    var promise = deferred.promise;
+
+    window.resolveLocalFileSystemURL(
+      imgUrl,
+      function(fileEntry) {
+        fileEntry.file(function(file) {
+            var reader = new FileReader();
+            reader.onloadend = function(e) {
+              var imgBlob = new Blob([this.result], {
+                type: file.type
+              });
+
+              // Add appropriate extension to the file name if it does not exist - Android media library bug
+              // image/jpeg
+              // image/png
+
+              if (file.type == 'image/jpeg' && !(fileEntry.name.toLowerCase().endsWith('.jpg') || fileEntry.name.toLowerCase().endsWith('.jpeg'))) {
+                fileEntry.name += '.jpg';
+              }
+
+              if (file.type == 'image/png' && ! fileEntry.name.toLowerCase().endsWith('.png')) {
+                fileEntry.name += '.png';
+              }
+
+              deferred.resolve({ blob: imgBlob, name: fileEntry.name });
+            };
+
+            reader.readAsArrayBuffer(file);
+          },
+          function(e) {
+            deferred.reject(e);
+          });
+      },
+      function(e) {
+        deferred.reject(e);
+      });
+
+    promise.success = function(fn) {
+      promise.then(fn);
+      return promise;
+    }
+
+    promise.error = function(fn) {
+      promise.then(null, fn);
+      return promise;
+    }
+
+    return promise;
+  }
 
   return {
     getFilters: function() {
@@ -126,8 +154,6 @@ angular.module('okarito.services', ['angular-storage'])
       if (bug != null) {
         bug.newEvent = '';
         bug.tags = normalizeArray(bug.tags.tag);
-
-        console.log(bug.events.event.length);
 
         for (var i = 0; i < bug.events.event.length; i++) {
           bug.events.event[i].attachments = normalizeArray(bug.events.event[i].rgAttachments.attachment);
@@ -316,6 +342,10 @@ angular.module('okarito.services', ['angular-storage'])
         }, true)[0];
         bug.icon = category.icon;
 
+        for (var i = 0; i < bug.events.event.length; i++) {
+          bug.events.event[i].attachments = normalizeArray(bug.events.event[i].rgAttachments.attachment);
+        }
+
         // Copy refreshed case back in to the case list
         for (var i = 0; i < cases.length; i++) {
           if (cases[i].ixBug == caseId) {
@@ -329,7 +359,6 @@ angular.module('okarito.services', ['angular-storage'])
         transformResponse: transform,
         cache: cacheResponse
       }).then(function(response) {
-        console.log(response);
         var description = response.data.description != undefined ? response.data.description.__cdata : 'Search: ' + filter;
         cases = normalizeArray(response.data.cases.case).splice(0, max);
         count = response.data.cases._count;
@@ -466,17 +495,6 @@ angular.module('okarito.services', ['angular-storage'])
       }
       fd.append('sTags', tags);
 
-      if (attachments.length > 0) {
-        fd.append('nFileCount', attachments.length);
-
-        for (var i = 0; i < attachments.length; i++) {
-          var blob = getImageData(attachments[i].url);
-          fd.append('File' + i, blob);
-
-          console.log(blob);
-        }
-      }
-
       fd.append('ixBug', bug.ixBug);
       fd.append('sTitle', bug.sTitle.__cdata);
       fd.append('ixArea', bug.ixArea);
@@ -487,17 +505,35 @@ angular.module('okarito.services', ['angular-storage'])
       fd.append('ixPersonAssignedTo', bug.ixPersonAssignedTo);
       fd.append('sEvent', bug.newEvent);;
 
-      return $http.post(
-        '',
-        fd, {
-          headers: {
-            'Content-Type': undefined
-          },
-          transformResponse: transform,
-          transformRequest: angular.identy
-        }).success(function(response) {
-        return response;
-      });
+      if (attachments.length > 0) {
+        var promises = [];
+
+        for (var i = 0; i < attachments.length; i++) {
+          promises.push(getImageData(attachments[i].url));
+        }
+
+        return $q.all(promises).then(function(responses) {
+          fd.append('nFileCount', responses.length);
+
+          for (var i = 0; i < responses.length; i++) {
+            fd.append('File' + i, responses[0].blob, responses[0].name);
+          }
+
+          return $http.post('', fd, { headers: {'Content-Type': undefined },
+              transformResponse: transform,
+              transformRequest: angular.identity
+          }).then(function(response) {
+              return response;
+          });
+        });
+      } else {
+        return $http.post('', fd, { headers: {'Content-Type': undefined },
+            transformResponse: transform,
+            transformRequest: angular.identity
+          }).then(function(response) {
+            return response;
+          });
+      }
     }
   }
 })

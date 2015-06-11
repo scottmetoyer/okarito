@@ -225,6 +225,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.label = 'New case';
     $scope.date = $filter('date')(new Date(), 'medium');
     $scope.touched = 'Opened by ' + userService.getCurrentUser().full_name;
+    $scope.attachments=[];
     $scope.case = dataService.stubCase();
     $scope.newModal();
   }
@@ -250,7 +251,6 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.cancel = function() {
-    $scope.attachments = [];
     $scope.closeModal();
   };
 
@@ -518,6 +518,8 @@ angular.module('okarito.controllers', ['okarito.services'])
           dataService.refreshCase($scope.case.ixBug)
             .then(function() {
               $scope.working = false;
+              $scope.mailMessage = { from: '', to: '', cc: '', bcc: '', subject: '' };
+              $scope.attachments = [];
             });
         })
     } else {
@@ -526,6 +528,8 @@ angular.module('okarito.controllers', ['okarito.services'])
           dataService.refreshCase($scope.case.ixBug)
             .then(function() {
               $scope.working = false;
+              $scope.mailMessage = { from: '', to: '', cc: '', bcc: '', subject: '' };
+              $scope.attachments = [];
             });
         });
     }
@@ -569,9 +573,10 @@ angular.module('okarito.controllers', ['okarito.services'])
     };
 
     cameraService.getPicture(options).then(function(imageURI) {
-      console.log(imageURI);
+      
     }, function(err) {
       console.log(err);
+      // TODO: Show an Ionic popup error
     });
   };
 
@@ -586,6 +591,7 @@ angular.module('okarito.controllers', ['okarito.services'])
 
     cameraService.getPicture(options).then(function(imageURI) {
       var filename = imageURI.substr(imageURI.lastIndexOf("/") + 1);
+
       var attachment = {
         name: filename,
         url: imageURI
