@@ -19,7 +19,14 @@ function convertImageToData(url) {
   var dataUri = '';
   var img = angular.element('<img/>');
   img.attr('src', url);
-  img.css({position: 'absolute', left: '0px', top: '-999999em', maxWidth: 'none', width: 'auto', height: 'auto'});
+  img.css({
+    position: 'absolute',
+    left: '0px',
+    top: '-999999em',
+    maxWidth: 'none',
+    width: 'auto',
+    height: 'auto'
+  });
 
   img.bind('load', function() {
     var canvas = document.createElement("canvas");
@@ -130,7 +137,7 @@ angular.module('okarito.services', ['angular-storage'])
 
         console.log(bug.events.event.length);
 
-        for(var i = 0; i < bug.events.event.length; i++) {
+        for (var i = 0; i < bug.events.event.length; i++) {
           bug.events.event[i].attachments = normalizeArray(bug.events.event[i].rgAttachments.attachment);
         }
       }
@@ -159,7 +166,7 @@ angular.module('okarito.services', ['angular-storage'])
     getMailboxes: function() {
       return $http.get('cmd=listMailboxes', {
         transformResponse: transform
-      }).then(function(response){
+      }).then(function(response) {
         var mailboxes = normalizeArray(response.data.mailboxes.mailbox);
         var list = []
 
@@ -386,57 +393,74 @@ angular.module('okarito.services', ['angular-storage'])
       };
     },
     assignCase: function(bug) {
+      var fd = new FormData();
+      fd.append('cmd', 'assign');
+      fd.append('ixBug', bug.ixBug);
+      fd.append('ixPersonAssignedTo', bug.ixPersonAssignedTo);
+
       return $http({
         method: 'POST',
         url: '',
-        data: "cmd=assign&ixBug=" + bug.ixBug +
-          "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo,
+        data: fd,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': undefined
         },
-        transformResponse: transform
+        transformResponse: transform,
+        transformRequest: angular.identity
       }).then(function(response) {
         // Save success
         return response;
       });
     },
     closeCase: function(bug) {
+      var fd = new FormData();
+      fd.append('cmd', 'close');
+      fd.append('ixBug', bug.ixBug);
+      fd.append('sEvent', bug.newEvent);
+
       return $http({
         method: 'POST',
         url: '',
-        data: "cmd=close&ixBug=" + bug.ixBug +
-          "&sEvent=" + bug.newEvent,
+        data: fd,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': undefined
         },
-        transformResponse: transform
+        transformResponse: transform,
+        transformRequest: angular.identity
       }).then(function(response) {
         return response;
       });
     },
     emailCase: function(bug, mail) {
+      var fd = new FormData();
+      fd.append('cmd', 'email');
+      fd.append('ixBug', bug.ixBug);
+      fd.append('sFrom', mail.from);
+      fd.append('sTo', mail.to);
+      fd.append('sSubject', mail.subject);
+      fd.append('sCC', mail.cc);
+      fd.append('sBCC', mail.bcc);
+      fd.append('sEvent', bug.newEvent);
+
       return $http({
         method: 'POST',
         url: '',
-        data: "cmd=email&ixBug=" + bug.ixBug +
-          "&sFrom=" + mail.from +
-          "&sTo=" + mail.to +
-          "&sSubject=" + mail.subject +
-          "&sCC=" + mail.cc +
-          "&sBCC=" + mail.bcc +
-          "&sEvent=" + bug.newEvent,
+        data: fd,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': undefined
         },
-        transformResponse: transform
+        transformResponse: transform,
+        transformRequest: angular.identity
       }).then(function(response) {
-          return response;
+        return response;
       });
     },
     saveCase: function(bug, cmd, attachments) {
-      var status = '';
+      var fd = new FormData();
+      fd.append('cmd', cmd);
+
       if (cmd == 'resolve') {
-        status = "&ixStatus=" + bug.ixStatus;
+        fd.append('ixStatus', bug.ixStatus);
       }
 
       // Create comma separated list of tags
@@ -448,39 +472,32 @@ angular.module('okarito.services', ['angular-storage'])
       if (tags == '') {
         tags = ",";
       }
-
-      // Add attachments
-      var attach = '';
+      fd.append('sTags', tags);
 
       if (attachments.length > 0) {
-        attach = '&nFileCount=' + attachments.length;
+        fd.append('nFileCount', attachments.length);
       }
 
-      for (var i = 0; i < attachments.length; i++) {
-        attach += '&File' + (i + 1) + '=' + convertImageToData(attachments[i].url);
-      }
+      fd.append('ixBug', bug.ixBug);
+      fd.append('sTitle', bug.sTitle.__cdata);
+      fd.append('ixArea', bug.ixArea);
+      fd.append('ixProject', bug.ixProject);
+      fd.append('ixPriority', bug.ixPriority);
+      fd.append('ixCategory', bug.ixCategory);
+      fd.append('ixFixFor', bug.ixFixFor);
+      fd.append('ixPersonAssignedTo', bug.ixPersonAssignedTo);
+      fd.append('sEvent', bug.newEvent);;
 
-      return $http({
-        method: 'POST',
-        url: '',
-        data: "cmd=" + cmd + "&ixBug=" + bug.ixBug +
-          "&sTitle=" + bug.sTitle.__cdata +
-          "&ixArea=" + bug.ixArea +
-          "&ixProject=" + bug.ixProject +
-          "&ixPriority=" + bug.ixPriority +
-          "&ixCategory=" + bug.ixCategory +
-          "&ixFixFor=" + bug.ixFixFor +
-          "&ixPersonAssignedTo=" + bug.ixPersonAssignedTo +
-          "&sEvent=" + bug.newEvent +
-          "&sTags=" + tags +
-          status,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'enctype': 'multipart/form-data'
-        },
-        transformResponse: transform
-      }).then(function(response) {
-          return response;
+      return $http.post(
+        '',
+        fd, {
+          headers: {
+            'Content-Type': undefined
+          },
+          transformResponse: transform,
+          transformRequest: angular.identy
+        }).success(function(response) {
+        return response;
       });
     }
   }
@@ -579,12 +596,12 @@ angular.module('okarito.services', ['angular-storage'])
           user.root = root;
 
           return $http.get(user.api_url + 'cmd=logon&email=' + userEmail + '&password=' + password, {
-            transformResponse: transform
-          })
-          .then(function(response) {
-            user.access_token = response.data.token.__cdata;
-            deferred.resolve(user);
-          });
+              transformResponse: transform
+            })
+            .then(function(response) {
+              user.access_token = response.data.token.__cdata;
+              deferred.resolve(user);
+            });
         })
         .catch(function(reject) {
           if (reject.status != 200) {
@@ -654,13 +671,11 @@ angular.module('okarito.services', ['angular-storage'])
 
     // Process POST requests
     if (config.method == 'POST') {
-      if (config.data.indexOf('cmd=') > -1) {
-        if (access_token && api_url) {
-          config.url = api_url + config.url;
-          config.data = config.data + "&token=" + access_token;
-        } else {
-          $rootScope.$broadcast('not-logged-in');
-        }
+      if (access_token && api_url) {
+        config.url = api_url + config.url;
+        config.data.append('token', access_token);
+      } else {
+        $rootScope.$broadcast('not-logged-in');
       }
     }
 
