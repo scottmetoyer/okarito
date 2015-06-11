@@ -1,9 +1,106 @@
 angular.module('okarito.controllers', ['okarito.services'])
 
-.controller('AppCtrl', function($scope, $rootScope, $state, $filter, $ionicLoading, $ionicPopup, $ionicModal, $timeout, loginService, userService, dataService) {
+.controller('AppCtrl', function($scope, $rootScope, $state, $filter, $ionicLoading, $ionicPopup, $ionicModal, $timeout, loginService, userService, dataService, cameraService) {
   var app = this;
   $scope.s = {
     searchString: ''
+  };
+  $rootScope.attachments = [];
+
+  $rootScope.deleteAttachment = function(idx) {
+    $rootScope.attachments.splice(idx, 1);
+  }
+
+  $rootScope.camera = function() {
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: false,
+      encodingType: Camera.EncodingType.JPEG
+    };
+
+    cameraService.getPicture(options).then(function(imageURI) {
+      var filename = imageURI.substr(imageURI.lastIndexOf("/") + 1);
+      var attachment = {
+        name: filename,
+        url: imageURI
+      };
+      $rootScope.attachments.push(attachment);
+    }, function(err) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Image error',
+        template: err,
+        buttons: [{
+          text: 'OK',
+          type: 'button-stable',
+          onTap: function(e) {
+            return;
+          }
+        }]
+      });
+    });
+  };
+
+  $rootScope.viewAttachment = function(url) {
+    var root = userService.getCurrentUser().root;
+    var token = userService.getCurrentUser().access_token;
+    var url = angular.element('<textarea />').html(url).text();
+
+    var link = root + url + '&token=' + token;
+    window.open(link, '_blank', 'location=no,EnableViewPortScale=yes');
+  };
+
+  $rootScope.showAttachment = function(imageSrc) {
+    var scope = $scope.$new(true);
+    scope.imageSrc = imageSrc;
+
+    $ionicModal.fromTemplateUrl('templates/image-modal.html', {
+      scope: scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      scope.modal = modal;
+      scope.modal.show();
+    });
+
+    scope.hideAttachments = function() {
+      scope.modal.hide();
+    }
+
+    scope.$on('$destroy', function() {
+      scope.modal.remove();
+    });
+  };
+
+  $rootScope.gallery = function() {
+    var options = {
+      quality: 75,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      allowEdit: false,
+      encodingType: Camera.EncodingType.JPEG
+    };
+
+    cameraService.getPicture(options).then(function(imageURI) {
+      var filename = imageURI.substr(imageURI.lastIndexOf("/") + 1);
+      var attachment = {
+        name: filename,
+        url: imageURI
+      };
+      $rootScope.attachments.push(attachment);
+    }, function(err) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Image error',
+        template: err,
+        buttons: [{
+          text: 'OK',
+          type: 'button-stable',
+          onTap: function(e) {
+            return;
+          }
+        }]
+      });
+    });
   };
 
   $rootScope.$on('not-logged-in', function(event) {
@@ -203,7 +300,7 @@ angular.module('okarito.controllers', ['okarito.services'])
           }]
         });
       });
-  }
+    }
 })
 
 .controller('CasesCtrl', function($q, $filter, $rootScope, $state, $scope, $ionicLoading, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService, userService, caseModalService) {
@@ -211,7 +308,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   $scope.filterDescription = '';
   $scope.ready = false;
   $scope.max = 25;
-  $scope.attachments = [];
+  $rootScope.attachments = [];
 
   $scope.newModal = function() {
     caseModalService
@@ -225,14 +322,17 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.label = 'New case';
     $scope.date = $filter('date')(new Date(), 'medium');
     $scope.touched = 'Opened by ' + userService.getCurrentUser().full_name;
-    $scope.attachments=[];
+    $rootScope.attachments=[];
     $scope.case = dataService.stubCase();
     $scope.newModal();
   }
 
   $scope.save = function() {
-    dataService.saveCase($scope.case, 'new', $scope.attachments)
+    dataService.saveCase($scope.case, 'new', $rootScope.attachments)
       .then(function(result) {
+        // Clear the sub objects
+        $rootScope.attachments = [];
+
         // Get the created case number and open it up
         caseNumber = result.data.case._ixBug;
 
@@ -356,7 +456,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   }
 })
 
-.controller('CaseCtrl', function($q, $scope, $state, $sce, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $ionicPopup, $filter, $ionicLoading, dataService, userService, caseModalService, cameraService) {
+.controller('CaseCtrl', function($q, $scope, $state, $sce, $rootScope, $stateParams, $timeout, $ionicModal, $ionicPopover, $ionicPopup, $filter, $ionicLoading, dataService, userService, caseModalService) {
   var x2js = new X2JS();
   var backup = {};
   $scope.working = false;
@@ -368,7 +468,6 @@ angular.module('okarito.controllers', ['okarito.services'])
     bcc: '',
     subject: ''
   };
-  $scope.attachments = [];
 
   $scope.$on('error', function(event, args) {
     $ionicLoading.hide();
@@ -398,45 +497,11 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.popover = popover;
   });
 
-  $scope.deleteAttachment = function(idx) {
-    $scope.attachments.splice(idx, 1);
-  }
-
   $scope.quickSearch = function(searchString) {
     $state.go('app.cases').then(function() {
       $rootScope.$broadcast('search-cases', {
         search: searchString
       });
-    });
-  };
-
-  $scope.viewAttachment = function(url) {
-    var root = userService.getCurrentUser().root;
-    var token = userService.getCurrentUser().access_token;
-    var url = angular.element('<textarea />').html(url).text();
-
-    var link = root + url + '&token=' + token;
-    window.open(link, '_blank', 'location=no,EnableViewPortScale=yes');
-  };
-
-  $scope.showAttachment = function(imageSrc) {
-    var scope = $scope.$new(true);
-    scope.imageSrc = imageSrc;
-
-    $ionicModal.fromTemplateUrl('templates/image-modal.html', {
-      scope: scope,
-      animation: 'slide-in-up'
-    }).then(function(modal) {
-      scope.modal = modal;
-      scope.modal.show();
-    });
-
-    scope.hideAttachments = function() {
-      scope.modal.hide();
-    }
-
-    scope.$on('$destroy', function() {
-      scope.modal.remove();
     });
   };
 
@@ -513,23 +578,23 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.closeModal();
 
     if (command == 'email') {
-      dataService.emailCase($scope.case, $scope.mailMessage, $scope.attachments)
+      dataService.emailCase($scope.case, $scope.mailMessage, $rootScope.attachments)
         .then(function(result) {
           dataService.refreshCase($scope.case.ixBug)
             .then(function() {
               $scope.working = false;
               $scope.mailMessage = { from: '', to: '', cc: '', bcc: '', subject: '' };
-              $scope.attachments = [];
+              $rootScope.attachments = [];
             });
         })
     } else {
-      dataService.saveCase($scope.case, command, $scope.attachments)
+      dataService.saveCase($scope.case, command, $rootScope.attachments)
         .then(function(result) {
           dataService.refreshCase($scope.case.ixBug)
             .then(function() {
               $scope.working = false;
               $scope.mailMessage = { from: '', to: '', cc: '', bcc: '', subject: '' };
-              $scope.attachments = [];
+              $rootScope.attachments = [];
             });
         });
     }
@@ -543,7 +608,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       bcc: '',
       subject: ''
     };
-    $scope.attachments = [];
+    $rootScope.attachments = [];
     angular.copy(backup, $scope.case);
     $scope.closeModal();
   };
@@ -561,47 +626,6 @@ angular.module('okarito.controllers', ['okarito.services'])
       .then(function() {
         $scope.working = false;
       });
-  };
-
-  $scope.camera = function() {
-    var options = {
-      quality: 75,
-      destinationType: Camera.DestinationType.FILE_URI,
-      sourceType: Camera.PictureSourceType.CAMERA,
-      allowEdit: false,
-      encodingType: Camera.EncodingType.JPEG
-    };
-
-    cameraService.getPicture(options).then(function(imageURI) {
-      
-    }, function(err) {
-      console.log(err);
-      // TODO: Show an Ionic popup error
-    });
-  };
-
-  $scope.gallery = function() {
-    var options = {
-      quality: 75,
-      destinationType: Camera.DestinationType.FILE_URI,
-      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-      allowEdit: false,
-      encodingType: Camera.EncodingType.JPEG
-    };
-
-    cameraService.getPicture(options).then(function(imageURI) {
-      var filename = imageURI.substr(imageURI.lastIndexOf("/") + 1);
-
-      var attachment = {
-        name: filename,
-        url: imageURI
-      };
-      $scope.attachments.push(attachment);
-    }, function(err) {
-      console.log(err);
-
-      // TODO: Show an Ionic popup error
-    });
   };
 
   $scope.emailCase = function() {

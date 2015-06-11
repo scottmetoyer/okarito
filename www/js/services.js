@@ -407,6 +407,9 @@ angular.module('okarito.services', ['angular-storage'])
         sPriority: {
           __cdata: ''
         },
+        sStatus: {
+          __cdata: ''
+        },
         sTitle: {
           __cdata: ''
         },
@@ -516,7 +519,7 @@ angular.module('okarito.services', ['angular-storage'])
           fd.append('nFileCount', responses.length);
 
           for (var i = 0; i < responses.length; i++) {
-            fd.append('File' + i, responses[0].blob, responses[0].name);
+            fd.append('File' + (i + 1), responses[i].blob, responses[i].name);
           }
 
           return $http.post('', fd, { headers: {'Content-Type': undefined },
@@ -581,7 +584,7 @@ angular.module('okarito.services', ['angular-storage'])
       dataService.getStatuses(val, resolved, false)
         .then(function(response) {
           $scope.statuses = response;
-          $scope.case.sStatus.__cdata = $scope.statuses[0].text;
+          $scope.case.sStatus.__cdata = $scope.statuses[0].text; // TODO: Find the bug here, when saving a new case
           $scope.case.ixStatus = $scope.statuses[0].id;
         });
     }
