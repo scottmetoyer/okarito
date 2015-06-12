@@ -1,3 +1,6 @@
+* {
+    box-shadow: none !important;
+}
 .spacer {
   height: .25em;
 }
