@@ -341,7 +341,7 @@ try {
   };
 
   $scope.showAll = function() {
-    $scope.max = 99999;
+    $scope.max = 250;
 
     $ionicLoading.show({
       template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
