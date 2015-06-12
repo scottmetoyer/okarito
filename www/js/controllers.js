@@ -28,17 +28,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       };
       $rootScope.attachments.push(attachment);
     }, function(err) {
-      var alertPopup = $ionicPopup.alert({
-        title: 'Image error',
-        template: err,
-        buttons: [{
-          text: 'OK',
-          type: 'button-stable',
-          onTap: function(e) {
-            return;
-          }
-        }]
-      });
+      console.log(err);
     });
   };
 
@@ -89,17 +79,7 @@ angular.module('okarito.controllers', ['okarito.services'])
       };
       $rootScope.attachments.push(attachment);
     }, function(err) {
-      var alertPopup = $ionicPopup.alert({
-        title: 'Image error',
-        template: err,
-        buttons: [{
-          text: 'OK',
-          type: 'button-stable',
-          onTap: function(e) {
-            return;
-          }
-        }]
-      });
+      console.log(err);
     });
   };
 
