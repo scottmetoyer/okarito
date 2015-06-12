@@ -263,12 +263,13 @@ try {
             userService.setCurrentUser(data);
           });
 
-        // TODO: Clear out scope data on successful login
-        // $scope.data = {};
-        $rootScope.$broadcast('authorized');
-        $state.go('app.cases').then(function() {
-          $rootScope.$broadcast('search-cases', {
-            search: ''
+          // Clear out the password value
+          $scope.data.password = '';
+
+          $rootScope.$broadcast('authorized');
+          $state.go('app.cases').then(function() {
+            $rootScope.$broadcast('search-cases', {
+              search: ''
           });
         });
       })
