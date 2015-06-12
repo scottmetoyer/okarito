@@ -20,16 +20,21 @@ angular.module('okarito.controllers', ['okarito.services'])
       encodingType: Camera.EncodingType.JPEG
     };
 
-    cameraService.getPicture(options).then(function(imageURI) {
-      var filename = imageURI.substr(imageURI.lastIndexOf("/") + 1);
-      var attachment = {
-        name: filename,
-        url: imageURI
-      };
-      $rootScope.attachments.push(attachment);
-    }, function(err) {
-      console.log(err);
-    });
+try {
+  cameraService.getPicture(options).then(function(imageURI) {
+    var filename = imageURI.substr(imageURI.lastIndexOf("/") + 1);
+    var attachment = {
+      name: filename,
+      url: imageURI
+    };
+    $rootScope.attachments.push(attachment);
+  }, function(err) {
+    console.log(err);
+  });
+} catch (e) {
+  alert(e.message)
+}
+
   };
 
   $rootScope.viewAttachment = function(url) {
@@ -720,7 +725,6 @@ angular.module('okarito.controllers', ['okarito.services'])
         $scope.areas = responses[1];
         $scope.statuses = responses[2];
         $scope.mailboxes = responses[3];
-        $ionicLoading.hide();
       });
   }
 

@@ -153,13 +153,13 @@ angular.module('okarito.services', ['angular-storage'])
 
       if (bug != null) {
         bug.newEvent = '';
-        bug.tags = normalizeArray(bug.tags.tag);
+        bug.tagList = normalizeArray(bug.tags.tag);
 
         for (var i = 0; i < bug.events.event.length; i++) {
           bug.events.event[i].attachments = normalizeArray(bug.events.event[i].rgAttachments.attachment);
         }
       }
-      
+
       return bug;
     },
     getProjects: function(cacheResponse) {
@@ -335,7 +335,7 @@ angular.module('okarito.services', ['angular-storage'])
       }).then(function(response) {
         var bug = normalizeArray(response.data.cases.case)[0];
         bug.newEvent = '';
-        bug.tags = normalizeArray(bug.tags.tag);
+        bug.tagList = normalizeArray(bug.tags.tag);
 
         var category = $filter('filter')(categories, {
           id: bug.ixCategory
@@ -489,8 +489,8 @@ angular.module('okarito.services', ['angular-storage'])
 
       // Create comma separated list of tags
       var tags = '';
-      for (var i = 0; i < bug.tags.length; i++) {
-        tags += ',"' + bug.tags[i].__cdata + '"';
+      for (var i = 0; i < bug.tagList.length; i++) {
+        tags += ',"' + bug.tagList[i].__cdata + '"';
       }
       tags = tags.substring(1);
       if (tags == '') {
