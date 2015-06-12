@@ -697,11 +697,11 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.$on('$ionicView.enter', function() {
-    init();
   });
 
   $scope.$on('$ionicView.beforeEnter', function() {
     $scope.ready = false;
+    init();
   });
 
   var prepareModal = function() {

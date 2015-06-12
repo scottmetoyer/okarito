@@ -159,7 +159,7 @@ angular.module('okarito.services', ['angular-storage'])
           bug.events.event[i].attachments = normalizeArray(bug.events.event[i].rgAttachments.attachment);
         }
       }
-
+      
       return bug;
     },
     getProjects: function(cacheResponse) {
