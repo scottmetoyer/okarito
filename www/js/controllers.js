@@ -512,7 +512,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.editModal = function() {
-    caseModalService.init('templates/edit.html', $scope)
+    return caseModalService.init('templates/edit.html', $scope)
       .then(function(modal) {
         modal.show();
       });
@@ -684,8 +684,9 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.touched = 'Edited by ' + userService.getCurrentUser().full_name;
 
     $scope.closePopover();
-    $scope.editModal();
-    prepareModal().then(function() {});
+    $scope.editModal().then(function(){
+      prepareModal();
+    });
   };
 
   $scope.openPopover = function($event) {
@@ -705,10 +706,6 @@ angular.module('okarito.controllers', ['okarito.services'])
   });
 
   var prepareModal = function() {
-    $ionicLoading.show({
-      template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
-    });
-
     // Backup the case to support non-destructive edit
     angular.copy($scope.case, backup);
 
