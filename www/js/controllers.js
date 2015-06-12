@@ -38,7 +38,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     var url = angular.element('<textarea />').html(url).text();
 
     var link = root + url + '&token=' + token;
-    window.open(link, '_blank', 'location=no,EnableViewPortScale=yes');
+    window.open(link, '_blank', 'location=no,EnableViewPortScale=yes,hardwareback=no');
   };
 
   $rootScope.showAttachment = function(imageSrc) {
