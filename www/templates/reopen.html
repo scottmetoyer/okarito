@@ -20,23 +20,38 @@
         <label class="item item-input">
           <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a case note..."></textarea>
         </label>
-        <label class="item tabs tabs-secondary tabs-icon-left">
-          <button class="tab-item button button-clear" ng-click="gallery()">
-            <i class="icon ion-images tropic"></i>
-          </button>
-          <button class="tab-item button button-clear" ng-click="camera()">
-            <i class="icon ion-camera tropic"></i>
-          </button>
-        </label>
+        <div class="row" style="padding: 0; text-align: center;">
+          <div class="col">
+          </div>
+          <div class="col">
+            <button class="tab-item button button-clear" ng-click="gallery()">
+              <i class="icon ion-images dark"></i>
+            </button>
+          </div>
+          <div class="col">
+          </div>
+          <div class="col">
+            <button class="tab-item button button-clear" ng-click="camera()">
+              <i class="icon ion-camera dark"></i>
+            </button>
+          </div>
+          <div class="col">
+          </div>
+        </div>
+        <div class="attachments" ng-show="attachments.length > 0">
+          <div class="attachment" ng-repeat="attachment in attachments">
+            <span ng-click="showAttachment(attachment.url)"><i class="icon ion-image"></i>{{ attachment.name }}</span><i ng-click="deleteAttachment($index)" class="icon ion-close dark"></i>
+          </div>
+        </div>
         <fancy-select header-text="Choose a Project" label="Project" allow-empty="true" value="case.ixProject" text="case.sProject.__cdata" items="projects" callback="projectUpdated(val)"></fancy-select>
         <fancy-select header-text="Choose an Area" label="Area" allow-empty="true" value="case.ixArea" text="case.sArea.__cdata" items="areas"></fancy-select>
         <fancy-select header-text="Choose a Milestone" label="Milestone" allow-empty="true" value="case.ixFixFor" text="case.sFixFor.__cdata" items="milestones"></fancy-select>
         <fancy-select header-text="Choose a Category" label="Category" allow-empty="true" value="case.ixCategory" text="case.sCategory.__cdata" items="categories" callback="categoryUpdated(val, false)"></fancy-select>
         <fancy-select header-text="Choose a Person" label="Assigned To" allow-empty="true" value="case.ixPersonAssignedTo" text="case.sPersonAssignedTo.__cdata" items="people"></fancy-select>
         <fancy-select header-text="Choose a Priority" label="Priority" allow-empty="true" value="case.ixPriority" text="case.sPriority.__cdata" items="priorities"></fancy-select>
-        <label class="item item-input item-input">
-          <div class="input-label">Tags</div>
-          <input name="tags" ng-model="tags" type="text">
+        <label class="item item-stacked-label tag-box">
+          <span class="input-label subdued">Tags</span>
+          <tags-input ng-model="case.tags" replace-spaces-with-dashes="false" display-property="__cdata" placeholder="+" min-length="1"></tags-input>
         </label>
       </div>
     </div>

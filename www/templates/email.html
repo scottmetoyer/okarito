@@ -44,14 +44,29 @@
         <label class="item item-input">
           <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a message body..."></textarea>
         </label>
-        <label class="item tabs tabs-secondary tabs-icon-left">
-          <button class="tab-item button button-clear" ng-click="gallery()">
-            <i class="icon ion-images tropic"></i>
-          </button>
-          <button class="tab-item button button-clear" ng-click="camera()">
-            <i class="icon ion-camera tropic"></i>
-          </button>
-        </label>
+        <div class="row" style="padding: 0; text-align: center;">
+          <div class="col">
+          </div>
+          <div class="col">
+            <button class="tab-item button button-clear" ng-click="gallery()">
+              <i class="icon ion-images dark"></i>
+            </button>
+          </div>
+          <div class="col">
+          </div>
+          <div class="col">
+            <button class="tab-item button button-clear" ng-click="camera()">
+              <i class="icon ion-camera dark"></i>
+            </button>
+          </div>
+          <div class="col">
+          </div>
+        </div>
+        <div class="attachments" ng-show="attachments.length > 0">
+          <div class="attachment" ng-repeat="attachment in attachments">
+            <span ng-click="showAttachment(attachment.url)"><i class="icon ion-image"></i>{{ attachment.name }}</span><i ng-click="deleteAttachment($index)" class="icon ion-close dark"></i>
+          </div>
+        </div>
       </div>
     </div>
   </ion-content>

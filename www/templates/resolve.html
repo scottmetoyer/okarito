@@ -24,14 +24,29 @@
         <label class="item item-input">
           <textarea msd-elastic="\n\n" id="event" name="event" ng-model="case.newEvent" placeholder="Add a resolution note..."></textarea>
         </label>
-        <label class="item tabs tabs-secondary tabs-icon-left">
-          <button class="tab-item button button-clear" ng-click="gallery()">
-            <i class="icon ion-images tropic"></i>
-          </button>
-          <button class="tab-item button button-clear" ng-click="camera()">
-            <i class="icon ion-camera tropic"></i>
-          </button>
-        </label>
+        <div class="row" style="padding: 0; text-align: center;">
+          <div class="col">
+          </div>
+          <div class="col">
+            <button class="tab-item button button-clear" ng-click="gallery()">
+              <i class="icon ion-images dark"></i>
+            </button>
+          </div>
+          <div class="col">
+          </div>
+          <div class="col">
+            <button class="tab-item button button-clear" ng-click="camera()">
+              <i class="icon ion-camera dark"></i>
+            </button>
+          </div>
+          <div class="col">
+          </div>
+        </div>
+        <div class="attachments" ng-show="attachments.length > 0">
+          <div class="attachment" ng-repeat="attachment in attachments">
+            <span ng-click="showAttachment(attachment.url)"><i class="icon ion-image"></i>{{ attachment.name }}</span><i ng-click="deleteAttachment($index)" class="icon ion-close dark"></i>
+          </div>
+        </div>
         <fancy-select header-text="Choose a Status" label="Status" allow-empty="true" value="case.ixStatus" text="case.sStatus.__cdata" items="statuses"></fancy-select>
         <label class="item item-input">
           <div class="input-label subdued">Project</div>
@@ -54,9 +69,9 @@
           </div>
         </label>
         <fancy-select header-text="Choose a Priority" label="Priority" allow-empty="true" value="case.ixPriority" text="case.sPriority.__cdata" items="priorities"></fancy-select>
-        <label class="item item-input item-input">
-          <div class="input-label">Tags</div>
-          <input name="tags" ng-model="tags" type="text">
+        <label class="item item-stacked-label tag-box">
+          <span class="input-label subdued">Tags</span>
+          <tags-input ng-model="case.tags" replace-spaces-with-dashes="false" display-property="__cdata" placeholder="+" min-length="1"></tags-input>
         </label>
       </div>
     </div>
