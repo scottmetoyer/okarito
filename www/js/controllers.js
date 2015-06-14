@@ -177,8 +177,8 @@ try {
 
 .controller('LoginCtrl', function($scope, $rootScope, $state, $filter, $ionicPopup, $ionicModal, loginService, userService, dataService) {
   $scope.data = {
-    email: 'scott.metoyer@gmail.com',
-    url: 'https://scottmetoyer.fogbugz.com',
+    email: '',
+    url: '',
     password: ''
   };
 
