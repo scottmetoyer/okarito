@@ -70,4 +70,8 @@ angular.module('okarito', ['ionic', 'okarito.controllers', 'okarito.directives',
 
   // Add the authentication interceptor
   $httpProvider.interceptors.push('authInterceptor');
+})
+
+.config(function($compileProvider){
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile|content):|data:image\//);
 });

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<response>
-  <error code="2">Ambiguous Logon</error>
-  <people>
-    <person>John Hancock</person>
-    <person>Fred Astaire</person>
-  </people>
-</response>

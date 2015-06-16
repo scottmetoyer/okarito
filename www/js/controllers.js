@@ -44,7 +44,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   $rootScope.showAttachment = function(imageSrc) {
     var scope = $scope.$new(true);
     scope.imageSrc = imageSrc;
-
+    console.log(scope.imageSrc);
     $ionicModal.fromTemplateUrl('templates/image-modal.html', {
       scope: scope,
       animation: 'slide-in-up'
