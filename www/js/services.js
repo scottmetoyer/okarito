@@ -118,10 +118,12 @@ angular.module('okarito.services', ['angular-storage'])
             reader.readAsArrayBuffer(file);
           },
           function(e) {
+            console.log(e);
             deferred.reject(e);
           });
       },
       function(e) {
+        console.log(e);
         deferred.reject(e);
       });
 
@@ -131,6 +133,7 @@ angular.module('okarito.services', ['angular-storage'])
     }
 
     promise.error = function(fn) {
+      console.log(e);
       promise.then(null, fn);
       return promise;
     }
