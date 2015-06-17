@@ -8,7 +8,7 @@
       <div class="padding">
         <p>There were multiple matches for that email address. Please choose the specific user you would like to log in as.</p>
       </div>
-      <label ng-repeat="item in items" class="item item-text-wrap item-icon-left" ng-click='validateSingle(item)'>
+      <label collection-repeat="item in items" class="item item-text-wrap item-icon-left" ng-click='validateSingle(item)'>
         <i class="icon ion-person"></i>
         {{item.text}}
       </label>
