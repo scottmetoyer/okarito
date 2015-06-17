@@ -336,7 +336,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $scope.showAll = function() {
-    $scope.max = 250;
+    $scope.max = 99999;
 
     $ionicLoading.show({
       template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'

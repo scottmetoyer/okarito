@@ -9,7 +9,7 @@
       <div class="item bare" ng-show="cases.length == 0">
         <p>Nothing was found that matched.</p>
       </div>
-      <a class="item" style="padding: .4em;" ng-repeat="bug in cases" href="#/app/cases/{{$index}}">
+      <a class="item" style="padding: .4em;" collection-repeat="bug in cases" href="#/app/cases/{{$index}}">
         <div class="row">
           <div class="col">
             <span class="case-number priority{{bug.ixPriority}}">{{bug.ixBug}}</span>
@@ -21,13 +21,13 @@
           </div>
         </div>
       </a>
-      <div class="list-footer" ng-show="cases.length > 0">
-        <div class="short" ng-hide="count > max && cases.length < count">
-          {{ cases.length }} of {{ count }}
-        </div>
-        <button class="button button-clear short" ng-click="showAll()" ng-show="count > max && cases.length < count">
-          {{ cases.length }} of <span ng-show="count == 250">over </span> {{ count }} (tap for all)
-        </button>
+    </div>
+    <div class="list-footer" ng-show="cases.length > 0" style="height: 60px;">
+      <div ng-show="cases.length == count">
+        {{ cases.length }} of {{ count }}
+      </div>
+      <div ng-click="showAll()" ng-show="count > max && cases.length < count">
+        {{ cases.length }} of {{ count }} (tap for all)
       </div>
     </div>
   </ion-content>
