@@ -720,6 +720,9 @@ angular.module('okarito.services', ['angular-storage'])
       }
     }
 
+    // Finally, put a 20 second delay in there to timeout if requests take too long
+    config.timeout = 20000;
+    
     return config || $q.when(config);
   };
 
