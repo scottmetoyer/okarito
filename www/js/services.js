@@ -1,12 +1,12 @@
 // Shared service utility functions
+var x2js = new X2JS();
+
 function transform(data) {
-  var x2js = new X2JS();
   var json = x2js.xml_str2json(data);
   return json.response;
 }
 
 function normalizeArray(data) {
-  var x2js = new X2JS();
   var array = x2js.asArray(data);
   if (array[0] == undefined) {
     return [];
@@ -358,7 +358,7 @@ angular.module('okarito.services', ['angular-storage'])
       });
     },
     getCases: function(filter, cacheResponse, max) {
-      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,fOpen,sFormat,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
+      return $http.get('cmd=search&max=200&q=' + filter + '&cols=sTitle,ixBug,fOpen,sFormat,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
         transformResponse: transform,
         cache: cacheResponse
       }).then(function(response) {
@@ -694,6 +694,7 @@ angular.module('okarito.services', ['angular-storage'])
   var service = this;
 
   service.request = function(config) {
+    console.log('Making request');
     var currentUser = userService.getCurrentUser();
     var access_token = currentUser ? currentUser.access_token : null;
     var api_url = currentUser ? currentUser.api_url : null;
