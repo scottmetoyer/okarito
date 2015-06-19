@@ -141,6 +141,22 @@ angular.module('okarito.services', ['angular-storage'])
     return promise;
   }
 
+  function prepBug(bug) {
+    bug.newEvent = '';
+    bug.tagList = normalizeArray(bug.tags.tag);
+
+    var category = $filter('filter')(categories, {
+      id: bug.ixCategory
+    }, true)[0];
+    bug.icon = category.icon;
+
+    for (var i = 0; i < bug.events.event.length; i++) {
+      bug.events.event[i].attachments = normalizeArray(bug.events.event[i].rgAttachments.attachment);
+    }
+
+    return bug;
+  }
+
   return {
     getFilters: function() {
       return $http.get('cmd=listFilters', {
@@ -150,20 +166,36 @@ angular.module('okarito.services', ['angular-storage'])
         return filters;
       });
     },
-    getCase: function(id, refresh) {
-      var bug = null;
-      bug = cases[id];
+    previewCase: function(id) {
+      return cases[id];
+    },
+    refreshCase: function(caseId) {
+      return $http.get('cmd=search&q=' + caseId + '&cols=sTitle,ixBug,fOpen,sFormat,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
+        transformResponse: transform
+      }).then(function(response) {
+        var bug = normalizeArray(response.data.cases.case)[0];
+        bug = prepBug(bug);
 
-      if (bug != null) {
-        bug.newEvent = '';
-        bug.tagList = normalizeArray(bug.tags.tag);
-
-        for (var i = 0; i < bug.events.event.length; i++) {
-          bug.events.event[i].attachments = normalizeArray(bug.events.event[i].rgAttachments.attachment);
+        // Copy refreshed case back in to the case list
+        for (var i = 0; i < cases.length; i++) {
+          if (cases[i].ixBug == caseId) {
+            angular.copy(bug, cases[i]);
+          }
         }
-      }
+      });
+    },
+    getCase: function(id, refresh) {
+      // Load the full case details from server
+      return $http.get('cmd=search&q=' + cases[id].ixBug + '&cols=sTitle,ixBug,fOpen,sFormat,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
+        transformResponse: transform
+      }).then(function(response) {
+        var bug = normalizeArray(response.data.cases.case)[0];
+        bug = prepBug(bug);
+        angular.copy(bug, cases[id]);
 
-      return bug;
+        // Return the case
+        return cases[id];
+      });
     },
     getProjects: function(cacheResponse) {
       return $http.get('cmd=listProjects', {
@@ -332,33 +364,8 @@ angular.module('okarito.services', ['angular-storage'])
         return list;
       });
     },
-    refreshCase: function(caseId) {
-      return $http.get('cmd=search&q=' + caseId + '&cols=sTitle,ixBug,fOpen,sFormat,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
-        transformResponse: transform
-      }).then(function(response) {
-        var bug = normalizeArray(response.data.cases.case)[0];
-        bug.newEvent = '';
-        bug.tagList = normalizeArray(bug.tags.tag);
-
-        var category = $filter('filter')(categories, {
-          id: bug.ixCategory
-        }, true)[0];
-        bug.icon = category.icon;
-
-        for (var i = 0; i < bug.events.event.length; i++) {
-          bug.events.event[i].attachments = normalizeArray(bug.events.event[i].rgAttachments.attachment);
-        }
-
-        // Copy refreshed case back in to the case list
-        for (var i = 0; i < cases.length; i++) {
-          if (cases[i].ixBug == caseId) {
-            angular.copy(bug, cases[i]);
-          }
-        }
-      });
-    },
     getCases: function(filter, cacheResponse, max) {
-      return $http.get('cmd=search&max=200&q=' + filter + '&cols=sTitle,ixBug,fOpen,sFormat,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory,sPersonAssignedTo,ixPersonAssignedTo,sEmailAssignedTo,tags,events', {
+      return $http.get('cmd=search&q=' + filter + '&cols=sTitle,ixBug,fOpen,sFormat,sProject,ixProject,sArea,ixArea,sPriority,ixPriority,sFixFor,ixFixFor,ixStatus,sStatus,sCategory,ixCategory', {
         transformResponse: transform,
         cache: cacheResponse
       }).then(function(response) {
@@ -694,7 +701,6 @@ angular.module('okarito.services', ['angular-storage'])
   var service = this;
 
   service.request = function(config) {
-    console.log('Making request');
     var currentUser = userService.getCurrentUser();
     var access_token = currentUser ? currentUser.access_token : null;
     var api_url = currentUser ? currentUser.api_url : null;
@@ -729,7 +735,6 @@ angular.module('okarito.services', ['angular-storage'])
   service.response = function(response) {
     if (response.data && response.data.error) {
       var code = response.data.error._code;
-      console.log(response);
 
       switch (code) {
         case '1':
