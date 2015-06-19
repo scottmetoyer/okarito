@@ -725,25 +725,29 @@ angular.module('okarito.controllers', ['okarito.services'])
   }
 
   var init = function() {
-    $scope.case = dataService.getCase($stateParams.id);
-    $scope.date = $filter('date')(new Date(), 'medium');
+    $scope.case = dataService.previewCase($stateParams.id);
 
-    $scope.$watch('case.ixCategory', function(newValue, oldValue) {
-      var category = $filter('filter')($rootScope.categories, {
-        id: $scope.case.ixCategory
-      }, true)[0];
+    dataService.getCase($stateParams.id).then(function(result){
+      $scope.case = result;
+      $scope.date = $filter('date')(new Date(), 'medium');
 
-      $scope.case.icon = category.icon;
+      $scope.$watch('case.ixCategory', function(newValue, oldValue) {
+        var category = $filter('filter')($rootScope.categories, {
+          id: $scope.case.ixCategory
+        }, true)[0];
+
+        $scope.case.icon = category.icon;
+      });
+
+      $scope.$watch('case.ixStatus', function(newValue, oldValue) {
+        var status = $filter('filter')($rootScope.allStatuses, {
+          id: $scope.case.ixStatus
+        }, true)[0];
+
+        $scope.caseResolved = status.resolved;
+      });
+
+      $scope.ready = true;
     });
-
-    $scope.$watch('case.ixStatus', function(newValue, oldValue) {
-      var status = $filter('filter')($rootScope.allStatuses, {
-        id: $scope.case.ixStatus
-      }, true)[0];
-
-      $scope.caseResolved = status.resolved;
-    });
-
-    $scope.ready = true;
   };
 });

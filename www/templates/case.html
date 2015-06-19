@@ -1,34 +1,32 @@
 <ion-view view-title="">
   <ion-nav-buttons side="right">
-    <span ng-show="ready">
-      <span ng-show="case.fOpen == 'true'">
-        <fancy-select mode="icon" header-text="Choose a Person" allow-empty="true" value="case.ixPersonAssignedTo" items="people" callback="assignCase(val, text)"></fancy-select>
-        <button class="button button-icon icon ion-checkmark" ng-click="resolveCase()">
-        </button>
-      </span>
-      <button class="button button-icon icon ion-edit" ng-click="editCase()">
-      </button>
-      <button class="button button-icon icon ion-more" ng-click="openPopover($event)">
+    <span ng-show="case.fOpen == 'true'">
+      <fancy-select mode="icon" header-text="Choose a Person" allow-empty="true" value="case.ixPersonAssignedTo" items="people" callback="assignCase(val, text)"></fancy-select>
+      <button class="button button-icon icon ion-checkmark" ng-click="resolveCase()">
       </button>
     </span>
+    <button class="button button-icon icon ion-edit" ng-click="editCase()">
+    </button>
+    <button class="button button-icon icon ion-more" ng-click="openPopover($event)">
+    </button>
   </ion-nav-buttons>
   <ion-content>
     <div class="item item-divider">
-      <span ng-show="ready">
-        <strong>{{case.ixBug}}&nbsp;</strong>
-        <i class="icon {{ case.icon }}"></i>&nbsp;
-        <i class="icon ion-record priority{{case.ixPriority}}"></i>&nbsp;
-        <i ng-show="caseResolved == 'false' && case.fOpen == 'true'" class="ion-ios-circle-outline"></i>
-        <i ng-show="caseResolved == 'true' && case.fOpen == 'true'" class="ion-ios-checkmark-outline"></i>
-        <i ng-hide="case.fOpen == 'true'" class="ion-ios-circle-filled"></i>
-        <img class="loader" ng-show="working" src="img/ajax-loader.gif" />
-      </span>
+      <strong>{{case.ixBug}}&nbsp;</strong>
+      <i class="icon {{ case.icon }}"></i>&nbsp;
+      <i class="icon ion-record priority{{case.ixPriority}}"></i>&nbsp;
+      <i ng-show="caseResolved == 'false' && case.fOpen == 'true'" class="ion-ios-circle-outline"></i>
+      <i ng-show="caseResolved == 'true' && case.fOpen == 'true'" class="ion-ios-checkmark-outline"></i>
+      <i ng-hide="case.fOpen == 'true'" class="ion-ios-circle-filled"></i>
+      <img class="loader" ng-show="working" src="img/ajax-loader.gif" />
     </div>
     <div class="item item-text-wrap">
       <h2>{{ case.sTitle.__cdata }}</h2>
-      <p ng-show="ready"><a href="#" ng-click="quickSearch('project:&quot;' + case.sProject.__cdata + '&quot;')">{{ case.sProject.__cdata }}</a>: <a href="#" ng-click="quickSearch('area:&quot;' + case.sArea.__cdata + '&quot;')">{{ case.sArea.__cdata }}</a> (Milestone:
-        <a
-        href="#" ng-click="quickSearch('milestone:&quot;' + case.sFixFor.__cdata + '&quot;')">{{ case.sFixFor.__cdata }}</a>)</p>
+      <p><a href="#" ng-click="quickSearch('project:&quot;' + case.sProject.__cdata + '&quot;')">{{ case.sProject.__cdata }}</a>: <a href="#" ng-click="quickSearch('area:&quot;' + case.sArea.__cdata + '&quot;')">{{ case.sArea.__cdata }}</a> (Milestone:
+        <a href="#" ng-click="quickSearch('milestone:&quot;' + case.sFixFor.__cdata + '&quot;')">{{ case.sFixFor.__cdata }}</a>)</p>
+    </div>
+    <div style="text-align: center; padding: 20px;" ng-hide="ready">
+      <img src="img/38-1.gif"/>
     </div>
     <div class="item" ng-show="ready">
       <div class="row">
@@ -54,7 +52,7 @@
         </div>
       </div>
     </div>
-    <span ng-repeat="event in case.events.event track by event.ixBugEvent">
+    <span ng-show="ready" ng-repeat="event in case.events.event track by event.ixBugEvent">
       <div class="item item-divider">
         <h3 ng-bind-html="event.evtDescription.__cdata" </h3>
           <h4 class="subdued">{{:: event.dt | date:'MM/dd/yyyy h:mma'}}</h4>
