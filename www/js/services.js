@@ -118,12 +118,10 @@ angular.module('okarito.services', ['angular-storage'])
             reader.readAsArrayBuffer(file);
           },
           function(e) {
-            console.log(e);
             deferred.reject(e);
           });
       },
       function(e) {
-        console.log(e);
         deferred.reject(e);
       });
 
@@ -133,7 +131,6 @@ angular.module('okarito.services', ['angular-storage'])
     }
 
     promise.error = function(fn) {
-      console.log(e);
       promise.then(null, fn);
       return promise;
     }
@@ -594,7 +591,7 @@ angular.module('okarito.services', ['angular-storage'])
       dataService.getStatuses(val, resolved, false)
         .then(function(response) {
           $scope.statuses = response;
-          $scope.case.sStatus.__cdata = $scope.statuses[0].text; // TODO: Find the bug here, when saving a new case
+          $scope.case.sStatus.__cdata = $scope.statuses[0].text;
           $scope.case.ixStatus = $scope.statuses[0].id;
         });
     }
@@ -764,7 +761,6 @@ angular.module('okarito.services', ['angular-storage'])
   };
 
   service.responseError = function(rejection) {
-    console.log(rejection);
     return $q.reject(rejection);
   };
 });
