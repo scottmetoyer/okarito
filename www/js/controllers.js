@@ -43,6 +43,8 @@ angular.module('okarito.controllers', ['okarito.services'])
 
   $rootScope.showAttachment = function(imageSrc) {
     var scope = $scope.$new(true);
+
+    // TODO: Clean up the image and resolve to a local path for Android
     scope.imageSrc = imageSrc;
 
     $ionicModal.fromTemplateUrl('templates/image-modal.html', {
