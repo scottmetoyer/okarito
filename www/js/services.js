@@ -732,7 +732,6 @@ angular.module('okarito.services', ['angular-storage'])
   service.response = function(response) {
     if (response.data && response.data.error) {
       var code = response.data.error._code;
-
       switch (code) {
         case '1':
           $rootScope.$broadcast('unauthorized', {
@@ -746,7 +745,9 @@ angular.module('okarito.services', ['angular-storage'])
           });
           break;
         case '3':
-          $rootScope.$broadcast('not-logged-in');
+          $rootScope.$broadcast('not-logged-in', {
+            message: response.data.error.__cdata
+          });
           break;
         default:
           $rootScope.$broadcast('error', {

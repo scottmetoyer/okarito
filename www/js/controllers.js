@@ -42,26 +42,48 @@ angular.module('okarito.controllers', ['okarito.services'])
   };
 
   $rootScope.showAttachment = function(imageSrc) {
+    // Turn off attachment view until we fix the bugs
+    /*
     var scope = $scope.$new(true);
 
-    // TODO: Clean up the image and resolve to a local path for Android
-    scope.imageSrc = imageSrc;
+    window.resolveLocalFileSystemURL(
+      imageSrc,
+      function(fileEntry) {
+        fileEntry.file(function(file) {
+          if (file.type == 'image/jpeg' && !(fileEntry.name.toLowerCase().endsWith('.jpg') || fileEntry.name.toLowerCase().endsWith('.jpeg'))) {
+            fileEntry.name += '.jpg';
+          }
 
-    $ionicModal.fromTemplateUrl('templates/image-modal.html', {
-      scope: scope,
-      animation: 'slide-in-up'
-    }).then(function(modal) {
-      scope.modal = modal;
-      scope.modal.show();
-    });
+          if (file.type == 'image/png' && !fileEntry.name.toLowerCase().endsWith('.png')) {
+            fileEntry.name += '.png';
+          }
 
-    scope.hideAttachments = function() {
-      scope.modal.hide();
-    }
+          scope.imageSrc = fileEntry.nativeURL;
 
-    scope.$on('$destroy', function() {
-      scope.modal.remove();
-    });
+          $ionicModal.fromTemplateUrl('templates/image-modal.html', {
+            scope: scope,
+            animation: 'slide-in-up'
+          }).then(function(modal) {
+            scope.modal = modal;
+            scope.modal.show();
+          });
+
+          scope.hideAttachments = function() {
+            scope.modal.hide();
+          };
+
+          scope.$on('$destroy', function() {
+            scope.modal.remove();
+          });
+        },
+        function(e){
+          console.log(e);
+        });
+      },
+      function(e) {
+        console.log(e);
+      });
+      */
   };
 
   $rootScope.gallery = function() {
@@ -85,8 +107,21 @@ angular.module('okarito.controllers', ['okarito.services'])
     })
   };
 
-  $rootScope.$on('not-logged-in', function(event) {
+  $rootScope.$on('not-logged-in', function(event, args) {
     $ionicLoading.hide();
+
+    var alertPopup = $ionicPopup.alert({
+      title: 'Not logged in',
+      template: args.message,
+      buttons: [{
+        text: 'OK',
+        type: 'button-stable',
+        onTap: function(e) {
+          return;
+        }
+      }]
+    });
+
     $state.go('login');
   });
 
@@ -215,6 +250,12 @@ angular.module('okarito.controllers', ['okarito.services'])
     };
   });
 
+  $scope.prependHttps = function() {
+      if ($scope.data.url == '') {
+        $scope.data.url = "https://";
+      }
+  };
+
   $scope.login = function() {
     loginUser($scope.data.email, $scope.data.password, $scope.data.url, false);
   };
@@ -260,13 +301,13 @@ angular.module('okarito.controllers', ['okarito.services'])
             userService.setCurrentUser(data);
           });
 
-          // Clear out the password value
-          $scope.data.password = '';
+        // Clear out the password value
+        $scope.data.password = '';
 
-          $rootScope.$broadcast('authorized');
-          $state.go('app.cases').then(function() {
-            $rootScope.$broadcast('search-cases', {
-              search: ''
+        $rootScope.$broadcast('authorized');
+        $state.go('app.cases').then(function() {
+          $rootScope.$broadcast('search-cases', {
+            search: ''
           });
         });
       })
@@ -283,7 +324,7 @@ angular.module('okarito.controllers', ['okarito.services'])
           }]
         });
       });
-    }
+  }
 })
 
 .controller('CasesCtrl', function($q, $filter, $rootScope, $state, $scope, $ionicLoading, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicModal, dataService, userService, caseModalService) {
@@ -305,7 +346,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.label = 'New case';
     $scope.date = $filter('date')(new Date(), 'medium');
     $scope.touched = 'Opened by ' + userService.getCurrentUser().full_name;
-    $rootScope.attachments=[];
+    $rootScope.attachments = [];
     $scope.case = dataService.stubCase();
     $scope.newModal();
   }
@@ -566,7 +607,13 @@ angular.module('okarito.controllers', ['okarito.services'])
           dataService.refreshCase($scope.case.ixBug)
             .then(function() {
               $scope.working = false;
-              $scope.mailMessage = { from: '', to: '', cc: '', bcc: '', subject: '' };
+              $scope.mailMessage = {
+                from: '',
+                to: '',
+                cc: '',
+                bcc: '',
+                subject: ''
+              };
               $rootScope.attachments = [];
             });
         })
@@ -576,7 +623,13 @@ angular.module('okarito.controllers', ['okarito.services'])
           dataService.refreshCase($scope.case.ixBug)
             .then(function() {
               $scope.working = false;
-              $scope.mailMessage = { from: '', to: '', cc: '', bcc: '', subject: '' };
+              $scope.mailMessage = {
+                from: '',
+                to: '',
+                cc: '',
+                bcc: '',
+                subject: ''
+              };
               $rootScope.attachments = [];
             });
         });
@@ -687,7 +740,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.touched = 'Edited by ' + userService.getCurrentUser().full_name;
 
     $scope.closePopover();
-    $scope.editModal().then(function(){
+    $scope.editModal().then(function() {
       prepareModal();
     });
   };
@@ -700,8 +753,7 @@ angular.module('okarito.controllers', ['okarito.services'])
     $scope.popover.hide();
   };
 
-  $scope.$on('$ionicView.enter', function() {
-  });
+  $scope.$on('$ionicView.enter', function() {});
 
   $scope.$on('$ionicView.beforeEnter', function() {
     $scope.ready = false;
@@ -729,7 +781,7 @@ angular.module('okarito.controllers', ['okarito.services'])
   var init = function() {
     $scope.case = dataService.previewCase($stateParams.id);
 
-    dataService.getCase($stateParams.id).then(function(result){
+    dataService.getCase($stateParams.id).then(function(result) {
       $scope.case = result;
       $scope.date = $filter('date')(new Date(), 'medium');
 

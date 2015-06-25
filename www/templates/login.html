@@ -16,7 +16,7 @@
         </label>
         <div class="item item-input item-input-inset" style="padding: 0;">
           <label class="item-input flex">
-            <input type="text" placeholder="FogBugz URL" ng-model="data.url">
+            <input type="text" placeholder="FogBugz URL" ng-model="data.url" ng-focus="prependHttps()">
           </label>
           <button class="button button-small" ng-click="showUrlHelp()" style="margin-right: 10px;">
             <i class="icon ion-help"></i>
