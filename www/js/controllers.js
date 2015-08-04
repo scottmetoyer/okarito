@@ -110,18 +110,19 @@ angular.module('okarito.controllers', ['okarito.services'])
   $rootScope.$on('not-logged-in', function(event, args) {
     $ionicLoading.hide();
 
-    var alertPopup = $ionicPopup.alert({
-      title: 'Not logged in',
-      template: args.message,
-      buttons: [{
-        text: 'OK',
-        type: 'button-stable',
-        onTap: function(e) {
-          return;
-        }
-      }]
-    });
-
+    if (args != undefined && args.message != undefined) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Not logged in',
+        template: args.message,
+        buttons: [{
+          text: 'OK',
+          type: 'button-stable',
+          onTap: function(e) {
+            return;
+          }
+        }]
+      });
+    }
     $state.go('login');
   });
 
