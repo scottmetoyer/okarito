@@ -358,14 +358,12 @@ angular.module('okarito.controllers', ['okarito.services'])
         // Clear the sub objects
         $rootScope.attachments = [];
 
-        // Get the created case number and open it up
-        caseNumber = result.data.case._ixBug;
-
-        if (caseNumber != undefined) {
-          $rootScope.$broadcast('search-cases', {
-            search: caseNumber
-          });
-        }
+        // Received customer feedback to go back to filter view after creating a case - testing this out
+        $ionicLoading.show({
+          template: '<ion-spinner class="overlay" icon="lines"></ion-spinner>'
+        });
+        
+        loadCases();
 
         $scope.closeModal();
       });
