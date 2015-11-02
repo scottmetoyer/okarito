@@ -81,7 +81,7 @@ angular.module('okarito.services', ['angular-storage'])
   }
 })
 
-.factory('dataService', function($q, $http, $filter, userService) {;
+.factory('dataService', function($q, $http, $filter, userService) {
   var data = this;
   var cases = [];
   var categories = [];
