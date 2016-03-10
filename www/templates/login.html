@@ -4,15 +4,12 @@
       <div class="center">
         <img src="img/logo.svg" class="logo shadow" height="100" />
         <h1>Okarito7</h1>
-        <p>Please log in to your FogBugz account to continue.</p>
-        <p>No account? <a href="#" onclick="window.open('http://www.fogcreek.com/fogbugz/', '_system');">Get one here.</a></p>
+        <p>Please enter your FogBugz API token to continue.</p>
+        <p>Need help getting an API key? <a href="#" onclick="window.open('http://help.fogcreek.com/8447/how-to-get-a-fogbugz-xml-api-token', '_system');">Look here.</a></p>
       </div>
       <div class="list">
         <label class="item item-input">
-          <input type="email" placeholder="Email" ng-model="data.email">
-        </label>
-        <label class="item item-input">
-          <input type="password" placeholder="Password" ng-model="data.password">
+          <input type="text" placeholder="API Token" ng-model="data.token">
         </label>
         <div class="item item-input item-input-inset" style="padding: 0;">
           <label class="item-input flex">
