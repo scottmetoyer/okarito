@@ -2,46 +2,9 @@ angular.module('okarito.controllers')
 
 .controller('LoginCtrl', function($scope, $rootScope, $state, $filter, $ionicPopup, $ionicModal, loginService, userService, dataService) {
   $scope.data = {
-    email: '',
-    url: '',
-    password: ''
+    token: '',
+    url: ''
   };
-
-  $scope.$on('ambiguous-login', function(event, args) {
-    var people = args.people;
-    $scope.items = [];
-    $scope.headerText = "Choose person";
-
-    for (var i = 0; i < people.length; i++) {
-      $scope.items.push({
-        id: people[i].__cdata,
-        text: people[i].__cdata
-      });
-    }
-
-    $ionicModal.fromTemplateUrl(
-        'templates/ambiguous-login.html', {
-          'scope': $scope
-        })
-      .then(function(modal) {
-        $scope.modal = modal;
-        $scope.modal.show();
-      });
-
-    $scope.hideItems = function() {
-      $scope.modal.hide();
-    }
-
-    $scope.$on('$destroy', function() {
-      $scope.modal.remove();
-    });
-
-    $scope.validateSingle = function(item) {
-      // Resend the login request, passing in the appropriate user full name
-      loginUser(item.text, $scope.data.password, $scope.data.url, true);
-      $scope.modal.hide();
-    };
-  });
 
   $scope.prependHttps = function() {
       if ($scope.data.url == '') {
@@ -50,7 +13,7 @@ angular.module('okarito.controllers')
   };
 
   $scope.login = function() {
-    loginUser($scope.data.email, $scope.data.password, $scope.data.url, false);
+    loginUser($scope.data.token, $scope.data.url);
   };
 
   $scope.showUrlHelp = function() {
@@ -67,7 +30,7 @@ angular.module('okarito.controllers')
     });
   };
 
-  function loginUser(id, password, url, multipleEmails) {
+  function loginUser(token, url) {
     loginService
       .loginUser(id, password, url)
       .success(function(data) {
