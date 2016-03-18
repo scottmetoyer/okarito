@@ -1,0 +1,17 @@
+<ion-view class="fancy-select-items modal">
+  <ion-header-bar class="bar-positive green">
+    <button ng-click="hideItems()" class="button button-positive button-icon ion-chevron-left"></button>
+    <h1 class="title">Choose person</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list">
+      <div class="padding">
+        <p>There were multiple matches for that email address. Please choose the specific user you would like to log in as.</p>
+      </div>
+      <label collection-repeat="item in items" item-height="60px" item-width="100%" class="item item-text-wrap item-icon-left" ng-click='validateSingle(item)'>
+        <i class="icon ion-person"></i>
+        {{item.text}}
+      </label>
+    </div>
+  </ion-content>
+</ion-view>
