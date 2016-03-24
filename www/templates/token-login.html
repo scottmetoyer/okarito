@@ -1,0 +1,27 @@
+<ion-view view-title="Login" name="login-view">
+  <ion-content class="login-form" has-bouncing="false">
+    <div id="form">
+      <div class="center">
+        <img src="img/logo.svg" class="logo shadow" height="100" />
+        <h1>Okarito7</h1>
+        <p>Please enter your FogBugz API token to continue.</p>
+        <p>Need help getting an API key? <a href="#" onclick="window.open('http://help.fogcreek.com/8447/how-to-get-a-fogbugz-xml-api-token', '_system');">Look here.</a></p>
+        <p>FogBugz For Your Server users can <a href="#" onclick="showEmailLogin()">log in with their email address and password here.</a></p>
+      </div>
+      <div class="list">
+        <label class="item item-input">
+          <input type="text" placeholder="API Token" ng-model="data.token">
+        </label>
+        <div class="item item-input item-input-inset" style="padding: 0;">
+          <label class="item-input flex">
+            <input type="text" placeholder="FogBugz URL" ng-model="data.url" ng-focus="prependHttps()">
+          </label>
+          <button class="button button-small" ng-click="showUrlHelp()" style="margin-right: 10px;">
+            <i class="icon ion-help"></i>
+          </button>
+        </div>
+        <button class="button button-block button-outline button-white" ng-click="login()">Login</button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

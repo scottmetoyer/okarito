@@ -43,6 +43,12 @@ angular.module('okarito.controllers')
     };
   });
 
+  $scope.showEmailLogin() = function() {
+  }
+
+  $scope.showTokenLogin() = function() {
+  }
+  
   $scope.prependHttps = function() {
       if ($scope.data.url == '') {
         $scope.data.url = "https://";

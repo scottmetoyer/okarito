@@ -1,6 +1,6 @@
 angular.module('okarito', ['ionic', 'okarito.controllers', 'okarito.directives', 'monospaced.elastic', 'ngTagsInput'])
 
-.run(function($ionicPlatform, $rootScope) {  
+.run(function($ionicPlatform, $rootScope) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -18,9 +18,9 @@ angular.module('okarito', ['ionic', 'okarito.controllers', 'okarito.directives',
   $ionicConfigProvider.backButton.previousTitleText(false).text('');
   $stateProvider
 
-    .state('login', {
+  .state('login', {
     url: '/login',
-    templateUrl: 'templates/login.html',
+    templateUrl: 'templates/token-login.html',
     controller: 'LoginCtrl'
   })
 
