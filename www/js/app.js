@@ -24,6 +24,12 @@ angular.module('okarito', ['ionic', 'okarito.controllers', 'okarito.directives',
     controller: 'LoginCtrl'
   })
 
+  .state('email-login', {
+    url: '/email-login',
+    templateUrl: 'templates/login.html',
+    controller: 'LoginCtrl'
+  })
+
   .state('app', {
       url: "/app",
       abstract: true,
