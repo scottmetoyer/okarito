@@ -67,6 +67,10 @@ angular.module('okarito.controllers')
     });
   };
 
+  function loginUserWithToken(token) {
+    
+  };
+
   function loginUser(id, password, url, multipleEmails) {
     loginService
       .loginUser(id, password, url)
